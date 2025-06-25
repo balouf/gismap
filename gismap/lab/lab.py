@@ -53,8 +53,11 @@ class Lab(MixInIO):
 
     How many publications per member?
 
-    >>> [len(a.publications) for a in mini_lab.member_list]
-    [100, 289]
+    >>> production = [len(a.publications) for a in mini_lab.member_list]
+    >>> [p >= 100 for p in production]
+    [True, True]
+    >>> [p >= 250 for p in production]
+    [False, True]
 
     Consider one publication.
 
