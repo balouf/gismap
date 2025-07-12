@@ -39,11 +39,8 @@ class Lab(MixInIO):
 
     >>> mini_lab.get_ids()
     >>> mini_lab.member_list # doctest: +NORMALIZE_WHITESPACE
-    [Member(name='Fabien Mathieu', sources={'hal': HALAuthor(name='Fabien Mathieu', id='fabien-mathieu'),
-    'dblp': DBLPAuthor(name='Fabien Mathieu', id='66/2077')}),
-    Member(name='François Baccelli', sources={'hal': HALAuthor(name='François Baccelli', id='francois-baccelli',
-    aliases=['Francois Baccelli']),
-    'dblp': DBLPAuthor(name='François Baccelli', id='b/FrancoisBaccelli')})]
+    [Member(name='Fabien Mathieu'),
+    Member(name='François Baccelli')]
 
     There is one entry missing (it was in the warnings). Let us manually set it.
 
