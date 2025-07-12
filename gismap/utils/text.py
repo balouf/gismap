@@ -69,3 +69,21 @@ def reduce_keywords(kws):
         if accept:
             indices.append(i)
     return [kws[i] for i in indices]
+
+
+def clean_aliases(name, alias_list):
+    """
+    Parameters
+    ----------
+    name: :class:`str`
+        Main name.
+    alias_list: :class:`list` or :class:`set`
+        Aliases.
+
+    Returns
+    -------
+    :class:`list`
+        Aliases deduped, sorted, and with main name removed.
+    """
+    return sorted(set(n for n in alias_list if n != name))
+

@@ -1,9 +1,11 @@
+HIDDEN_KEYS = {'sources', 'aliases', 'abstract'}
+
 class LazyRepr:
     """
     MixIn that hides empty fields in dataclasses repr's.
     """
     def __repr__(self):
-        kws = [f"{key}={value!r}" for key, value in self.__dict__.items() if value]
+        kws = [f"{key}={value!r}" for key, value in self.__dict__.items() if value and key not in HIDDEN_KEYS]
         return f"{type(self).__name__}({', '.join(kws)})"
 
 

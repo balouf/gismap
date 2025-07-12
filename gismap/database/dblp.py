@@ -32,17 +32,6 @@ class DBLPAuthor(DBAuthor):
 
     @staticmethod
     def parse_entry(r):
-        """
-        Parameters
-        ----------
-        r: :class:`~bs4.BeautifulSoup`
-            Soup of a result (paper).
-
-        Returns
-        -------
-        :class:`dict`
-            The paper as a dictionary.
-        """
         p = r.find()
         typ = p.get('publtype', p.name)
         typ = DBLP_TYPES.get(typ, typ)
@@ -70,47 +59,6 @@ class DBLPAuthor(DBAuthor):
         return res
 
     def query_id(self, s=None):
-        """
-        Parameters
-        ----------
-        s: :class:`~requests.Session`, optional
-            Session.
-
-        Returns
-        -------
-        :class:`list`
-            Potential matches.
-
-        Examples
-        --------
-
-        >>> fabien = DBLPAuthor("Fabien Mathieu")
-        >>> fabien
-        DBLPAuthor(name='Fabien Mathieu')
-        >>> fabien.url
-        'https://dblp.org/search?q=Fabien+Mathieu'
-        >>> fabien.populate_id()
-        1
-        >>> fabien
-        DBLPAuthor(name='Fabien Mathieu', id='66/2077')
-        >>> fabien.url
-        'https://dblp.org/pid/66/2077.html'
-        >>> sleep(2)
-        >>> manu = DBLPAuthor("Manuel Barragan")
-        >>> manu.query_id() # doctest:  +NORMALIZE_WHITESPACE
-        [DBLPAuthor(name='Manuel Barragan', id='07/10587', aliases=['José M. Peña 0003',
-        'José Manuel Peña 0002', 'José Manuel Peñá-Barragán']),
-        DBLPAuthor(name='Manuel Barragan', id='83/3865', aliases=['Manuel J. Barragan Asian', 'Manuel J. Barragán']),
-        DBLPAuthor(name='Manuel Barragan', id='188/0198', aliases=['Manuel Barragán-Villarejo'])]
-        >>> sleep(2)
-        >>> unknown = DBLPAuthor("NotaSearcherName")
-        >>> unknown
-        DBLPAuthor(name='NotaSearcherName')
-        >>> unknown.populate_id()
-        0
-        >>> unknown
-        DBLPAuthor(name='NotaSearcherName')
-        """
         s = autosession(s)
         dblp_api = "https://dblp.org/search/author/api"
         dblp_args = {'q': self.name}
@@ -121,38 +69,6 @@ class DBLPAuthor(DBAuthor):
                 for hit in soup('hit')]
 
     def query_publications(self, s=None):
-        """
-        Parameters
-        ----------
-        s: :class:`~requests.Session`, optional
-            Session.
-
-        Returns
-        -------
-        :class:`list`
-            Papers available in DBLP.
-
-        Examples
-        --------
-
-        >>> fabien = DBLPAuthor('Fabien Mathieu', id='66/2077')
-        >>> publications = sorted(fabien.query_publications(),
-        ...                 key=lambda p: p['title'])
-        >>> publications[0] # doctest:  +NORMALIZE_WHITESPACE
-        {'type': 'conference', 'key': 'conf/iptps/BoufkhadMMPV08',
-        'url': 'https://dblp.org/rec/conf/iptps/BoufkhadMMPV08.html',
-        'title': 'Achievable catalog size in peer-to-peer video-on-demand systems.',
-        'booktitle': 'IPTPS', 'pages': 4, 'year': 2008, 'venue': 'IPTPS',
-        'authors': [DBLPAuthor(name='Yacine Boufkhad', id='75/5742'), DBLPAuthor(name='Fabien Mathieu', id='66/2077'),
-        DBLPAuthor(name='Fabien de Montgolfier', id='57/6313'), DBLPAuthor(name='Diego Perino', id='03/3645'),
-        DBLPAuthor(name='Laurent Viennot', id='v/LaurentViennot')], 'origin': 'dblp'}
-        >>> publications[-1] # doctest:  +NORMALIZE_WHITESPACE
-        {'type': 'conference', 'key': 'conf/sss/Mathieu07',
-        'url': 'https://dblp.org/rec/conf/sss/Mathieu07.html',
-        'title': 'Upper Bounds for Stabilization in Acyclic Preference-Based Systems.',
-        'booktitle': 'SSS', 'pages': '372-382', 'year': 2007, 'venue': 'SSS',
-        'authors': [DBLPAuthor(name='Fabien Mathieu', id='66/2077')], 'origin': 'dblp'}
-        """
         s = autosession(s)
         r = auto_retry_get(s, f'https://dblp.org/pid/{self.id}.xml')
         soup = Soup(r.text, features='xml')

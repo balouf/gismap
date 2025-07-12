@@ -106,3 +106,4 @@ ENV/
 
 # PyCharm project settings
 .idea
+/sandbox/

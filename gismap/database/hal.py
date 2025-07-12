@@ -111,7 +111,7 @@ class HALAuthor(DBAuthor):
         >>> ana.populate_id()
         1
         >>> ana
-        HALAuthor(name='Ana Busic', id='anabusic', aliases=['Ana Bušić', 'Bušić Ana'])
+        HALAuthor(name='Ana Busic', id='anabusic')
         >>> diego = HALAuthor("Diego Perino") # doctest:  +NORMALIZE_WHITESPACE
         >>> diego.query_id()
         [HALAuthor(name='Diego Perino', pid=847558), HALAuthor(name='Diego Perino', pid=978810)]
@@ -188,8 +188,7 @@ class HALAuthor(DBAuthor):
 
         >>> emilios = HALAuthor('Emilio Calvanese').query_id()
         >>> emilios # doctest: +NORMALIZE_WHITESPACE
-        [HALAuthor(name='Emilio Calvanese', aliases=['Calvanese Strinati Emilio',
-        'Emilio Calvanese Strinati'], pid=911234)]
+        [HALAuthor(name='Emilio Calvanese', pid=911234)]
         >>> len(emilios[0].query_publications())
         69
 
