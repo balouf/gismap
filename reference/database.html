@@ -1,0 +1,966 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Database &#8212; Generic Information Search: Mapping and Analysis of Publications 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/database';</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Utils" href="utils.html" />
+    <link rel="prev" title="Gismo" href="gismo.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Generic Information Search: Mapping and Analysis of Publications 0.1.0 documentation - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="Generic Information Search: Mapping and Analysis of Publications 0.1.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="lab.html">Laboratory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gismo.html">Gismo</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Database</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="database">
+<h1>Database<a class="headerlink" href="#database" title="Link to this heading">#</a></h1>
+<p>Classes and functions to interact with databases of publications.</p>
+<section id="blueprint">
+<h2>Blueprint<a class="headerlink" href="#blueprint" title="Link to this heading">#</a></h2>
+<p>Abstract description of GISMAP’ DB interface.</p>
+<dl class="py class" id="module-gismap.database.blueprint">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.database.blueprint.</span></span><span class="sig-name descname"><span class="pre">DBAuthor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/blueprint.html#DBAuthor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.blueprint.DBAuthor" title="Link to this definition">#</a></dt>
+<dd><p>Blueprint for DB-specific author management.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.aliases">
+<span class="sig-name descname"><span class="pre">aliases</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.aliases" title="Link to this definition">#</a></dt>
+<dd><p>Alternative names for the author.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.db_name">
+<span class="sig-name descname"><span class="pre">db_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.13)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.db_name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the database.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.id" title="Link to this definition">#</a></dt>
+<dd><p>Id of author in DB.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.is_set">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_set</span></span><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.is_set" title="Link to this definition">#</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>
+Is the author identified in DB?</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.iter_keys">
+<span class="sig-name descname"><span class="pre">iter_keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/blueprint.html#DBAuthor.iter_keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.iter_keys" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> – Key of author (typically name, alias, or internal key).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.name" title="Link to this definition">#</a></dt>
+<dd><p>Author name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.populate_id">
+<span class="sig-name descname"><span class="pre">populate_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/blueprint.html#DBAuthor.populate_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.populate_id" title="Link to this definition">#</a></dt>
+<dd><p>Try to automatically fill-in DB information.
+If one unique match is found, the data is integrated.</p>
+<p>Otherwise, a warning is issued, with some suggestions/URLS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code>, optional) – Session.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of matches found (i.e. 1 means success).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.query_id">
+<span class="sig-name descname"><span class="pre">query_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/blueprint.html#DBAuthor.query_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.query_id" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code>, optional) – Session.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Potential matches.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.query_id_backoff">
+<span class="sig-name descname"><span class="pre">query_id_backoff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.13)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.query_id_backoff" title="Link to this definition">#</a></dt>
+<dd><p>Time to wait between 2 <em>query id</em> calls.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.query_publications">
+<span class="sig-name descname"><span class="pre">query_publications</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/blueprint.html#DBAuthor.query_publications"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.query_publications" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code>, optional) – Session.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Papers available in DB.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.query_publications_backoff">
+<span class="sig-name descname"><span class="pre">query_publications_backoff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.13)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.query_publications_backoff" title="Link to this definition">#</a></dt>
+<dd><p>Time to wait between 2 <em>query publications</em> calls.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.update_values">
+<span class="sig-name descname"><span class="pre">update_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">author</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/blueprint.html#DBAuthor.update_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.update_values" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>author</strong> (<a class="reference internal" href="#gismap.database.blueprint.DBAuthor" title="gismap.database.blueprint.DBAuthor"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBAuthor</span></code></a>) – External author info to inject in current instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gismap.database.blueprint.DBAuthor.url">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#gismap.database.blueprint.DBAuthor.url" title="Link to this definition">#</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+URL associated with the author in the DB.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismap.database.blueprint.clean_aliases">
+<span class="sig-prename descclassname"><span class="pre">gismap.database.blueprint.</span></span><span class="sig-name descname"><span class="pre">clean_aliases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/blueprint.html#clean_aliases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.blueprint.clean_aliases" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Main name.</p></li>
+<li><p><strong>alias_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – Aliases.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Aliases deduped, sorted, and with main name removed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="dblp">
+<h2>DBLP<a class="headerlink" href="#dblp" title="Link to this heading">#</a></h2>
+<p>Interface for <em>dblp computer science bibliography</em> (<a class="reference external" href="https://dblp.org/" rel="noreferer noopener" target="_blank">https://dblp.org/</a>).</p>
+<dl class="py class" id="module-gismap.database.dblp">
+<dt class="sig sig-object py" id="gismap.database.dblp.DBLPAuthor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.database.dblp.</span></span><span class="sig-name descname"><span class="pre">DBLPAuthor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/dblp.html#DBLPAuthor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.dblp.DBLPAuthor" title="Link to this definition">#</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.dblp.DBLPAuthor.db_name">
+<span class="sig-name descname"><span class="pre">db_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.13)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dblp'</span></em><a class="headerlink" href="#gismap.database.dblp.DBLPAuthor.db_name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.database.dblp.DBLPAuthor.query_id">
+<span class="sig-name descname"><span class="pre">query_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/dblp.html#DBLPAuthor.query_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.dblp.DBLPAuthor.query_id" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code>, optional) – Session.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Potential matches.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.dblp.DBLPAuthor.query_id_backoff">
+<span class="sig-name descname"><span class="pre">query_id_backoff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.13)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7.0</span></em><a class="headerlink" href="#gismap.database.dblp.DBLPAuthor.query_id_backoff" title="Link to this definition">#</a></dt>
+<dd><p>Time to wait between 2 <em>query id</em> calls.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.database.dblp.DBLPAuthor.query_publications">
+<span class="sig-name descname"><span class="pre">query_publications</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/dblp.html#DBLPAuthor.query_publications"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.dblp.DBLPAuthor.query_publications" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code>, optional) – Session.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Papers available in DB.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.dblp.DBLPAuthor.query_publications_backoff">
+<span class="sig-name descname"><span class="pre">query_publications_backoff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.13)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2.0</span></em><a class="headerlink" href="#gismap.database.dblp.DBLPAuthor.query_publications_backoff" title="Link to this definition">#</a></dt>
+<dd><p>Time to wait between 2 <em>query publications</em> calls.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gismap.database.dblp.DBLPAuthor.url">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#gismap.database.dblp.DBLPAuthor.url" title="Link to this definition">#</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+URL associated with the author in the DB.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="hal">
+<h2>HAL<a class="headerlink" href="#hal" title="Link to this heading">#</a></h2>
+<p>Interface for <em>HyperArticles en Ligne</em> (<a class="reference external" href="https://hal.science/" rel="noreferer noopener" target="_blank">https://hal.science/</a>).</p>
+<dl class="py class" id="module-gismap.database.hal">
+<dt class="sig sig-object py" id="gismap.database.hal.HALAuthor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.database.hal.</span></span><span class="sig-name descname"><span class="pre">HALAuthor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt_pids:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/hal.html#HALAuthor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.hal.HALAuthor" title="Link to this definition">#</a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.hal.HALAuthor.alt_pids">
+<span class="sig-name descname"><span class="pre">alt_pids</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a></em><a class="headerlink" href="#gismap.database.hal.HALAuthor.alt_pids" title="Link to this definition">#</a></dt>
+<dd><p>One author has one unique hal-id but possibly multiple Personal Ids. Extra pids should be put here.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.hal.HALAuthor.db_name">
+<span class="sig-name descname"><span class="pre">db_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.13)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'hal'</span></em><a class="headerlink" href="#gismap.database.hal.HALAuthor.db_name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the database.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gismap.database.hal.HALAuthor.is_set">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_set</span></span><a class="headerlink" href="#gismap.database.hal.HALAuthor.is_set" title="Link to this definition">#</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>
+Is the author identified in DB?</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.database.hal.HALAuthor.parse_entry">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/hal.html#HALAuthor.parse_entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.hal.HALAuthor.parse_entry" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>r</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – Raw dict of a result (paper).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The paper as a sanitized dictionary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.database.hal.HALAuthor.pid">
+<span class="sig-name descname"><span class="pre">pid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#gismap.database.hal.HALAuthor.pid" title="Link to this definition">#</a></dt>
+<dd><p>Personal Id, an integer that can be used when hal-id is not available.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.database.hal.HALAuthor.query_id">
+<span class="sig-name descname"><span class="pre">query_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/hal.html#HALAuthor.query_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.hal.HALAuthor.query_id" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code>, optional) – Session.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Potential matches.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span> <span class="o">=</span> <span class="n">HALAuthor</span><span class="p">(</span><span class="s2">&quot;Fabien Mathieu&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span>
+<span class="go">HALAuthor(name=&#39;Fabien Mathieu&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span><span class="o">.</span><span class="n">url</span>
+<span class="go">&#39;https://hal.science/search/index?q=Fabien+Mathieu&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span><span class="o">.</span><span class="n">populate_id</span><span class="p">()</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span>
+<span class="go">HALAuthor(name=&#39;Fabien Mathieu&#39;, id=&#39;fabien-mathieu&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span><span class="o">.</span><span class="n">url</span>
+<span class="go">&#39;https://hal.science/search/index/?q=*&amp;authIdHal_s=fabien-mathieu&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">laurent</span> <span class="o">=</span> <span class="n">HALAuthor</span><span class="p">(</span><span class="s2">&quot;Laurent Viennot&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">laurent</span><span class="o">.</span><span class="n">query_id</span><span class="p">()</span>
+<span class="go">[HALAuthor(name=&#39;Laurent Viennot&#39;, id=&#39;laurentviennot&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unknown</span> <span class="o">=</span> <span class="n">HALAuthor</span><span class="p">(</span><span class="s2">&quot;NotaSearcherName&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unknown</span>
+<span class="go">HALAuthor(name=&#39;NotaSearcherName&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unknown</span><span class="o">.</span><span class="n">populate_id</span><span class="p">()</span>
+<span class="go">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unknown</span>
+<span class="go">HALAuthor(name=&#39;NotaSearcherName&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ana</span> <span class="o">=</span> <span class="n">HALAuthor</span><span class="p">(</span><span class="s2">&quot;Ana Busic&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ana</span><span class="o">.</span><span class="n">populate_id</span><span class="p">()</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ana</span>
+<span class="go">HALAuthor(name=&#39;Ana Busic&#39;, id=&#39;anabusic&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diego</span> <span class="o">=</span> <span class="n">HALAuthor</span><span class="p">(</span><span class="s2">&quot;Diego Perino&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diego</span><span class="o">.</span><span class="n">query_id</span><span class="p">()</span>
+<span class="go">[HALAuthor(name=&#39;Diego Perino&#39;, pid=847558), HALAuthor(name=&#39;Diego Perino&#39;, pid=978810)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HALAuthor</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Diego Perino&#39;</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="mi">978810</span><span class="p">)</span><span class="o">.</span><span class="n">url</span>
+<span class="go">&#39;https://hal.science/search/index/?q=*&amp;authIdPerson_i=978810&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.database.hal.HALAuthor.query_publications">
+<span class="sig-name descname"><span class="pre">query_publications</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/hal.html#HALAuthor.query_publications"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.hal.HALAuthor.query_publications" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code>, optional) – Session.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Papers available in HAL.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span> <span class="o">=</span> <span class="n">HALAuthor</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Fabien&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;fabien-mathieu&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">publications</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">fabien</span><span class="o">.</span><span class="n">query_publications</span><span class="p">(),</span>
+<span class="gp">... </span>                <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">publications</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> 
+<span class="go">{&#39;title&#39;: &#39;Achievable Catalog Size in Peer-to-Peer Video-on-Demand Systems&#39;,</span>
+<span class="go">&#39;abstract&#39;: &#39;We analyze a system where $n$ set-top boxes with same upload and storage capacities collaborate to</span>
+<span class="go">serve $r$ videos simultaneously (a typical value is $r=n$). We give upper and lower bounds on the catalog size</span>
+<span class="go">of the system, i.e. the maximal number of distinct videos that can be stored in such a system so that any demand</span>
+<span class="go">of at most $r$ videos can be served. Besides $r/n$, the catalog size is constrained by the storage capacity, the</span>
+<span class="go">upload capacity, and the maximum number of simultaneous connections a box can open. We show that the achievable</span>
+<span class="go">catalog size drastically increases when the upload capacity of the boxes becomes strictly greater than the</span>
+<span class="go">playback rate of videos.&#39;, &#39;key&#39;: &#39;471724&#39;,</span>
+<span class="go">&#39;conference&#39;: &#39;Proceedings of the 7th Internnational Workshop on Peer-to-Peer Systems (IPTPS)&#39;,</span>
+<span class="go">&#39;type&#39;: &#39;conference&#39;, &#39;year&#39;: 2008, &#39;url&#39;: &#39;https://inria.hal.science/inria-00471724v1&#39;,</span>
+<span class="go">&#39;authors&#39;: [HALAuthor(name=&#39;Yacine Boufkhad&#39;, id=&#39;yacine-boufkhad&#39;, pid=7352),</span>
+<span class="go">HALAuthor(name=&#39;Fabien Mathieu&#39;, id=&#39;fabien-mathieu&#39;, pid=446),</span>
+<span class="go">HALAuthor(name=&#39;Fabien de Montgolfier&#39;, pid=949013), HALAuthor(name=&#39;Diego Perino&#39;),</span>
+<span class="go">HALAuthor(name=&#39;Laurent Viennot&#39;, id=&#39;laurentviennot&#39;, pid=1841)],</span>
+<span class="go">&#39;venue&#39;: &#39;Proceedings of the 7th Internnational Workshop on Peer-to-Peer Systems (IPTPS)&#39;, &#39;origin&#39;: &#39;hal&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">publications</span><span class="p">[</span><span class="o">-</span><span class="mi">7</span><span class="p">]</span> 
+<span class="go">{&#39;title&#39;: &#39;Upper bounds for stabilization in acyclic preference-based systems&#39;,</span>
+<span class="go">&#39;abstract&#39;: &#39;Preference-based systems (p.b.s.) describe interactions between nodes of a system that can rank</span>
+<span class="go">their neighbors. Previous work has shown that p.b.s. converge to a unique locally stable matching if an</span>
+<span class="go">acyclicity property is verified. In the following we analyze acyclic p.b.s. with respect to the</span>
+<span class="go">self-stabilization theory. We prove that the round complexity is bounded by n/2 for the adversarial daemon.</span>
+<span class="go">The step complexity is equivalent to (n^2)/4 for the round robin daemon, and exponential for the general</span>
+<span class="go">adversarial daemon.&#39;, &#39;key&#39;: &#39;668356&#39;,</span>
+<span class="go">&#39;conference&#39;: &quot;SSS&#39;07 - 9th international conference on Stabilization, Safety,</span>
+<span class="go">and Security of Distributed Systems&quot;,</span>
+<span class="go">&#39;type&#39;: &#39;conference&#39;, &#39;year&#39;: 2007, &#39;url&#39;: &#39;https://inria.hal.science/hal-00668356v1&#39;,</span>
+<span class="go">&#39;authors&#39;: [HALAuthor(name=&#39;Fabien Mathieu&#39;, id=&#39;fabien-mathieu&#39;, pid=446)],</span>
+<span class="go">&#39;venue&#39;: &quot;SSS&#39;07 - 9th international conference on Stabilization, Safety,</span>
+<span class="go">and Security of Distributed Systems&quot;, &#39;origin&#39;: &#39;hal&#39;}</span>
+</pre></div>
+</div>
+<p>Case of someone with multiple ids one want to cumulate:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">emilios</span> <span class="o">=</span> <span class="n">HALAuthor</span><span class="p">(</span><span class="s1">&#39;Emilio Calvanese&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">query_id</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">emilios</span> 
+<span class="go">[HALAuthor(name=&#39;Emilio Calvanese&#39;, pid=911234)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">emilios</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">query_publications</span><span class="p">())</span>
+<span class="go">69</span>
+</pre></div>
+</div>
+<p>Note: an error is raised if not enough data is provided</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">HALAuthor</span><span class="p">(</span><span class="s1">&#39;Fabien Mathieu&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">query_publications</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">HALAuthor(name=&#39;Fabien Mathieu&#39;) must have id or pid for publications to be fetched.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.database.hal.HALAuthor.update_values">
+<span class="sig-name descname"><span class="pre">update_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">author</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/hal.html#HALAuthor.update_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.hal.HALAuthor.update_values" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>author</strong> (<a class="reference internal" href="#gismap.database.blueprint.DBAuthor" title="gismap.database.blueprint.DBAuthor"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBAuthor</span></code></a>) – External author info to inject in current instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="gismap.database.hal.HALAuthor.url">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">url</span></span><a class="headerlink" href="#gismap.database.hal.HALAuthor.url" title="Link to this definition">#</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+URL associated with the author in the DB.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismap.database.hal.parse_facet_author">
+<span class="sig-prename descclassname"><span class="pre">gismap.database.hal.</span></span><span class="sig-name descname"><span class="pre">parse_facet_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/database/hal.html#parse_facet_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.database.hal.parse_facet_author" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>a</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Formatted APH author string from HAL API.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sanitized version.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#gismap.database.hal.HALAuthor" title="gismap.database.hal.HALAuthor"><code class="xref py py-class docutils literal notranslate"><span class="pre">HALAuthor</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="gismo.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Gismo</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="utils.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Utils</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#blueprint">Blueprint</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor"><code class="docutils literal notranslate"><span class="pre">DBAuthor</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.aliases"><code class="docutils literal notranslate"><span class="pre">DBAuthor.aliases</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.db_name"><code class="docutils literal notranslate"><span class="pre">DBAuthor.db_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.id"><code class="docutils literal notranslate"><span class="pre">DBAuthor.id</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.is_set"><code class="docutils literal notranslate"><span class="pre">DBAuthor.is_set</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.iter_keys"><code class="docutils literal notranslate"><span class="pre">DBAuthor.iter_keys()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.name"><code class="docutils literal notranslate"><span class="pre">DBAuthor.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.populate_id"><code class="docutils literal notranslate"><span class="pre">DBAuthor.populate_id()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.query_id"><code class="docutils literal notranslate"><span class="pre">DBAuthor.query_id()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.query_id_backoff"><code class="docutils literal notranslate"><span class="pre">DBAuthor.query_id_backoff</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.query_publications"><code class="docutils literal notranslate"><span class="pre">DBAuthor.query_publications()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.query_publications_backoff"><code class="docutils literal notranslate"><span class="pre">DBAuthor.query_publications_backoff</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.update_values"><code class="docutils literal notranslate"><span class="pre">DBAuthor.update_values()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.DBAuthor.url"><code class="docutils literal notranslate"><span class="pre">DBAuthor.url</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.blueprint.clean_aliases"><code class="docutils literal notranslate"><span class="pre">clean_aliases()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dblp">DBLP</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.dblp.DBLPAuthor"><code class="docutils literal notranslate"><span class="pre">DBLPAuthor</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.dblp.DBLPAuthor.db_name"><code class="docutils literal notranslate"><span class="pre">DBLPAuthor.db_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.dblp.DBLPAuthor.query_id"><code class="docutils literal notranslate"><span class="pre">DBLPAuthor.query_id()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.dblp.DBLPAuthor.query_id_backoff"><code class="docutils literal notranslate"><span class="pre">DBLPAuthor.query_id_backoff</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.dblp.DBLPAuthor.query_publications"><code class="docutils literal notranslate"><span class="pre">DBLPAuthor.query_publications()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.dblp.DBLPAuthor.query_publications_backoff"><code class="docutils literal notranslate"><span class="pre">DBLPAuthor.query_publications_backoff</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.dblp.DBLPAuthor.url"><code class="docutils literal notranslate"><span class="pre">DBLPAuthor.url</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hal">HAL</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.hal.HALAuthor"><code class="docutils literal notranslate"><span class="pre">HALAuthor</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.hal.HALAuthor.alt_pids"><code class="docutils literal notranslate"><span class="pre">HALAuthor.alt_pids</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.hal.HALAuthor.db_name"><code class="docutils literal notranslate"><span class="pre">HALAuthor.db_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.hal.HALAuthor.is_set"><code class="docutils literal notranslate"><span class="pre">HALAuthor.is_set</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.hal.HALAuthor.parse_entry"><code class="docutils literal notranslate"><span class="pre">HALAuthor.parse_entry()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.hal.HALAuthor.pid"><code class="docutils literal notranslate"><span class="pre">HALAuthor.pid</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.hal.HALAuthor.query_id"><code class="docutils literal notranslate"><span class="pre">HALAuthor.query_id()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.hal.HALAuthor.query_publications"><code class="docutils literal notranslate"><span class="pre">HALAuthor.query_publications()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.hal.HALAuthor.update_values"><code class="docutils literal notranslate"><span class="pre">HALAuthor.update_values()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.hal.HALAuthor.url"><code class="docutils literal notranslate"><span class="pre">HALAuthor.url</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.database.hal.parse_facet_author"><code class="docutils literal notranslate"><span class="pre">parse_facet_author()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/database.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

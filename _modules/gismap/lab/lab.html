@@ -1,0 +1,706 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gismap.lab.lab &#8212; Generic Information Search: Mapping and Analysis of Publications 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gismap/lab/lab';</script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt="Generic Information Search: Mapping and Analysis of Publications 0.1.0 documentation - Home"/>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="Generic Information Search: Mapping and Analysis of Publications 0.1.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gismap.lab.lab</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gismap.lab.lab</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">bof.fuzz</span><span class="w"> </span><span class="kn">import</span> <span class="n">Process</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.lab.member</span><span class="w"> </span><span class="kn">import</span> <span class="n">Member</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.lab.publication</span><span class="w"> </span><span class="kn">import</span> <span class="n">Publication</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.utils.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_classes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.utils.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.utils.mixinio</span><span class="w"> </span><span class="kn">import</span> <span class="n">MixInIO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.utils.requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">autosession</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.database.blueprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">DBAuthor</span>
+
+
+<div class="viewcode-block" id="Lab">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.lab.Lab">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Lab</span><span class="p">(</span><span class="n">MixInIO</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    members: :class:`list` of `str`</span>
+<span class="sd">        Names of the lab members.</span>
+<span class="sd">    db_dict: :class:`dict`</span>
+<span class="sd">        Publication DBs to use. Default to all available.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Use a two-people lab for example.</span>
+
+<span class="sd">    &gt;&gt;&gt; mini_lab = Lab([&#39;Fabien Mathieu&#39;, &#39;François Baccelli&#39;])</span>
+
+<span class="sd">    Get DB ids</span>
+
+<span class="sd">    &gt;&gt;&gt; from gismap import HALAuthor, DBLPAuthor</span>
+<span class="sd">    &gt;&gt;&gt; mini_lab.manual_update([HALAuthor(name=&#39;François Baccelli&#39;, id=&#39;francois-baccelli&#39;,</span>
+<span class="sd">    ...                                                     aliases=[&#39;Francois Baccelli&#39;]),</span>
+<span class="sd">    ... DBLPAuthor(name=&#39;François Baccelli&#39;, id=&#39;b/FrancoisBaccelli&#39;),</span>
+<span class="sd">    ... DBLPAuthor(name=&#39;Fabien Mathieu&#39;, id=&#39;66/2077&#39;)])</span>
+
+
+<span class="sd">    &gt;&gt;&gt; mini_lab.get_ids()</span>
+<span class="sd">    &gt;&gt;&gt; mini_lab.member_list # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    [Member(name=&#39;Fabien Mathieu&#39;),</span>
+<span class="sd">    Member(name=&#39;François Baccelli&#39;)]</span>
+
+<span class="sd">    There is one entry missing (it was in the warnings). Let us manually set it.</span>
+
+<span class="sd">    Now we fetch publications:</span>
+
+<span class="sd">    &gt;&gt;&gt; mini_lab.get_publications()</span>
+
+<span class="sd">    How many publications per member?</span>
+
+<span class="sd">    &gt;&gt;&gt; production = [len(a.publications) for a in mini_lab.member_list]</span>
+<span class="sd">    &gt;&gt;&gt; [p &gt;= 100 for p in production]</span>
+<span class="sd">    [True, True]</span>
+<span class="sd">    &gt;&gt;&gt; [p &gt;= 250 for p in production]</span>
+<span class="sd">    [False, True]</span>
+
+<span class="sd">    Consider one publication.</span>
+
+<span class="sd">    &gt;&gt;&gt; key = mini_lab.members[&#39;Fabien Mathieu&#39;].publications[0]</span>
+<span class="sd">    &gt;&gt;&gt; publi = mini_lab.publications[key]</span>
+
+<span class="sd">    Use the string property to have a simple bibliography entry:</span>
+
+<span class="sd">    &gt;&gt;&gt; publi.string # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    &#39;Making most voting systems meet the Condorcet criterion reduces their manipulability,</span>
+<span class="sd">    by François Durand, Fabien Mathieu, Ludovic Noirie. unpublished, 2014.&#39;</span>
+
+<span class="sd">    Use publi_to_text for something more content-oriented:</span>
+
+<span class="sd">    &gt;&gt;&gt; mini_lab.publi_to_text(key) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    &#39;Making most voting systems meet the Condorcet criterion reduces their manipulability\\nSince any non-trivial voting</span>
+<span class="sd">    system is susceptible to manipulation, we investigate how it is possible to reduce the set of situations where it is</span>
+<span class="sd">    manipulable, that is, such that a coalition of voters, by casting an insincere ballot, may secure an outcome that is</span>
+<span class="sd">    better from their point of view. We prove that, for a large class of voting systems, a simple modiﬁcation allows to</span>
+<span class="sd">    reduce manipulability. This modiﬁcation is Condorciﬁcation: when there is a Condorcet winner, designate her;</span>
+<span class="sd">    otherwise, use the original rule. Our very general framework allows to do this for any voting system, whatever the</span>
+<span class="sd">    form of the original ballots. Hence, when searching for a voting system whose manipulability is minimal, one can</span>
+<span class="sd">    restrict to those that meet the Condorcet criterion.&#39;</span>
+
+<span class="sd">    Use member_to_text to get the content of a member:</span>
+
+<span class="sd">    &gt;&gt;&gt; mini_lab.member_to_text(&quot;Fabien Mathieu&quot;)[:100]</span>
+<span class="sd">    &#39;Making most voting systems meet the Condorcet criterion reduces their manipulability\\nSince any non-t&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; from collections import Counter</span>
+<span class="sd">    &gt;&gt;&gt; copublis = [k for k, v in Counter(p for m in mini_lab.members.values() for p in m.publications).items() if v&gt;1]</span>
+<span class="sd">    &gt;&gt;&gt; print(&quot;\\n&quot;.join(mini_lab.publications[p].string for p in copublis)) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    On Spatial Point Processes with Uniform Births and Deaths by Random Connection,</span>
+<span class="sd">    by François Baccelli, Fabien Mathieu, Ilkka Norros. unpublished, 2014.</span>
+<span class="sd">    Mutual Service Processes in Euclidean Spaces: Existence and Ergodicity,</span>
+<span class="sd">    by François Baccelli, Fabien Mathieu, Ilkka Norros. Queueing Systems, 2017.</span>
+<span class="sd">    Spatial Interactions of Peers and Performance of File Sharing Systems,</span>
+<span class="sd">    by François Baccelli, Fabien Mathieu, Ilkka Norros. unpublished, 2012.</span>
+<span class="sd">    Can P2P Networks be Super-Scalable?,</span>
+<span class="sd">    by François Baccelli, Fabien Mathieu, Ilkka Norros, Rémi Varloot. IEEE Infocom 2013 - 32nd IEEE International</span>
+<span class="sd">    Conference on Computer Communications, 2013.</span>
+<span class="sd">    Supra-extensibilité des réseaux P2P,</span>
+<span class="sd">    by François Baccelli, Fabien Mathieu, Ilkka Norros, Rémi Varloot. 15èmes Rencontres Francophones sur les Aspects</span>
+<span class="sd">    Algorithmiques des Télécommunications (AlgoTel), 2013.</span>
+<span class="sd">    Performance of P2P Networks with Spatial Interactions of Peers,</span>
+<span class="sd">    by François Baccelli, Fabien Mathieu, Ilkka Norros. CoRR, 2011.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">constructor</span> <span class="o">=</span> <span class="n">Member</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class attribute: constructor for members of the lab.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">members</span><span class="p">,</span> <span class="n">db_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">member_keys</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">db_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">db_dict</span> <span class="o">=</span> <span class="n">get_classes</span><span class="p">(</span><span class="n">DBAuthor</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;db_name&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>
+            <span class="n">member</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constructor</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">db_dict</span><span class="o">=</span><span class="n">db_dict</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="n">member</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">member</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publications</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">autosession</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">member_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :class:`list`</span>
+<span class="sd">            List of lab members.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+
+<div class="viewcode-block" id="Lab.manual_update">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.lab.Lab.manual_update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">manual_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">up_list</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inject some populated DBAuthors in the lab.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        up_list: :class:`list` of :class:`~gismap.database.blueprint.DBAuthor`</span>
+<span class="sd">            Info to inject.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">db_auth</span> <span class="ow">in</span> <span class="n">up_list</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">db_auth</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> is not a registered team author.&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">member</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">db_auth</span><span class="o">.</span><span class="n">db_name</span>
+            <span class="n">member</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">db</span><span class="p">]</span><span class="o">.</span><span class="n">update_values</span><span class="p">(</span><span class="n">db_auth</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Lab.get_ids">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.lab.Lab.get_ids">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rewrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get DB identifiers.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rewrite: :class:`bool`, default=False</span>
+<span class="sd">            Update even if identifiers are already set.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">member</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">backoff</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rewrite</span><span class="o">=</span><span class="n">rewrite</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Lab.compute_keys">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.lab.Lab.compute_keys">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Makes a key dictionary so that any name, alias, or db identifier of a member can be linked to her key.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">member_keys</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">member</span><span class="o">.</span><span class="n">key</span>
+            <span class="k">for</span> <span class="n">db_author</span> <span class="ow">in</span> <span class="n">member</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">db_author</span><span class="o">.</span><span class="n">iter_keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">member_keys</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">target</span></div>
+
+
+<div class="viewcode-block" id="Lab.get_publications">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.lab.Lab.get_publications">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_publications</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">.9</span><span class="p">,</span> <span class="n">length_impact</span><span class="o">=</span><span class="mf">.2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * Retrieve all publications from members in their databases</span>
+<span class="sd">        * Remove full duplicates</span>
+<span class="sd">        * Gather pseudo-duplicates and populate publications</span>
+<span class="sd">        * Populate each member&#39;s publication list with her publications&#39; keys.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publications</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_keys</span><span class="p">()</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">raw</span> <span class="o">+=</span> <span class="n">member</span><span class="o">.</span><span class="n">get_papers</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">backoff</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">raw</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">{</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]:</span> <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">}</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">length_impact</span><span class="o">=</span><span class="n">length_impact</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">fit</span><span class="p">([</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">])</span>
+
+        <span class="n">done</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">raw</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">paper</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">raw</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">done</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="n">locs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">transform</span><span class="p">([</span><span class="n">paper</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]],</span> <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">article</span> <span class="o">=</span> <span class="n">Publication</span><span class="p">([</span><span class="n">raw</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">locs</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">publications</span><span class="p">[</span><span class="n">article</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">article</span>
+            <span class="n">done</span><span class="p">[</span><span class="n">locs</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">aut2pap</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">paper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">publications</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">paper</span><span class="o">.</span><span class="n">authors</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">author_id</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">iter_keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">author_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">member_keys</span><span class="p">:</span>
+                        <span class="n">aut2pap</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">member_keys</span><span class="p">[</span><span class="n">author_id</span><span class="p">]]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">author</span><span class="p">,</span> <span class="n">papers</span> <span class="ow">in</span> <span class="n">aut2pap</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="n">author</span><span class="p">]</span><span class="o">.</span><span class="n">publications</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">papers</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Lab.publi_to_text">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.lab.Lab.publi_to_text">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">publi_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simple texter that gives title and abstract (if any) from a publication key.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key: :class:`str`</span>
+<span class="sd">            Identifier of a publication.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`str`</span>
+<span class="sd">            Publication description.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">paper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">publications</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">paper</span><span class="o">.</span><span class="n">title</span>
+        <span class="k">if</span> <span class="n">paper</span><span class="o">.</span><span class="n">abstract</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">res</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">paper</span><span class="o">.</span><span class="n">abstract</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="Lab.member_to_text">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.lab.Lab.member_to_text">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">member_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simple texter that concatenates all publications of a member (titles and possibly abstracts).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key: :class:`str`</span>
+<span class="sd">            Identifier of a member.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`str`</span>
+<span class="sd">            Member description.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">member</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">member_keys</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">publi_to_text</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">member</span><span class="o">.</span><span class="n">publications</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
