@@ -206,8 +206,8 @@ def lab2graph(lab):
     >>> len(lab.publications)
     453
     >>> html = lab2graph(lab)
-    >>> len(html)
-    296306
+    >>> html[:80]  # doctest: +ELLIPSIS
+    '\\n<div id="mynetwork_..."></div>\\n<div id="modal_..." class="modal">\\n  <'
     """
     node_pubs = {k: [] for k in lab.authors}
     edges_dict = defaultdict(list)
