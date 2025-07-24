@@ -8,6 +8,7 @@ class SearchAction:
     """
     Blueprint for extracting search results out of a gismo.
     """
+
     def __init__(self, name=None, post=None):
         self.name = name
         self.post = (lambda x: x) if post is None else post
@@ -51,7 +52,8 @@ def l2t(lis):
 
 class SearchDocuments(SearchAction):
     """Gives *k* best covering articles."""
-    def __init__(self, name='articles', post=None, k=5):
+
+    def __init__(self, name="articles", post=None, k=5):
         if post is None:
             post = p2t
         super().__init__(name=name, post=post)
@@ -63,7 +65,8 @@ class SearchDocuments(SearchAction):
 
 class SearchFeatures(SearchAction):
     """Gives best keywords."""
-    def __init__(self, name='keywords', post=None):
+
+    def __init__(self, name="keywords", post=None):
         if post is None:
             post = l2t
         super().__init__(name=name, post=post)
@@ -74,7 +77,8 @@ class SearchFeatures(SearchAction):
 
 class SearchLandmarks(SearchAction):
     """Gives best landmarks."""
-    def __init__(self, name='landmarks', post=None, lmks=None):
+
+    def __init__(self, name="landmarks", post=None, lmks=None):
         if post is None:
             post = l2t
         super().__init__(name=name, post=post)
@@ -99,6 +103,7 @@ class Search:
     corrector: :class:`Bool`, default=True
         Implement word correction.
     """
+
     def __init__(self, gismo, action_list, post=None, corrector=True):
         self.gismo = gismo
         self.action_list = action_list
@@ -116,7 +121,7 @@ class Search:
         if success:
             for action in self.action_list:
                 res[action.name] = action.run(self.gismo)
-        return self.post({'query': query, 'success': success, 'results': res})
+        return self.post({"query": query, "success": success, "results": res})
 
 
 def search_to_text(res):
@@ -131,11 +136,11 @@ def search_to_text(res):
     :class:`str`
         Text representation of the results.
     """
-    query = res['query']
-    if not res['success']:
+    query = res["query"]
+    if not res["success"]:
         return f"Failure: ``{query}'' not found!"
     output = f"Results for ``{query}'':\n"
-    for k, v in res['results'].items():
+    for k, v in res["results"].items():
         output += f"Suggested {k}: {v}\n"
     return output
 
@@ -149,14 +154,14 @@ publi_template = Template("""
 
 def publi_to_html(publi):
     dico = dict()
-    for db in ['hal', 'dblp']:
+    for db in ["hal", "dblp"]:
         source = publi.sources.get(db)
         if source:
             dico[db] = f"<a href='{source['url']}' target='_blank'>{db.upper()}</a>"
         else:
             dico[db] = ""
-    dico['authors'] = ', '.join(a.name for a in publi.authors)
-    for key in ['title', 'venue', 'year']:
+    dico["authors"] = ", ".join(a.name for a in publi.authors)
+    for key in ["title", "venue", "year"]:
         dico[key] = getattr(publi, key)
     return publi_template.substitute(dico)
 
@@ -203,8 +208,8 @@ def search_to_html(res):
         HTML representation of the results.
     """
     dico = defaultdict(str)
-    dico.update(res['results'])
-    dico['query'] = res['query']
-    if res['success']:
-        dico['publis'] = publis_to_html(dico['articles'])
+    dico.update(res["results"])
+    dico["query"] = res["query"]
+    if res["success"]:
+        dico["publis"] = publis_to_html(dico["articles"])
     return html_template.safe_substitute(dico)

@@ -1,4 +1,4 @@
 import logging
 
-logger = logging.getLogger()
+logger = logging.getLogger("GisMap")
 """Default logging interface."""

@@ -4,7 +4,7 @@ Various functions and classes.
 
 ## Common
 
-All-purpose functions
+All-purpose functions.
 
 ```{eval-rst}
 .. automodule:: gismap.utils.common
@@ -13,18 +13,27 @@ All-purpose functions
 
 ## Requests
 
-Functions related to the `requests`
+Functions related to the `requests`.
 
 ```{eval-rst}
 .. automodule:: gismap.utils.requests
     :members:
 ```
 
-## MixInIO
+## Logger
 
-MixInIO class (make classes easy to dump and load).
+Keep track of things that go wrong.
 
 ```{eval-rst}
-.. automodule:: gismap.utils.mixinio
+.. automodule:: gismap.utils.logger
+    :members:
+```
+
+## Text
+
+Text manipulation tools.
+
+```{eval-rst}
+.. automodule:: gismap.utils.text
     :members:
 ```

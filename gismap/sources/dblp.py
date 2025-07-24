@@ -11,7 +11,7 @@ from gismap.utils.requests import get
 
 @dataclass(repr=False)
 class DBLP(DB):
-    db_name: ClassVar[str] = 'dblp'
+    db_name: ClassVar[str] = "dblp"
     author_backoff: ClassVar[float] = 7.0
     publi_backoff: ClassVar[float] = 2.0
 
@@ -47,14 +47,21 @@ class DBLP(DB):
         []
         """
         dblp_api = "https://dblp.org/search/author/api"
-        dblp_args = {'q': name}
+        dblp_args = {"q": name}
         r = get(dblp_api, params=dblp_args)
-        soup = Soup(r.text, features='xml')
+        soup = Soup(r, features="xml")
         if wait:
             sleep(cls.author_backoff)
-        return [DBLPAuthor(name=name, key=hit.url.text.split('pid/')[1],
-                           aliases=clean_aliases(name, [hit.author.text] + [alia.text for alia in hit('alias')]))
-                for hit in soup('hit')]
+        return [
+            DBLPAuthor(
+                name=name,
+                key=hit.url.text.split("pid/")[1],
+                aliases=clean_aliases(
+                    name, [hit.author.text] + [alia.text for alia in hit("alias")]
+                ),
+            )
+            for hit in soup("hit")
+        ]
 
     @classmethod
     def from_author(cls, a, wait=True):
@@ -84,35 +91,38 @@ class DBLP(DB):
         authors=[DBLPAuthor(name='Fabien Mathieu', key='66/2077')], venue='SSS', type='conference', year=2007,
         key='conf/sss/Mathieu07', url='https://dblp.org/rec/conf/sss/Mathieu07.html', pages='372-382')
         """
-        r = get(f'https://dblp.org/pid/{a.key}.xml')
-        soup = Soup(r.text, features='xml')
+        r = get(f"https://dblp.org/pid/{a.key}.xml")
+        soup = Soup(r, features="xml")
         if wait:
             sleep(cls.author_backoff)
-        return [DBLPPublication.from_soup(r) for r in soup('r')]
+        res = [DBLPPublication.from_soup(r) for r in soup("r")]
+        return [p for p in res if p.authors]
 
 
 @dataclass(repr=False)
 class DBLPAuthor(Author, DBLP):
     key: str
-    aliases: list=field(default_factory=list)
+    aliases: list = field(default_factory=list)
 
     @property
     def url(self):
         if self.key:
-            return f'https://dblp.org/pid/{self.key}.html'
-        return f'https://dblp.org/search?q={quote_plus(self.name)}'
+            return f"https://dblp.org/pid/{self.key}.html"
+        return f"https://dblp.org/search?q={quote_plus(self.name)}"
 
     def get_publications(self, wait=False):
         return DBLP.from_author(self, wait=wait)
 
 
-DBLP_TYPES = {'article': 'journal',
-              'inproceedings': 'conference',
-              'proceedings': 'book',
-              'informal': 'report',
-              'phdthesis': 'thesis',
-              'habil': 'hdr',
-              'software': 'software'}
+DBLP_TYPES = {
+    "article": "journal",
+    "inproceedings": "conference",
+    "proceedings": "book",
+    "informal": "report",
+    "phdthesis": "thesis",
+    "habil": "hdr",
+    "software": "software",
+}
 
 
 @dataclass(repr=False)
@@ -126,12 +136,14 @@ class DBLPPublication(Publication, DBLP):
     @classmethod
     def from_soup(cls, soup):
         p = soup.find()
-        typ = p.get('publtype', p.name)
+        typ = p.get("publtype", p.name)
         typ = DBLP_TYPES.get(typ, typ)
-        res = {'type': typ,
-               'key': p['key'],
-               'url': f"https://dblp.org/rec/{p['key']}.html"}
-        keys = ['title', 'booktitle', 'pages', 'journal', 'year', 'volume', 'number']
+        res = {
+            "type": typ,
+            "key": p["key"],
+            "url": f"https://dblp.org/rec/{p['key']}.html",
+        }
+        keys = ["title", "booktitle", "pages", "journal", "year", "volume", "number"]
         for tag in keys:
             t = p.find(tag)
             if t:
@@ -139,13 +151,12 @@ class DBLPPublication(Publication, DBLP):
                     res[tag] = int(t.text)
                 except ValueError:
                     res[tag] = t.text
-        for tag in ['booktitle', 'journal']:
+        for tag in ["booktitle", "journal"]:
             t = p.find(tag)
             if t:
-                res['venue'] = t.text
+                res["venue"] = t.text
                 break
         else:
-            res['venue'] = 'unpublished'
-        res['authors'] = [DBLPAuthor(key=a['pid'], name=a.text)
-                          for a in p('author')]
+            res["venue"] = "unpublished"
+        res["authors"] = [DBLPAuthor(key=a["pid"], name=a.text) for a in p("author")]
         return cls(**{k: v for k, v in res.items() if k in cls.__match_args__})

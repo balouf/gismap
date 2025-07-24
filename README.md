@@ -9,31 +9,34 @@
 
 GISMAP leverages DBLP and HAL databases to provide cartography tools for you and your lab.
 
-
 - Free software: MIT
 - Documentation: <https://balouf.github.io/gismap/>.
 - Github: <https://github.com/balouf/gismap>
 
-
 ## Features
 
-- TODO
+- Can be used by all researchers in Computer Science (DBLP endpoint) or based in France (HAL endpoint).
+- Aggregate publications from multiple databases, including multiple author keys inside the same database.
+- Automatically keeps track of a Lab/Department members and publications.
+- Builds interactive collaboration graphs.
 
 ## Quickstart
 
-Install Generic Information Search: Mapping and Analysis of Publications:
+Install GISMAP:
 
 ```console
 $ pip install gismap
 ```
 
-Use Generic Information Search: Mapping and Analysis of Publications in a Python project:
+Use GISMAP to produce a collaboration graph (HTML):
 
 ```pycon
->>> from gismap import MyClass1
->>> my_object = MyClass1(a=5, b=3)
->>> my_object.addition()
-8
+>>> from gismap.sources.hal import HAL
+>>> from gismap.lab import ListLab, lab2graph
+>>> lab = ListLab(["Mathilde Labbé", "Anne Reverseau", "David Martens", "Marcela Scibiorska", "Nathalie Grande"], dbs=[HAL])
+>>> lab.update_authors()
+>>> lab.update_publis()
+>>> collabs = lab2graph(lab)
 ```
 
 ## Credits

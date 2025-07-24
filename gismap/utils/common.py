@@ -1,11 +1,17 @@
-HIDDEN_KEYS = {'sources', 'aliases', 'abstract'}
+HIDDEN_KEYS = {"sources", "aliases", "abstract"}
+
 
 class LazyRepr:
     """
     MixIn that hides empty fields in dataclasses repr's.
     """
+
     def __repr__(self):
-        kws = [f"{key}={value!r}" for key, value in self.__dict__.items() if value and key not in HIDDEN_KEYS]
+        kws = [
+            f"{key}={value!r}"
+            for key, value in self.__dict__.items()
+            if value and key not in HIDDEN_KEYS
+        ]
         return f"{type(self).__name__}({', '.join(kws)})"
 
 
@@ -24,7 +30,7 @@ def unlist(x):
     return x[0] if (isinstance(x, list) and x) else x
 
 
-def get_classes(root, key='name'):
+def get_classes(root, key="name"):
     """
     Parameters
     ----------
@@ -41,13 +47,14 @@ def get_classes(root, key='name'):
     Examples
     --------
 
-    >>> from gismap.database.blueprint import DBAuthor
-    >>> subclasses = get_classes(DBAuthor, key='db_name')
+    >>> from gismap.sources.models import DB
+    >>> subclasses = get_classes(DB, key='db_name')
     >>> dict(sorted(subclasses.items())) # doctest: +NORMALIZE_WHITESPACE
-    {'dblp': <class 'gismap.database.dblp.DBLPAuthor'>,
-    'hal': <class 'gismap.database.hal.HALAuthor'>}
+    {'dblp': <class 'gismap.sources.dblp.DBLP'>, 'hal': <class 'gismap.sources.hal.HAL'>}
     """
-    result = {getattr(c, key): c for c in root.__subclasses__() if getattr(c, key)}
+    result = {
+        getattr(c, key): c for c in root.__subclasses__() if getattr(c, key, None)
+    }
     for c in root.__subclasses__():
         result.update(get_classes(c))
     return result

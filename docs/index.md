@@ -1,4 +1,4 @@
-# Welcome to Generic Information Search: Mapping and Analysis of Publications's documentation!
+# Welcome to GISMAP documentation!
 
 
 :::{toctree}
