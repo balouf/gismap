@@ -18,10 +18,15 @@ class Corrector:
     --------
 
     >>> vocabulary = ['My Taylor Swift is Rich']
-    >>> cor = Corrector(vocabulary)
-    >>> cor('May Tailor Swyft ise Riche')
-    'May taylor swift ise rich'
+    >>> phrase = "How riche ise Tailor Swyft"
+    >>> cor = Corrector(vocabulary, min_length=4)
+    >>> cor(phrase)
+    'How rich ise taylor swift'
+    >>> cor = Corrector(vocabulary, min_length=2)
+    >>> cor(phrase)
+    'How rich is taylor swift'
     """
+
     def __init__(self, voc, score_cutoff=20, min_length=3):
         self.voc = {k.lower() for w in voc for k in w.split() if len(k) >= min_length}
         self.cutoff = score_cutoff
@@ -86,4 +91,3 @@ def clean_aliases(name, alias_list):
         Aliases deduped, sorted, and with main name removed.
     """
     return sorted(set(n for n in alias_list if n != name))
-

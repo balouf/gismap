@@ -4,8 +4,6 @@
 
 import pytest
 
-from gismap import gismap
-
 
 @pytest.fixture
 def response():

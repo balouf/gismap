@@ -21,8 +21,6 @@ class Publication(LazyRepr):
 @dataclass(repr=False)
 class DB(LazyRepr):
     db_name: ClassVar[str] = None
-    author_backoff: ClassVar[float] = 0.0
-    publi_backoff: ClassVar[float] = 0.0
 
     @classmethod
     def search_author(cls, name):
@@ -31,5 +29,3 @@ class DB(LazyRepr):
     @classmethod
     def from_author(cls, a):
         raise NotImplementedError
-
-

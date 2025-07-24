@@ -1,6 +1,5 @@
 # Tutorials
 
 :::{toctree}
-tutorial
-answer
+lab_tutorial
 :::

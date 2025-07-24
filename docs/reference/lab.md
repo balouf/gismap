@@ -1,28 +1,38 @@
 # Laboratory
 
-## Lab
+Management of a group of people and their publications is made with the {class}`~gismap.lab.lab.Lab` abstract class.
 
-The `Lab` class glues researchers and publications together.
 
 ```{eval-rst}
 .. automodule:: gismap.lab.lab
     :members:
 ```
 
-## Member
-
-Handling one single researcher.
+## Collaboration graph
 
 ```{eval-rst}
-.. automodule:: gismap.lab.member
+.. automodule:: gismap.lab.graph
     :members:
 ```
 
-## Publication
 
-Handling one single publication.
+## LIP6
 
 ```{eval-rst}
-.. automodule:: gismap.lab.publication
+.. automodule:: gismap.lab.lip6
+    :members:
+```
+
+## Toulouse
+
+```{eval-rst}
+.. automodule:: gismap.lab.toulouse
+    :members:
+```
+
+## Vis
+
+```{eval-rst}
+.. automodule:: gismap.lab.vis
     :members:
 ```
