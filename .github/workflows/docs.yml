@@ -28,12 +28,15 @@ jobs:
       - name: Set up uv
         uses: astral-sh/setup-uv@v5
         with:
-          version: "0.7.13"
+          version: "0.8.12"
 
       - name: Setup Pandoc
         uses: pandoc/actions/setup@v1
         with:
           version: '3.6.3'
+
+      - name: Git LFS Pull Notebooks
+        run: git lfs pull
 
       - name: Build Sphinx documentation
         run: |
