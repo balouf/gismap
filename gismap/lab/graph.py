@@ -204,7 +204,7 @@ def lab2graph(lab):
     >>> len(lab.authors)
     2
     >>> len(lab.publications)
-    453
+    435
     >>> html = lab2graph(lab)
     >>> html[:80]  # doctest: +ELLIPSIS
     '\\n<div id="mynetwork_..."></div>\\n<div id="modal_..." class="modal">\\n  <'

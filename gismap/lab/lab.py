@@ -37,6 +37,13 @@ class AuthorMetadata(LazyRepr):
 class LabAuthor(SourcedAuthor):
     metadata: AuthorMetadata = field(default_factory=AuthorMetadata)
 
+    def auto_img(self):
+        for source in self.sources:
+            img = getattr(source, "img", None)
+            if img is not None:
+                self.metadata.img = img
+                break
+
     def auto_sources(self, dbs=None):
         """
         Automatically populate the sources based on author's name.
@@ -110,9 +117,12 @@ class Lab(MixInIO):
         """
         self.authors = dict()
         for author in self._author_iterator():
-            author.auto_sources(dbs=self.dbs)
+            if len(author.sources) == 0:
+                author.auto_sources(dbs=self.dbs)
             if author.sources:
                 self.authors[author.key] = author
+            if author.metadata.img is None:
+                author.auto_img()
 
     def update_publis(self):
         """

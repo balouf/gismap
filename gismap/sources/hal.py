@@ -2,6 +2,7 @@ from typing import ClassVar
 from dataclasses import dataclass, field
 from collections import defaultdict
 from urllib.parse import quote_plus
+from bs4 import BeautifulSoup as Soup
 import json
 
 from gismap.sources.models import DB, Publication, Author  #  DBAuthor, DBPublication
@@ -67,7 +68,7 @@ class HAL(DB):
                 elif "person_i" in a:
                     pids[a["person_i"]].add(a.get("label_s"))
             elif "fullName_s" in a:
-                    names.add(a["fullName_s"])
+                names.add(a["fullName_s"])
         res = [
             HALAuthor(name=name, key=k, aliases=clean_aliases(name, v))
             for k, v in hids.items()
@@ -189,6 +190,18 @@ class HALAuthor(Author, HAL):
             return f"https://hal.science/search/index?q={quote_plus(self.name)}"
         else:
             return f"https://hal.science/search/index/?q=*&authIdHal_s={self.key}"
+
+    @property
+    def img(self):
+        if self.key_type is not None:
+            return None
+        soup = Soup(get(f"https://cv.hal.science/{self.key}"), "lxml")
+        if soup.form:
+            return None
+        try:
+            return soup.main.section.div.div.div.img["src"]
+        except TypeError:
+            return None
 
     def get_publications(self):
         return HAL.from_author(self)

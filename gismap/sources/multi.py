@@ -100,7 +100,7 @@ def regroup_authors(auth_dict, pub_dict):
         pub.authors = [redirection.get(a.key, a) for a in pub.authors]
 
 
-def regroup_publications(pub_dict, threshold=90, length_impact=0.2):
+def regroup_publications(pub_dict, threshold=90, length_impact=0.08):
     """
     Puts together copies of the same publication.
 
