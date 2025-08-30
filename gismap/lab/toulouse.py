@@ -1,6 +1,7 @@
 import re
 from bs4 import BeautifulSoup as Soup
-from gismap.lab.lab import Lab, AuthorMetadata, LabAuthor
+from gismap.lab.lab import Lab
+from gismap.lab.lab_author import AuthorMetadata, LabAuthor
 from gismap.utils.requests import get
 
 

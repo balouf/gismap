@@ -1,4 +1,4 @@
-HIDDEN_KEYS = {"sources", "aliases", "abstract"}
+HIDDEN_KEYS = {"sources", "aliases", "abstract", "metadata"}
 
 
 class LazyRepr:
@@ -10,7 +10,7 @@ class LazyRepr:
         kws = [
             f"{key}={value!r}"
             for key, value in self.__dict__.items()
-            if value and key not in HIDDEN_KEYS
+            if value and key not in HIDDEN_KEYS and not key.startswith("_")
         ]
         return f"{type(self).__name__}({', '.join(kws)})"
 
@@ -58,3 +58,48 @@ def get_classes(root, key="name"):
     for c in root.__subclasses__():
         result.update(get_classes(c))
     return result
+
+
+def list_of_objects(clss, dico, default=None):
+    """
+    Versatile way to enter a list of objects referenced by a dico.
+
+    Parameters
+    ----------
+    clss: :class:`object`
+        Object or reference to an object or list of objects / references to objects.
+    dico: :class:`dict`
+        Dictionary of references to objects.
+    default: :class:`list`, optional
+        Default list to return if `clss` is None.
+
+    Returns
+    -------
+    :class:`list`
+        Proper list of objects.
+
+    Examples
+    ________
+
+    >>> from gismap.sources.models import DB
+    >>> subclasses = get_classes(DB, key='db_name')
+    >>> from gismap import HAL, DBLP
+    >>> list_of_objects([HAL, 'dblp'], subclasses)
+    [<class 'gismap.sources.hal.HAL'>, <class 'gismap.sources.dblp.DBLP'>]
+    >>> list_of_objects(None, subclasses, [DBLP])
+    [<class 'gismap.sources.dblp.DBLP'>]
+    >>> list_of_objects(DBLP, subclasses)
+    [<class 'gismap.sources.dblp.DBLP'>]
+    >>> list_of_objects('hal', subclasses)
+    [<class 'gismap.sources.hal.HAL'>]
+    """
+    if default is None:
+        default = []
+    if clss is None:
+        return default
+    elif isinstance(clss, str):
+        return [dico[clss]]
+    elif isinstance(clss, list):
+        return [cls for lcls in clss for cls in list_of_objects(lcls, dico, default)]
+    else:
+        return [clss]

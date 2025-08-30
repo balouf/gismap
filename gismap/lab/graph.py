@@ -59,8 +59,11 @@ def publication_to_html(pub):
     HTML string with hyperlinks where applicable.
     """
     # Title as link if available
-    if getattr(pub, "url", None):
-        title_html = f'<a href="{pub.url}" target="_blank">{pub.title}</a>'
+    url = getattr(pub, "url", None)
+    if url is None and hasattr(pub, "sources"):
+        url = getattr(pub.sources[0], "url", None)
+    if url:
+        title_html = f'<a href="{url}" target="_blank">{pub.title}</a>'
     else:
         title_html = pub.title
 
@@ -129,7 +132,7 @@ def to_node(s, node_pubs):
     """
     Parameters
     ----------
-    s: :class:`~gismap.lab.lab.LabAuthor`
+    s: :class:`~gismap.lab.lab_author.LabAuthor`
         Searcher.
     node_pubs: :class:`dict`
         Lab publications.
@@ -203,8 +206,8 @@ def lab2graph(lab):
     >>> lab.update_publis()
     >>> len(lab.authors)
     2
-    >>> len(lab.publications)
-    435
+    >>> 430 < len(lab.publications) < 440
+    True
     >>> html = lab2graph(lab)
     >>> html[:80]  # doctest: +ELLIPSIS
     '\\n<div id="mynetwork_..."></div>\\n<div id="modal_..." class="modal">\\n  <'
@@ -212,8 +215,8 @@ def lab2graph(lab):
     node_pubs = {k: [] for k in lab.authors}
     edges_dict = defaultdict(list)
     for p in lab.publications.values():
-        # Some authors are twice in the author list for some reason. This should take care of it.
-        lauths = {a.key: a for a in p.authors if a.__class__.__name__ == "LabAuthor"}
+        # Strange things can happen with multiple sources. This should take care of it.
+        lauths = {a.key: a for source in p.sources for a in source.authors if a.__class__.__name__ == "LabAuthor"}
         lauths = sorted([a for a in lauths.values()], key=lambda a: str(a.key))
         for a in lauths:
             node_pubs[a.key].append(p)

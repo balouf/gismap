@@ -91,10 +91,36 @@ vis_template = Template("""
   const edges = new vis.DataSet(${edges_json});
   const container = document.getElementById('${container_id}');
   let network = null;
+
+  var physics = {
+  physics: {
+    solver: "forceAtlas2Based",
+    forceAtlas2Based: {
+      gravitationalConstant: -50,
+      centralGravity: 0.01,
+      springLength: 200,
+      springConstant: 0.08,
+      damping: 0.98,
+      avoidOverlap: 1
+    },
+    maxVelocity: 10,
+    minVelocity: 0.9,
+    stabilization: {
+      enabled: true,
+      iterations: 2000,
+      updateInterval: 50,
+      onlyDynamicEdges: false,
+      fit: true
+    },
+    timestep: 0.25
+  }
+};
+
   function renderNetwork() {
     const theme = getTheme();
     const options = getVisOptions(theme);
     network = new vis.Network(container, { nodes: nodes, edges: edges }, options);
+    network.setOptions(physics)
     // Tooltip survol
     network.on("hoverNode", function(params) {
       const node = nodes.get(params.node);

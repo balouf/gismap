@@ -5,15 +5,15 @@ from bs4 import BeautifulSoup as Soup
 from time import sleep
 
 from gismap.sources.models import DB, Author, Publication
-from gismap.utils.text import clean_aliases
+from gismap.utils.text import clean_aliases, auto_int
 from gismap.utils.requests import get
 
 
 @dataclass(repr=False)
 class DBLP(DB):
     db_name: ClassVar[str] = "dblp"
-    author_backoff: ClassVar[float] = 7.0
-    publi_backoff: ClassVar[float] = 2.0
+    author_backoff: ClassVar[float] = 5.0
+    publi_backoff: ClassVar[float] = 1.0
 
     @classmethod
     def search_author(cls, name, wait=True):
@@ -84,17 +84,16 @@ class DBLP(DB):
         authors=[DBLPAuthor(name='Yacine Boufkhad', key='75/5742'), DBLPAuthor(name='Fabien Mathieu', key='66/2077'),
         DBLPAuthor(name='Fabien de Montgolfier', key='57/6313'), DBLPAuthor(name='Diego Perino', key='03/3645'),
         DBLPAuthor(name='Laurent Viennot', key='v/LaurentViennot')],
-        venue='IPTPS', type='conference', year=2008, key='conf/iptps/BoufkhadMMPV08',
-        url='https://dblp.org/rec/conf/iptps/BoufkhadMMPV08.html', pages=4)
+        venue='IPTPS', type='conference', year=2008, key='conf/iptps/BoufkhadMMPV08')
         >>> publications[-1] # doctest:  +NORMALIZE_WHITESPACE
         DBLPPublication(title='Upper Bounds for Stabilization in Acyclic Preference-Based Systems.',
         authors=[DBLPAuthor(name='Fabien Mathieu', key='66/2077')], venue='SSS', type='conference', year=2007,
-        key='conf/sss/Mathieu07', url='https://dblp.org/rec/conf/sss/Mathieu07.html', pages='372-382')
+        key='conf/sss/Mathieu07')
         """
         r = get(f"https://dblp.org/pid/{a.key}.xml")
         soup = Soup(r, features="xml")
         if wait:
-            sleep(cls.author_backoff)
+            sleep(cls.publi_backoff)
         res = [DBLPPublication.from_soup(r) for r in soup("r")]
         return [p for p in res if p.authors]
 
@@ -110,7 +109,7 @@ class DBLPAuthor(Author, DBLP):
             return f"https://dblp.org/pid/{self.key}.html"
         return f"https://dblp.org/search?q={quote_plus(self.name)}"
 
-    def get_publications(self, wait=False):
+    def get_publications(self, wait=True):
         return DBLP.from_author(self, wait=wait)
 
 
@@ -128,29 +127,27 @@ DBLP_TYPES = {
 @dataclass(repr=False)
 class DBLPPublication(Publication, DBLP):
     key: str
-    url: str = None
-    pages: str = None
-    volume: int = None
-    number: int = None
+    metadata: dict = field(default_factory=dict)
+
+    @property
+    def url(self):
+        if self.key:
+            return f"https://dblp.org/rec/{self.key}.html"
+        else:
+            return None
 
     @classmethod
     def from_soup(cls, soup):
         p = soup.find()
         typ = p.get("publtype", p.name)
         typ = DBLP_TYPES.get(typ, typ)
+
         res = {
             "type": typ,
             "key": p["key"],
-            "url": f"https://dblp.org/rec/{p['key']}.html",
+            "title": p.title.text,
+            "year": int(p.year.text),
         }
-        keys = ["title", "booktitle", "pages", "journal", "year", "volume", "number"]
-        for tag in keys:
-            t = p.find(tag)
-            if t:
-                try:
-                    res[tag] = int(t.text)
-                except ValueError:
-                    res[tag] = t.text
         for tag in ["booktitle", "journal"]:
             t = p.find(tag)
             if t:
@@ -159,4 +156,11 @@ class DBLPPublication(Publication, DBLP):
         else:
             res["venue"] = "unpublished"
         res["authors"] = [DBLPAuthor(key=a["pid"], name=a.text) for a in p("author")]
-        return cls(**{k: v for k, v in res.items() if k in cls.__match_args__})
+
+        metadata = dict()
+        for tag in p.find_all(recursive=False):
+            name = tag.name
+            if name not in {"title", "year", "author", "booktitle", "journal"}:
+                metadata[name] = auto_int(tag.text)
+
+        return cls(**res, metadata=metadata)

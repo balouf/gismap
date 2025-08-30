@@ -1,4 +1,5 @@
 from bof.fuzz import Process
+import unicodedata
 
 
 class Corrector:
@@ -90,4 +91,68 @@ def clean_aliases(name, alias_list):
     :class:`list`
         Aliases deduped, sorted, and with main name removed.
     """
-    return sorted(set(n for n in alias_list if n != name))
+    return sorted(set(n for nn in alias_list for n in [nn, asciify(nn)] if n != name))
+
+
+def asciify(text):
+    """
+    Parameters
+    ----------
+    text::class:`str`
+        Some text (typically names) with annoying accents.
+
+    Returns
+    -------
+    :class:`str`
+        Same text simplified into ascii.
+
+    Examples
+    --------
+    >>> asciify('Ana Bušić')
+    'Ana Busic'
+    >>> asciify("Thomas Deiß")
+    'Thomas Deiss'
+    """
+    text = text.replace("ß", "ss")
+    decomposed = unicodedata.normalize("NFD", text)
+    no_accents = "".join(c for c in decomposed if unicodedata.category(c) != "Mn")
+    ascii_text = no_accents.encode("ascii", "ignore").decode()
+    return ascii_text
+
+
+def normalized_name(txt):
+    """
+    Try to normalize names for facilitating comparisons. Name is lowered, split, asciified, sorted, and filtered.
+
+    Parameters
+    ----------
+    txt: :class:`str`
+
+    Returns
+    -------
+    :class:`str`
+
+    Examples
+    --------
+
+    >>> normalized_name("Thomas Deiß")
+    'deiss thomas'
+    >>> normalized_name("Dario Rossi 001")
+    'dario rossi'
+    >>> normalized_name("James W. Roberts")
+    'james roberts'
+    """
+    return " ".join(
+        sorted(
+            asciify(a)
+            for a in txt.lower().replace("-", " ").split()
+            if not (a.isdigit() or (len(a) < 3 and "." in a))
+        )
+    )
+
+
+def auto_int(txt):
+    try:
+        return int(txt)
+    except ValueError:
+        return txt

@@ -13,7 +13,7 @@ session.headers.update(
 )
 
 
-def get(url, params=None):
+def get(url, params=None, n_trials=10):
     """
     Parameters
     ----------
@@ -27,14 +27,20 @@ def get(url, params=None):
     :class:`str`
         Result.
     """
-    while True:
-        r = session.get(url, params=params)
-        if r.status_code == 429:
-            try:
-                t = int(r.headers["Retry-After"])
-            except KeyError:
-                t = 60
-            logger.warning(f"Too many requests. Auto-retry in {t} seconds.")
+    for attempt in range(n_trials):
+        try:
+            r = session.get(url, params=params)
+            if r.status_code == 429:
+                try:
+                    t = int(r.headers["Retry-After"])
+                except KeyError:
+                    t = 60
+                logger.warning(f"Too many requests. Auto-retry in {t} seconds.")
+                sleep(t)
+            else:
+                return r.text
+        except requests.exceptions.ConnectionError:
+            t = 6
+            logger.warning(f"Connection error. Auto-retry in {t} seconds.")
             sleep(t)
-        else:
-            return r.text
+    raise requests.exceptions.ConnectionError(f"Unable to retrieve {url}")

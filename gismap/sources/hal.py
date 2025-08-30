@@ -85,7 +85,7 @@ class HAL(DB):
                 HALAuthor(
                     name=name,
                     key=fullname,
-                    aliases=clean_aliases(name, fullname),
+                    aliases=[],
                     key_type="fullname",
                 )
                 for fullname in names
@@ -118,7 +118,7 @@ class HAL(DB):
         HALAuthor(name='Diego Perino', key='Diego Perino', key_type='fullname'),
         HALAuthor(name='Laurent Viennot', key='laurentviennot')],
         venue='Proceedings of the 7th Internnational Workshop on Peer-to-Peer Systems (IPTPS)', type='conference',
-        year=2008, key='471724', url='https://inria.hal.science/inria-00471724v1')
+        year=2008, key='471724')
         >>> diego = publications[2].authors[3]
         >>> diego
         HALAuthor(name='Diego Perino', key='Diego Perino', key_type='fullname')
@@ -128,7 +128,7 @@ class HAL(DB):
         HALPublication(title='Upper bounds for stabilization in acyclic preference-based systems',
         authors=[HALAuthor(name='Fabien Mathieu', key='fabien-mathieu')],
         venue="SSS'07 - 9th international conference on Stabilization, Safety, and Security of Distributed Systems",
-        type='conference', year=2007, key='668356', url='https://inria.hal.science/hal-00668356v1')
+        type='conference', year=2007, key='668356')
 
         Case of someone with multiple ids one want to cumulate:
 
@@ -181,9 +181,30 @@ class HALAuthor(Author, HAL):
     key: str | int = None
     key_type: str = None
     aliases: list = field(default_factory=list)
+    _url: str = None
+    _img: str = None
+    _cv: bool = None
+
+    def check_cv(self):
+        if self.key_type is not None:
+            self._cv = False
+            return None
+        url = f"https://cv.hal.science/{self.key}"
+        soup = Soup(get(url), "lxml")
+        if soup.form:
+            self._cv = False
+            return None
+        self._cv = True
+        self._url = url
+        try:
+            self._img = soup.main.section.div.div.div.img["src"]
+        except TypeError:
+            return None
 
     @property
     def url(self):
+        if self._url is not None:
+            return self._url
         if self.key_type == "pid":
             return f"https://hal.science/search/index/?q=*&authIdPerson_i={self.key}"
         elif self.key_type == "fullname":
@@ -193,15 +214,9 @@ class HALAuthor(Author, HAL):
 
     @property
     def img(self):
-        if self.key_type is not None:
-            return None
-        soup = Soup(get(f"https://cv.hal.science/{self.key}"), "lxml")
-        if soup.form:
-            return None
-        try:
-            return soup.main.section.div.div.div.img["src"]
-        except TypeError:
-            return None
+        if self._cv is None:
+            self.check_cv()
+        return self._img
 
     def get_publications(self):
         return HAL.from_author(self)
@@ -254,8 +269,11 @@ HAL_KEYS = {
 @dataclass(repr=False)
 class HALPublication(Publication, HAL):
     key: str
-    abstract: str = None
-    url: str = None
+    metadata: dict = field(default_factory=dict)
+
+    @property
+    def url(self):
+        return self.metadata.get("url")
 
     @classmethod
     def from_json(cls, r):
@@ -271,15 +289,20 @@ class HALPublication(Publication, HAL):
         :class:`~gismap.sources.hal.HALPublication`
 
         """
-        res = {v: unlist(r[k]) for k, v in HAL_KEYS.items() if k in r}
+        keys = {v: unlist(r[k]) for k, v in HAL_KEYS.items() if k in r}
+        res = {k: keys[k] for k in ["key", "title", "year"]}
+        # res = {v: unlist(r[k]) for k, v in HAL_KEYS.items() if k in r}
         res["authors"] = [
             parse_facet_author(a) for a in r.get("authFullNamePersonIDIDHal_fs", [])
         ]
         for tag in ["booktitle", "journal", "conference"]:
-            if tag in res:
-                res["venue"] = res[tag]
+            if tag in keys:
+                res["venue"] = keys[tag]
                 break
         else:
             res["venue"] = "unpublished"
-        res["type"] = HAL_TYPES.get(res["type"], res["type"].lower())
-        return cls(**{k: v for k, v in res.items() if k in cls.__match_args__})
+        res["type"] = HAL_TYPES.get(keys["type"], keys["type"].lower())
+        res["metadata"] = {
+            k: keys[k] for k in {"abstract", "url"} if k in keys and keys[k]
+        }
+        return cls(**res)

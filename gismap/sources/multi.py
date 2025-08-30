@@ -6,11 +6,22 @@ from gismap.sources.models import Publication, Author
 from gismap.utils.text import clean_aliases
 
 
-score_rosetta = {
-    "db_name": {"dblp": 1, "hal": 2},
-    "venue": {"CoRR": -1, "unpublished": -2},
-    "type": {"conference": 1, "journal": 2},
-}
+def score_author_source(dbauthor):
+    if dbauthor.db_name == "hal":
+        if dbauthor.key_type == "fullname":
+            return -1
+        elif dbauthor.key_type == "pid":
+            return 2
+        else:
+            return 3
+    elif dbauthor.db_name == "dblp":
+        return 1
+    else:
+        return 0
+
+
+def sort_author_sources(sources):
+    return sorted(sources, key=score_author_source, reverse=True)
 
 
 @dataclass(repr=False)
@@ -35,10 +46,15 @@ class SourcedAuthor(Author):
 
     @classmethod
     def from_sources(cls, sources):
+        sources = sort_author_sources(sources)
         return cls(name=sources[0].name, sources=sources)
 
-    def get_publications(self, clean=True):
-        res = {p.key: p for a in self.sources for p in a.get_publications()}
+    def get_publications(self, clean=True, selector=None):
+        if selector is None:
+            selector = []
+        res = {
+            p.key: p for a in self.sources for p in a.get_publications() if all(f(p) for f in selector)
+        }
         if clean:
             regroup_authors({self.key: self}, res)
             return regroup_publications(res)
@@ -46,29 +62,48 @@ class SourcedAuthor(Author):
             return res
 
 
+publication_score_rosetta = {
+    "db_name": {"dblp": 1, "hal": 2},
+    "venue": {"CoRR": -1, "unpublished": -2},
+    "type": {"conference": 1, "journal": 2},
+}
+
+
+def score_publication_source(source):
+    scores = [
+        v.get(getattr(source, k, None), 0) for k, v in publication_score_rosetta.items()
+    ]
+    scores.append(source.year)
+    return tuple(scores)
+
+
+def sort_publication_sources(sources):
+    return sorted(sources, key=score_publication_source, reverse=True)
+
+
 @dataclass(repr=False)
 class SourcedPublication(Publication):
-    key: str
     sources: list = field(default_factory=list)
+
+    @property
+    def key(self):
+        if self.sources:
+            return self.sources[0].key
+        else:
+            return None
 
     @classmethod
     def from_sources(cls, sources):
-        sources = sorted(sources, key=cls.score_source, reverse=True)
+        sources = sort_publication_sources(sources)
         main = sources[0]
         res = cls(
-            **{k: getattr(main, k) for k in main.__dict__ if k in cls.__match_args__},
+            **{
+                k: getattr(main, k)
+                for k in ["title", "authors", "venue", "type", "year"]
+            },
             sources=sources,
         )
-        for k, v in main.__dict__.items():
-            if k not in cls.__match_args__:
-                setattr(res, k, v)
         return res
-
-    @staticmethod
-    def score_source(source):
-        scores = [v.get(getattr(source, k, None), 0) for k, v in score_rosetta.items()]
-        scores.append(source.year)
-        return tuple(scores)
 
 
 def regroup_authors(auth_dict, pub_dict):
@@ -100,7 +135,7 @@ def regroup_authors(auth_dict, pub_dict):
         pub.authors = [redirection.get(a.key, a) for a in pub.authors]
 
 
-def regroup_publications(pub_dict, threshold=90, length_impact=0.08):
+def regroup_publications(pub_dict, threshold=85, length_impact=0.05, n_range=5):
     """
     Puts together copies of the same publication.
 
@@ -119,17 +154,19 @@ def regroup_publications(pub_dict, threshold=90, length_impact=0.08):
         Unified publications.
     """
     pub_list = [p for p in pub_dict.values()]
-
-    p = Process(length_impact=length_impact)
-    p.fit([paper.title for paper in pub_list])
-
     res = dict()
-    done = np.zeros(len(pub_list), dtype=bool)
-    for i, paper in enumerate(pub_list):
-        if done[i]:
-            continue
-        locs = np.where(p.transform([paper.title])[0, :] > threshold)[0]
-        pub = SourcedPublication.from_sources([pub_list[i] for i in locs])
-        res[pub.key] = pub
-        done[locs] = True
+
+    if pub_list:
+
+        p = Process(length_impact=length_impact, n_range=n_range)
+        p.fit([paper.title for paper in pub_list])
+
+        done = np.zeros(len(pub_list), dtype=bool)
+        for i, paper in enumerate(pub_list):
+            if done[i]:
+                continue
+            locs = np.where(p.transform([paper.title])[0, :] > threshold)[0]
+            pub = SourcedPublication.from_sources([pub_list[i] for i in locs])
+            res[pub.key] = pub
+            done[locs] = True
     return res

@@ -36,3 +36,10 @@ Management of a group of people and their publications is made with the {class}`
 .. automodule:: gismap.lab.vis
     :members:
 ```
+
+## Expansion
+
+```{eval-rst}
+.. automodule:: gismap.lab.expansion
+    :members:
+```

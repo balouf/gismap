@@ -2,18 +2,18 @@ import unicodedata
 from bof.fuzz import Process
 from gismap.sources.hal import HALAuthor
 from gismap.sources.dblp import DBLPAuthor
-from gismap.lab import LabAuthor, Lab
+from gismap.lab import Lab
 
 
 def asciify(texte):
     # Décompose les caractères en base + accents
-    texte_decompose = unicodedata.normalize('NFD', texte)
+    texte_decompose = unicodedata.normalize("NFD", texte)
     # Garde seulement les caractères qui ne sont pas des marques diacritiques (accents)
-    texte_sans_accents = ''.join(
-        c for c in texte_decompose
-        if unicodedata.category(c) != 'Mn'
+    texte_sans_accents = "".join(
+        c for c in texte_decompose if unicodedata.category(c) != "Mn"
     )
     return texte_sans_accents
+
 
 # Exemple
 texte = "Ana Bušić"
@@ -37,8 +37,8 @@ def score_author_source(dbauthor):
 import numpy as np
 
 
-def labify_authors(db_authors, length_impact=.2, threshold=55, n_range=4):
-    names = [asciify(a['author'].name) for a in db_authors.values()]
+def labify_authors(db_authors, length_impact=0.2, threshold=55, n_range=4):
+    names = [asciify(a["author"].name) for a in db_authors.values()]
     keys = {i: k for i, k in enumerate(db_authors.keys())}
     done = np.zeros(len(names), dtype=bool)
 
@@ -51,15 +51,20 @@ def labify_authors(db_authors, length_impact=.2, threshold=55, n_range=4):
             continue
         name = names[i]
         locs = np.where(sims[i, :] > threshold)[0]
-        sources = sorted([db_authors[keys[j]]['author'] for j in locs], key=lambda a: -score_author_source(a))
-        weight = sum(db_authors[keys[j]]['weight'] for j in locs)
+        sources = sorted(
+            [db_authors[keys[j]]["author"] for j in locs],
+            key=lambda a: -score_author_source(a),
+        )
+        weight = sum(db_authors[keys[j]]["weight"] for j in locs)
         res.append((LabAuthor.from_sources(sources), weight))
         done[locs] = True
     return res
 
+
 # res = [a for a, w in sorted(res, key=lambda aw: -aw[1])[:10]]
 
 from gismap.sources.multi import regroup_authors, regroup_publications
+from gismap.lab.lab_author import LabAuthor
 from gismap.utils.logger import logger
 
 
@@ -79,8 +84,10 @@ class CoLab(Lab):
         if self.authors is None:
             return {}
         return {
-            k for a in self.authors.values()
-            for k in [a.key, a.name, *a.aliases] + [kk for aa in a.sources for kk in [aa.key, aa.name, *aa.aliases]]
+            k
+            for a in self.authors.values()
+            for k in [a.key, a.name, *a.aliases]
+            + [kk for aa in a.sources for kk in [aa.key, aa.name, *aa.aliases]]
         }
 
     @property
@@ -94,9 +101,9 @@ class CoLab(Lab):
                     for author in source.authors:
                         key = author.key
                         if key in pub_authors:
-                            pub_authors[key]['weight'] += 1
+                            pub_authors[key]["weight"] += 1
                         else:
-                            pub_authors[key] = {'author': author, 'weight': 1}
+                            pub_authors[key] = {"author": author, "weight": 1}
         return pub_authors
 
     def build(self, target=10):
@@ -109,9 +116,17 @@ class CoLab(Lab):
             logger.info(f"{len(exists)} existing keys.")
             prospects = labify_authors(self.all_pub_authors)
             logger.info(f"{len(prospects)} potential lab authors found.")
-            news = {a.key: a for a, w in
-                    sorted([r for r in prospects if all(aa.key not in exists for aa in r[0].sources)],
-                           key=lambda aw: -aw[1])[:spare]}
+            news = {
+                a.key: a
+                for a, w in sorted(
+                    [
+                        r
+                        for r in prospects
+                        if all(aa.key not in exists for aa in r[0].sources)
+                    ],
+                    key=lambda aw: -aw[1],
+                )[:spare]
+            }
             self.authors.update(news)
             logger.info(f"{len(news)} new authors selected")
             if len(news) == 0:
@@ -128,8 +143,12 @@ class CoLab(Lab):
                     pubs[source.key] = source
             self.publications = regroup_publications(pubs)
 
-            redirection = {k: a for a in self.authors.values() for s in a.sources
-                           for k in [s.key, s.name, *s.aliases]}
+            redirection = {
+                k: a
+                for a in self.authors.values()
+                for s in a.sources
+                for k in [s.key, s.name, *s.aliases]
+            }
             for pub in self.publications.values():
                 pub.authors = [labify_author(a, redirection) for a in pub.authors]
 
@@ -138,5 +157,3 @@ def labify_author(author, rosetta):
     if isinstance(author, LabAuthor):
         return author
     return rosetta.get(author.key, author)
-
-

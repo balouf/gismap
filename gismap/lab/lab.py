@@ -1,74 +1,24 @@
 from gismo import MixInIO
-from dataclasses import dataclass, field
+from tqdm.auto import tqdm
+from IPython.display import display, HTML
+from pathlib import Path
 
-from gismap.utils.common import LazyRepr
+from gismap.utils.common import list_of_objects
 from gismap.utils.logger import logger
-from gismap.sources.multi import SourcedAuthor
-from gismap.sources.multi import regroup_authors, regroup_publications
-from gismap.sources.hal import HAL
-from gismap.sources.dblp import DBLP
-
-
-@dataclass(repr=False)
-class AuthorMetadata(LazyRepr):
-    """
-    Optional information about an author to be used to enhance her presentation.
-
-    Attributes
-    ----------
-
-    url: :class:`str`
-        Homepage of the author.
-    img: :class:`str`
-        Url to a picture.
-    group: :class:`str`
-        Group of the author.
-    position: :class:`tuple`
-        Coordinates of the author.
-    """
-
-    url: str = None
-    img: str = None
-    group: str = None
-    position: tuple = None
-
-
-@dataclass(repr=False)
-class LabAuthor(SourcedAuthor):
-    metadata: AuthorMetadata = field(default_factory=AuthorMetadata)
-
-    def auto_img(self):
-        for source in self.sources:
-            img = getattr(source, "img", None)
-            if img is not None:
-                self.metadata.img = img
-                break
-
-    def auto_sources(self, dbs=None):
-        """
-        Automatically populate the sources based on author's name.
-
-        Parameters
-        ----------
-        dbs: :class:`list`, default=[:class:`~gismap.sources.hal.HAL`, :class:`~gismap.sources.dblp.DBLP`]
-            List of DB sources to use.
-
-        Returns
-        -------
-        None
-        """
-        if dbs is None:
-            dbs = [HAL, DBLP]
-        sources = []
-        for db in dbs:
-            source = db.search_author(self.name)
-            if len(source) == 0:
-                logger.warning(f"{self.name} not found in {db.db_name}")
-            elif len(source) > 1:
-                logger.warning(f"Multiple entries for {self.name} in {db.db_name}")
-            sources += source
-        if len(sources) > 0:
-            self.sources = sources
+from gismap.lab.lab_author import (
+    db_dict,
+    default_dbs,
+    AuthorMetadata,
+    LabAuthor,
+    labify_publications,
+)
+from gismap.sources.multi import (
+    regroup_authors,
+    regroup_publications,
+)
+from gismap.lab.expansion import proper_prospects
+from gismap.lab.filters import author_taboo_filter, publication_taboo_filter, publication_size_filter
+from gismap.lab.graph import lab2graph
 
 
 class Lab(MixInIO):
@@ -83,16 +33,23 @@ class Lab(MixInIO):
         Name of the lab. Can be set as class or instance attribute.
     dbs: :class:`list`, default=[:class:`~gismap.sources.hal.HAL`, :class:`~gismap.sources.dblp.DBLP`]
         List of DB sources to use.
+    author_selectors: :class:`list`
+        Author filter. Default: minimal filtering.
+    publication_selectors: :class:`list`
+        Publication filter. Default: less than 10 authors to remove black holes.
     """
 
     name = None
-    dbs = [HAL, DBLP]
+    dbs = default_dbs
 
-    def __init__(self, name=None, dbs=None):
+    def __init__(
+        self, name=None, dbs=None):
         if name is not None:
             self.name = name
         if dbs is not None:
-            self.dbs = dbs
+            self.dbs = list_of_objects(dbs, db_dict, default=default_dbs)
+        self.author_selectors = [author_taboo_filter()]
+        self.publication_selectors = [publication_size_filter(), publication_taboo_filter()]
         self.authors = None
         self.publications = None
 
@@ -107,7 +64,7 @@ class Lab(MixInIO):
         """
         raise NotImplementedError
 
-    def update_authors(self):
+    def update_authors(self, desc="Author information"):
         """
         Populate the authors attribute (:class:`dict` [:class:`str`, :class:`~gismap.lab.lab.LabAuthor`]).
 
@@ -116,7 +73,9 @@ class Lab(MixInIO):
         None
         """
         self.authors = dict()
-        for author in self._author_iterator():
+        for author in tqdm(self._author_iterator(), desc=desc):
+            if not all(f(author) for f in self.author_selectors):
+                continue
             if len(author.sources) == 0:
                 author.auto_sources(dbs=self.dbs)
             if author.sources:
@@ -124,7 +83,7 @@ class Lab(MixInIO):
             if author.metadata.img is None:
                 author.auto_img()
 
-    def update_publis(self):
+    def update_publis(self, desc="Publications information"):
         """
         Populate the publications attribute (:class:`dict` [:class:`str`, :class:`~gismap.sources.multi.SourcedPublication`]).
 
@@ -133,10 +92,57 @@ class Lab(MixInIO):
         None
         """
         pubs = dict()
-        for author in self.authors.values():
-            pubs.update(author.get_publications(clean=False))
+        for author in tqdm(self.authors.values(), desc=desc):
+            pubs.update(
+                author.get_publications(clean=False, selector=self.publication_selectors)
+            )
         regroup_authors(self.authors, pubs)
         self.publications = regroup_publications(pubs)
+
+    def expand(self, target=None, group="moon", desc="Moon information", **kwargs):
+        if target is None:
+            target = len(self.authors) // 3
+        old, rosetta = proper_prospects(self, max_new=target, **kwargs)
+        new = {a.key: a for a in rosetta.values()}
+        for k, v in old.items():
+            rosetta[k] = self.authors[v]
+        logger.debug(f"{len(new)} new authors selected")
+        if len(new) == 0:
+            logger.warning("Expansion failed: no new author found.")
+            return None
+
+        self.authors.update(new)
+
+        pubs = dict()
+        for author in tqdm(new.values(), desc=desc):
+            author.auto_img()
+            author.metadata.group = group
+            pubs.update(
+                author.get_publications(clean=False, selector=self.publication_selectors)
+            )
+
+        for pub in self.publications.values():
+            for source in pub.sources:
+                pubs[source.key] = source
+
+        labify_publications(pubs.values(), rosetta)
+
+        self.publications = regroup_publications(pubs)
+
+        return None
+
+    def html(self, **kwargs):
+        return lab2graph(self, **kwargs)
+
+    def save_html(self, name=None, **kwargs):
+        if name is None:
+            name = self.name
+        name = Path(name).with_suffix(".html")
+        with open(name, "wt", encoding="utf8") as f:
+            f.write(self.html(**kwargs))
+
+    def show_html(self, **kwargs):
+        display(HTML(self.html(**kwargs)))
 
 
 class ListLab(Lab):
