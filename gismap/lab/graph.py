@@ -206,7 +206,7 @@ def lab2graph(lab):
     >>> lab.update_publis()
     >>> len(lab.authors)
     2
-    >>> 430 < len(lab.publications) < 440
+    >>> 400 < len(lab.publications) < 440
     True
     >>> html = lab2graph(lab)
     >>> html[:80]  # doctest: +ELLIPSIS

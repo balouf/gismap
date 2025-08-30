@@ -45,6 +45,13 @@ extensions = [
     "sphinx.ext.githubpages",
 ]
 
+# Remote NB execution
+nbsphinx_execute = 'always'
+nbsphinx_execute_arguments = [
+    "--InlineBackend.figure_formats={'svg', 'pdf'}"
+]
+
+
 # Smart code copy
 copybutton_exclude = ".linenos, .gp, .go"
 
