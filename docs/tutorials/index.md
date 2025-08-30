@@ -2,4 +2,5 @@
 
 :::{toctree}
 lab_tutorial
+egomap
 :::

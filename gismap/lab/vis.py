@@ -39,7 +39,20 @@ vis_template = Template("""
     .close:hover, .close:focus { color: #555; }
   }
 </style>
-<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script type="text/javascript">
+if (typeof vis === 'undefined') {
+  var script = document.createElement('script');
+  script.src = "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js";
+  script.type = "text/javascript";
+  script.onload = function() {
+    console.log("vis-network loaded dynamically");
+    // You can trigger your graph init here if needed
+  };
+  document.head.appendChild(script);
+} else {
+  console.log("vis-network already loaded");
+}
+</script>
 <script type="text/javascript">
 (function() {
   // Détection du thème

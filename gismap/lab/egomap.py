@@ -14,13 +14,12 @@ class EgoMap(Lab):
         yield self.sun
 
     def build(self, **kwargs):
-        name = self.sun.name
         target = kwargs.pop("target", 50)
         group = kwargs.pop("group", "moon")
-        self.update_authors(desc=f"{name} information")
-        self.update_publis(desc=f"{name} publications")
+        self.update_authors(desc="Sun metadata")
+        self.update_publis(desc="Sun publications")
         kwargs["target"] = target - len(self.authors)
-        self.expand(group=None, desc=f"{name} co-authors", **kwargs)
+        self.expand(group=None, desc="Planets", **kwargs)
         kwargs.update({"target": target - len(self.authors), "group": group})
         if kwargs["target"] > 0:
-            self.expand(desc=f"{name} moons", **kwargs)
+            self.expand(desc="Moons", **kwargs)
