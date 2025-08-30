@@ -3,6 +3,23 @@ from gismap.lab.lab_author import LabAuthor
 
 
 class EgoMap(Lab):
+    """
+    Parameters
+    ----------
+    sun
+    args
+    kwargs
+
+    Examples
+    --------
+
+    >>> dang = EgoMap("The-Dang Huynh", dbs="hal")
+    >>> dang.build(target=10)
+    >>> sorted(a.name for a in dang.authors.values())  # doctest: +NORMALIZE_WHITESPACE
+    ['Bruno Kauffmann', 'Chung Shue Chen', 'Fabien Mathieu', 'François Baccelli', 'Laurent Viennot', 'Ludovic Noirie',
+    'Siu-Wai Ho', 'Sébastien Tixeuil', 'The-Dang Huynh', 'Yannick Carlinet']
+    """
+
     def __init__(self, sun, *args, **kwargs):
         if isinstance(sun, str):
             sun = LabAuthor(sun)
