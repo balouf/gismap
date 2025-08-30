@@ -51,6 +51,10 @@ nbsphinx_execute_arguments = [
     "--InlineBackend.figure_formats={'svg', 'pdf'}"
 ]
 
+def setup(app):
+    app.add_css_file("https://unpkg.com/vis-network/styles/vis-network.min.css")
+    app.add_js_file("https://unpkg.com/vis-network/standalone/umd/vis-network.min.js")
+
 
 # Smart code copy
 copybutton_exclude = ".linenos, .gp, .go"

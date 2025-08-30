@@ -35,11 +35,6 @@ jobs:
         with:
           version: '3.6.3'
 
-      - name: Git LFS Pull Notebooks
-        run: |
-          git lfs fetch --all
-          git lfs pull
-
       - name: Build Sphinx documentation
         run: |
           uv sync --all-extras
