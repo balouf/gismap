@@ -7,7 +7,7 @@
   - Colors and size
   - Groups
 
-## 0.2.0 (2025-08-30): EgoMaps!
+## 0.2.0 (2025-08-31): EgoMaps!
 
 - New lab structure: EgoMap, an auto-lab that revolves around you!
 - New lab method: expansion, which adds *moons* (neighbor reasearchers).
