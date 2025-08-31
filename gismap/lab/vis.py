@@ -13,31 +13,102 @@ vis_template = Template("""
 </div>
 <style>
   /* Styles adaptatifs pour dark/light */
+/* Default: dark mode styles */
+#${container_id} {
+  width: 100%;
+  height: 80vh !important;
+  max-width: 100vw;
+  max-height: 100vh !important;
+  box-sizing: border-box;
+  border: 1px solid #444;
+  background: #181818;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(10,10,10,0.85);
+}
+
+.modal-content {
+  background-color: #23272e;
+  color: #f0f0f0;
+  margin: 10% auto;
+  padding: 24px;
+  border: 1px solid #888;
+  width: 50%;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.6);
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover, .close:focus {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* PyData Sphinx Light Theme */
+html[data-theme="light"] #${container_id},
+body[data-jp-theme-light="true"] #${container_id} {
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+html[data-theme="light"] .modal,
+body[data-jp-theme-light="true"] .modal {
+  background-color: rgba(220,220,220,0.85);
+}
+
+html[data-theme="light"] .modal-content,
+body[data-jp-theme-light="true"] .modal-content {
+  background: #fff;
+  color: #222;
+  border: 1px solid #888;
+}
+
+html[data-theme="light"] .close,
+body[data-jp-theme-light="true"] .close {
+  color: #222;
+}
+
+html[data-theme="light"] .close:hover, html[data-theme="light"] .close:focus,
+body[data-jp-theme-light="true"] .close:hover, body[data-jp-theme-light="true"] .close:focus {
+  color: #555;
+}
+
+/* Fallback: system light mode */
+@media (prefers-color-scheme: light) {
   #${container_id} {
-    width: 1200px; height: 800px; border: 1px solid #444;
-    background: #181818;
+    background: #fff;
+    border: 1px solid #ccc;
   }
   .modal {
-    display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
-    overflow: auto; background-color: rgba(10,10,10,0.85);
+    background-color: rgba(220,220,220,0.85);
   }
   .modal-content {
-    background-color: #23272e; color: #f0f0f0;
-    margin: 10% auto; padding: 24px; border: 1px solid #888;
-    width: 50%; border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,.6);
+    background: #fff;
+    color: #222;
+    border: 1px solid #888;
   }
   .close {
-    color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;
+    color: #222;
   }
-  .close:hover, .close:focus { color: #fff; text-decoration: none; cursor: pointer; }
-  @media (prefers-color-scheme: light) {
-    #${container_id} { background: #fff; border: 1px solid #ccc; }
-    .modal { background-color: rgba(220,220,220,0.85); }
-    .modal-content { background: #fff; color: #222; border: 1px solid #888; }
-    .close { color: #222; }
-    .close:hover, .close:focus { color: #555; }
+  .close:hover, .close:focus {
+    color: #555;
   }
+}
 </style>
 <script type="text/javascript">
 if (typeof vis === 'undefined') {
@@ -56,9 +127,29 @@ if (typeof vis === 'undefined') {
 <script type="text/javascript">
 (function() {
   // Détection du thème
-  function getTheme() {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+function getTheme() {
+  // Try PyData Sphinx theme on <html>
+  const pydataTheme = document.documentElement.getAttribute("data-theme");
+  if (pydataTheme === "dark" || pydataTheme === "light") {
+    return pydataTheme;
   }
+
+  // Try JupyterLab theme on <body>
+  const jupyterLabTheme = document.body.getAttribute("data-jp-theme-name");
+  if (jupyterLabTheme) {
+    // Simplify theme name to 'dark' or 'light'
+    const lowerName = jupyterLabTheme.toLowerCase();
+    if (lowerName.includes("dark")) {
+      return "dark";
+    }
+    if (lowerName.includes("light")) {
+      return "light";
+    }
+  }
+
+  // Fallback to system preference
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+};
   function getVisOptions(theme) {
     if (theme === 'dark') {
       return {
@@ -99,7 +190,7 @@ if (typeof vis === 'undefined') {
         interaction: { hover: true }
       };
     }
-  }
+  };
   const nodes = new vis.DataSet(${nodes_json});
   const edges = new vis.DataSet(${edges_json});
   const container = document.getElementById('${container_id}');
@@ -170,12 +261,22 @@ if (typeof vis === 'undefined') {
     window.onclick = function(event) {
       if (event.target == modal) { modal.style.display = "none"; }
     };
-  }
+  };
   renderNetwork();
+
   // Adapter dynamiquement si le thème change
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
-    renderNetwork();
-  });
+  window.addEventListener("theme-changed", () => renderNetwork());
+  const observer = new MutationObserver(mutations => {
+  for (const mutation of mutations) {
+    if (mutation.type === "attributes" && mutation.attributeName === "data-jp-theme-name") {
+      renderNetwork();
+    }
+  }
+    });
+    observer.observe(document.body, { attributes: true });
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => renderNetwork());
+    };
 })();
 </script>
 """)

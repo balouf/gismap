@@ -7,7 +7,9 @@ def taboos(txt, words):
 def publication_size_filter(n_max=10):
     return lambda p: len(p.authors) < n_max
 
-def publication_taboo_filter(w="Editorial"):
+def publication_taboo_filter(w=None):
+    if w is None:
+        w = ["Editorial", "Foreword"]
     return lambda p: taboos(p.title, w)
 
 def author_taboo_filter(w=None):
