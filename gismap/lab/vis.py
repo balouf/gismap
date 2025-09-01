@@ -4,21 +4,37 @@ import json
 
 
 vis_template = Template("""
+<div class="gismap-content" style="">
 <div id="${container_id}"></div>
+<a
+  href="https://balouf.github.io/gismap/"
+  target="_blank"
+  id="gismap-brand"
+  style="position: absolute; left: 10px; bottom: 10px; text-decoration: none; color: #888; font-size: min(2vw, 10px);
+  z-index: 10; pointer-events: auto;"
+>
+  &copy; Gismap 2025
+</a>
 <div id="${modal_id}" class="modal">
-  <div class="modal-content">
+<div class="modal-content">
     <span class="close" id="${modal_close_id}">&times;</span>
     <div id="${modal_body_id}"></div>
   </div>
 </div>
+</div>
 <style>
+.gismap-content {
+position: relative;
+width: 100%;
+height: 80vh !important;
+max-width: 100vw;
+max-height: 100vh !important;
+}
   /* Styles adaptatifs pour dark/light */
 /* Default: dark mode styles */
 #${container_id} {
   width: 100%;
-  height: 80vh !important;
-  max-width: 100vw;
-  max-height: 100vh !important;
+  height: 100%;
   box-sizing: border-box;
   border: 1px solid #444;
   background: #181818;
@@ -111,20 +127,6 @@ body[data-jp-theme-light="true"] .close:hover, body[data-jp-theme-light="true"] 
 }
 </style>
 <script type="text/javascript">
-if (typeof vis === 'undefined') {
-  var script = document.createElement('script');
-  script.src = "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js";
-  script.type = "text/javascript";
-  script.onload = function() {
-    console.log("vis-network loaded dynamically");
-    // You can trigger your graph init here if needed
-  };
-  document.head.appendChild(script);
-} else {
-  console.log("vis-network already loaded");
-}
-</script>
-<script type="text/javascript">
 (function() {
   // Détection du thème
 function getTheme() {
@@ -191,10 +193,6 @@ function getTheme() {
       };
     }
   };
-  const nodes = new vis.DataSet(${nodes_json});
-  const edges = new vis.DataSet(${edges_json});
-  const container = document.getElementById('${container_id}');
-  let network = null;
 
   var physics = {
   physics: {
@@ -221,6 +219,10 @@ function getTheme() {
 };
 
   function renderNetwork() {
+  const nodes = new vis.DataSet(${nodes_json});
+  const edges = new vis.DataSet(${edges_json});
+  const container = document.getElementById('${container_id}');
+  let network = null;
     const theme = getTheme();
     const options = getVisOptions(theme);
     network = new vis.Network(container, { nodes: nodes, edges: edges }, options);
@@ -262,20 +264,36 @@ function getTheme() {
       if (event.target == modal) { modal.style.display = "none"; }
     };
   };
-  renderNetwork();
+
+  function loadVisAndRender() {
+  if (typeof vis === 'undefined') {
+    var script = document.createElement('script');
+    script.src = "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js";
+    script.type = "text/javascript";
+    script.onload = function() {
+      console.log("vis-network loaded dynamically");
+      renderNetwork();  // Graph init after vis is loaded
+    };
+    document.head.appendChild(script);
+  } else {
+    console.log("vis-network already loaded");
+    renderNetwork();  // Graph init immediately
+  }
+}
+loadVisAndRender();
 
   // Adapter dynamiquement si le thème change
-  window.addEventListener("theme-changed", () => renderNetwork());
+  window.addEventListener("theme-changed", () => loadVisAndRender());
   const observer = new MutationObserver(mutations => {
   for (const mutation of mutations) {
     if (mutation.type === "attributes" && mutation.attributeName === "data-jp-theme-name") {
-      renderNetwork();
+      loadVisAndRender();
     }
   }
     });
     observer.observe(document.body, { attributes: true });
     if (window.matchMedia) {
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => renderNetwork());
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => loadVisAndRender());
     };
 })();
 </script>

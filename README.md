@@ -32,11 +32,11 @@ Use GISMAP to produce a collaboration graph (HTML):
 
 ```pycon
 >>> from gismap.sources.hal import HAL
->>> from gismap.lab import ListLab, lab2graph
->>> lab = ListLab(["Mathilde Labbé", "Anne Reverseau", "David Martens", "Marcela Scibiorska", "Nathalie Grande"], dbs=[HAL])
+>>> from gismap.lab import ListLab
+>>> lab = ListLab(["Fabien Mathieu", "François Baccelli", "Ludovic Noirie", "Céline Comte", "Sébastien Tixeuil"], dbs="hal")
 >>> lab.update_authors()
 >>> lab.update_publis()
->>> collabs = lab2graph(lab)
+>>> lab.show_html()
 ```
 
 ## Credits
