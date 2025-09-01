@@ -210,7 +210,7 @@ def lab2graph(lab):
     True
     >>> html = lab2graph(lab)
     >>> html[:80]  # doctest: +ELLIPSIS
-    '\\n<div id="mynetwork_..."></div>\\n<div id="modal_..." class="modal">\\n  <'
+    '\\n<div class="gismap-content">\\n<div id="mynetwork_..."></div>\\n<a\\n  href="htt'
     """
     node_pubs = {k: [] for k in lab.authors}
     edges_dict = defaultdict(list)

@@ -4,7 +4,7 @@ import json
 
 
 vis_template = Template("""
-<div class="gismap-content" style="">
+<div class="gismap-content">
 <div id="${container_id}"></div>
 <a
   href="https://balouf.github.io/gismap/"
