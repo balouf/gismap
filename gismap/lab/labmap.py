@@ -17,13 +17,20 @@ from gismap.sources.multi import (
     regroup_publications,
 )
 from gismap.lab.expansion import proper_prospects
-from gismap.lab.filters import author_taboo_filter, publication_taboo_filter, publication_size_filter
+from gismap.lab.filters import (
+    author_taboo_filter,
+    publication_taboo_filter,
+    publication_size_filter,
+    publication_oneword_filter,
+)
 from gismap.lab.graph import lab2graph
 
 
-class Lab(MixInIO):
+class LabMap(MixInIO):
     """
     Abstract class for labs.
+
+    Actual Lab classes can be created by implementing the `_author_iterator` method.
 
     Labs can be saved with the `dump` method and loaded with the `load` method.
 
@@ -33,23 +40,31 @@ class Lab(MixInIO):
         Name of the lab. Can be set as class or instance attribute.
     dbs: :class:`list`, default=[:class:`~gismap.sources.hal.HAL`, :class:`~gismap.sources.dblp.DBLP`]
         List of DB sources to use.
+
+
+    Attributes
+    -----------
+
     author_selectors: :class:`list`
-        Author filter. Default: minimal filtering.
+        Author filters. Default: minimal filtering.
     publication_selectors: :class:`list`
-        Publication filter. Default: less than 10 authors to remove black holes.
+        Publication filter. Default: less than 10 authors, not an editorial, at least two words in the title.
     """
 
     name = None
     dbs = default_dbs
 
-    def __init__(
-        self, name=None, dbs=None):
+    def __init__(self, name=None, dbs=None):
         if name is not None:
             self.name = name
         if dbs is not None:
             self.dbs = list_of_objects(dbs, db_dict, default=default_dbs)
         self.author_selectors = [author_taboo_filter()]
-        self.publication_selectors = [publication_size_filter(), publication_taboo_filter()]
+        self.publication_selectors = [
+            publication_size_filter(),
+            publication_taboo_filter(),
+            publication_oneword_filter(),
+        ]
         self.authors = None
         self.publications = None
 
@@ -94,7 +109,9 @@ class Lab(MixInIO):
         pubs = dict()
         for author in tqdm(self.authors.values(), desc=desc):
             pubs.update(
-                author.get_publications(clean=False, selector=self.publication_selectors)
+                author.get_publications(
+                    clean=False, selector=self.publication_selectors
+                )
             )
         regroup_authors(self.authors, pubs)
         self.publications = regroup_publications(pubs)
@@ -118,7 +135,9 @@ class Lab(MixInIO):
             author.auto_img()
             author.metadata.group = group
             pubs.update(
-                author.get_publications(clean=False, selector=self.publication_selectors)
+                author.get_publications(
+                    clean=False, selector=self.publication_selectors
+                )
             )
 
         for pub in self.publications.values():
@@ -145,7 +164,7 @@ class Lab(MixInIO):
         display(HTML(self.html(**kwargs)))
 
 
-class ListLab(Lab):
+class ListMap(LabMap):
     """
     Simplest way to create a lab: with a list of names.
 

@@ -11,7 +11,7 @@ def make_post_publi(lab):
 
     Parameters
     ----------
-    lab: :class:`~gismap.lab.lab.Lab`
+    lab: :class:`~gismap.lab.labmap.LabMap`
         Lab that contains the corpus publications.
 
     Returns
@@ -32,7 +32,7 @@ def make_gismo(lab, vectorizer_parameters=None):
 
     Parameters
     ----------
-    lab: :class:`~gismap.lab.lab.Lab`
+    lab: :class:`~gismap.lab.labmap.LabMap`
         Lab that contains publications.
     vectorizer_parameters: :class:`dict`
         Overriding parameters for the Countvectorizer of the gismo.

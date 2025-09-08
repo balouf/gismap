@@ -46,10 +46,9 @@ extensions = [
 ]
 
 # Remote NB execution
-nbsphinx_execute = 'always'
-nbsphinx_execute_arguments = [
-    "--InlineBackend.figure_formats={'svg', 'pdf'}"
-]
+nbsphinx_execute = "always"
+nbsphinx_execute_arguments = ["--InlineBackend.figure_formats={'svg', 'pdf'}"]
+
 
 def setup(app):
     app.add_css_file("https://unpkg.com/vis-network/styles/vis-network.min.css")

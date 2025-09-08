@@ -1,12 +1,12 @@
-from gismap.lab.lab import Lab
+from gismap.lab.labmap import LabMap
 from gismap.lab.lab_author import LabAuthor
 
 
-class EgoMap(Lab):
+class EgoMap(LabMap):
     """
     Parameters
     ----------
-    sun
+    star
     args
     kwargs
 
@@ -20,21 +20,21 @@ class EgoMap(Lab):
     'Siu-Wai Ho', 'Sébastien Tixeuil', 'The-Dang Huynh', 'Yannick Carlinet']
     """
 
-    def __init__(self, sun, *args, **kwargs):
-        if isinstance(sun, str):
-            sun = LabAuthor(sun)
-        sun.metadata.position = (0, 0)
-        self.sun = sun
+    def __init__(self, star, *args, **kwargs):
+        if isinstance(star, str):
+            star = LabAuthor(star)
+        star.metadata.position = (0, 0)
+        self.star = star
         super().__init__(*args, **kwargs)
 
     def _author_iterator(self):
-        yield self.sun
+        yield self.star
 
     def build(self, **kwargs):
         target = kwargs.pop("target", 50)
         group = kwargs.pop("group", "moon")
-        self.update_authors(desc="Sun metadata")
-        self.update_publis(desc="Sun publications")
+        self.update_authors(desc="Star metadata")
+        self.update_publis(desc="Star publications")
         kwargs["target"] = target - len(self.authors)
         self.expand(group=None, desc="Planets", **kwargs)
         kwargs.update({"target": target - len(self.authors), "group": group})

@@ -189,7 +189,7 @@ def lab2graph(lab):
     """
     Parameters
     ----------
-    lab: :class:`~gismap.lab.lab.Lab`
+    lab: :class:`~gismap.lab.labmap.LabMap`
         A lab populated with searchers and publications.
 
     Returns
@@ -200,13 +200,13 @@ def lab2graph(lab):
     Examples
     --------
 
-    >>> from gismap.lab import ListLab
-    >>> lab = ListLab(author_list=['Tixeuil Sébastien', 'Mathieu Fabien'], name='mini')
+    >>> from gismap.lab import ListMap as Map
+    >>> lab = Map(author_list=['Tixeuil Sébastien', 'Mathieu Fabien'], name='mini')
     >>> lab.update_authors()
     >>> lab.update_publis()
     >>> len(lab.authors)
     2
-    >>> 400 < len(lab.publications) < 440
+    >>> 380 < len(lab.publications) < 440
     True
     >>> html = lab2graph(lab)
     >>> html[:80]  # doctest: +ELLIPSIS
@@ -216,13 +216,18 @@ def lab2graph(lab):
     edges_dict = defaultdict(list)
     for p in lab.publications.values():
         # Strange things can happen with multiple sources. This should take care of it.
-        lauths = {a.key: a for source in p.sources for a in source.authors if a.__class__.__name__ == "LabAuthor"}
+        lauths = {
+            a.key: a
+            for source in p.sources
+            for a in source.authors
+            if a.__class__.__name__ == "LabAuthor"
+        }
         lauths = sorted([a for a in lauths.values()], key=lambda a: str(a.key))
         for a in lauths:
             node_pubs[a.key].append(p)
         for a1, a2 in combinations(lauths, 2):
             edges_dict[a1.key, a2.key].append(p)
-    connected = {k for kl in edges_dict for k in kl}
+    # connected = {k for kl in edges_dict for k in kl}
 
     for k, v in node_pubs.items():
         node_pubs[k] = sorted(v, key=lambda p: -p.year)
@@ -231,7 +236,8 @@ def lab2graph(lab):
 
     return generate_html(
         nodes=[
-            to_node(s, node_pubs) for s in lab.authors.values() if s.key in connected
+            to_node(s, node_pubs)
+            for s in lab.authors.values()  # if s.key in connected
         ],
         edges=[to_edge(k, v, lab.authors) for k, v in edges_dict.items()],
     )

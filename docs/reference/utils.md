@@ -22,7 +22,7 @@ Functions related to the `requests`.
 
 ## Logger
 
-Keep track of things that go wrong.
+Keep track of things.
 
 ```{eval-rst}
 .. automodule:: gismap.utils.logger

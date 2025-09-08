@@ -1,6 +1,6 @@
 import re
 from bs4 import BeautifulSoup as Soup
-from gismap.lab.lab import Lab
+from gismap.lab.labmap import LabMap
 from gismap.lab.lab_author import AuthorMetadata, LabAuthor
 from gismap.utils.requests import get
 
@@ -9,7 +9,7 @@ def name_changer(name, rosetta):
     return rosetta.get(name, name)
 
 
-class LaasLab(Lab):
+class LaasMap(LabMap):
     """
     Class for handling a LAAS team from its name.
     Default to `sara` team.
@@ -32,7 +32,7 @@ class LaasLab(Lab):
             yield LabAuthor(name=name, metadata=AuthorMetadata(url=url, img=img))
 
 
-class Solace(Lab):
+class SolaceMap(LabMap):
     """
     Class for handling the Solace team (`https://solace.cnrs.fr`).
     """

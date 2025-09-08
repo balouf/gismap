@@ -53,7 +53,10 @@ class SourcedAuthor(Author):
         if selector is None:
             selector = []
         res = {
-            p.key: p for a in self.sources for p in a.get_publications() if all(f(p) for f in selector)
+            p.key: p
+            for a in self.sources
+            for p in a.get_publications()
+            if all(f(p) for f in selector)
         }
         if clean:
             regroup_authors({self.key: self}, res)
@@ -157,7 +160,6 @@ def regroup_publications(pub_dict, threshold=85, length_impact=0.05, n_range=5):
     res = dict()
 
     if pub_list:
-
         p = Process(length_impact=length_impact, n_range=n_range)
         p.fit([paper.title for paper in pub_list])
 

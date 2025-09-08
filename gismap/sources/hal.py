@@ -139,7 +139,7 @@ class HAL(DB):
         >>> len(HAL.from_author(maria[0]))
         26
         >>> len(maria[1].get_publications())
-        123
+        124
 
         Note: an error is raised if not enough data is provided
 

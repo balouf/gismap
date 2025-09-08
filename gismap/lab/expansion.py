@@ -53,7 +53,7 @@ def count_prospect_entries(lab):
 
     Parameters
     ----------
-    lab: :class:`~gismap.lab.lab.Lab`
+    lab: :class:`~gismap.lab.labmap.LabMap`
         Reference lab.
 
     Returns
@@ -117,7 +117,7 @@ def get_prospects(lab):
     """
     Parameters
     ----------
-    lab: :class:`~gismap.lab.lab.Lab`
+    lab: :class:`~gismap.lab.labmap.LabMap`
         Reference lab.
 
     Returns
@@ -150,7 +150,7 @@ def get_member_names(lab):
     """
     Parameters
     ----------
-    lab: :class:`~gismap.lab.lab.Lab`
+    lab: :class:`~gismap.lab.labmap.LabMap`
         Reference lab.
 
     Returns
