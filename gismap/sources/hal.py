@@ -44,8 +44,7 @@ class HAL(DB):
         >>> HAL.search_author("Ana Busic")
         [HALAuthor(name='Ana Busic', key='anabusic')]
         >>> HAL.search_author("Potop-Butucaru Maria")  # doctest:  +NORMALIZE_WHITESPACE
-        [HALAuthor(name='Potop-Butucaru Maria', key='858256', key_type='pid'),
-        HALAuthor(name='Potop-Butucaru Maria', key='841868', key_type='pid')]
+        [HALAuthor(name='Potop-Butucaru Maria', key='841868', key_type='pid')]
         >>> diego = HAL.search_author("Diego Perino")
         >>> diego  # doctest:  +NORMALIZE_WHITESPACE
         [HALAuthor(name='Diego Perino', key='847558', key_type='pid'),
@@ -134,12 +133,11 @@ class HAL(DB):
 
         >>> maria = HAL.search_author('Maria Potop-Butucaru')
         >>> maria  # doctest: +NORMALIZE_WHITESPACE
-        [HALAuthor(name='Maria Potop-Butucaru', key='858256', key_type='pid'),
-        HALAuthor(name='Maria Potop-Butucaru', key='841868', key_type='pid')]
+        [HALAuthor(name='Maria Potop-Butucaru', key='841868', key_type='pid')]
         >>> len(HAL.from_author(maria[0]))
-        26
-        >>> len(maria[1].get_publications())
-        124
+        220
+        >>> len(maria[0].get_publications())
+        220
 
         Note: an error is raised if not enough data is provided
 

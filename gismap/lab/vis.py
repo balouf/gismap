@@ -2,7 +2,7 @@ from string import Template
 import uuid
 import json
 
-
+# language=HTML
 vis_template = Template("""
 <div class="gismap-content">
 <div id="${container_id}"></div>
