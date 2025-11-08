@@ -34,7 +34,7 @@ jobs:
     - name: Set up uv
       uses: astral-sh/setup-uv@v5
       with:
-        version: "0.8.12"
+        version: "0.9.8"
 
     - name: Run tests
       run: |
