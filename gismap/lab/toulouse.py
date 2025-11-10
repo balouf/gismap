@@ -41,7 +41,7 @@ class SolaceMap(LabMap):
     regex = re.compile(r"<li>(.*?)(,| \(|</li>)")
 
     def _author_iterator(self):
-        html = get("https://solace.cnrs.fr/people.html")
+        html = get("https://solace.cnrs.fr/people.html", verify=False)
         for name, _ in self.regex.findall(html):
             soup = Soup(name, features="lxml")
             url = soup.a["href"] if soup.a else None

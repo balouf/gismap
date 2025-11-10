@@ -13,7 +13,7 @@ session.headers.update(
 )
 
 
-def get(url, params=None, n_trials=10):
+def get(url, params=None, n_trials=10, verify=True):
     """
     Parameters
     ----------
@@ -21,6 +21,8 @@ def get(url, params=None, n_trials=10):
         Entry point to fetch.
     params: :class:`dict`, optional
         Get arguments (appended to URL).
+    verify: :class:`bool`, optional
+        Verify certificates.
 
     Returns
     -------
@@ -29,7 +31,7 @@ def get(url, params=None, n_trials=10):
     """
     for attempt in range(n_trials):
         try:
-            r = session.get(url, params=params)
+            r = session.get(url, params=params, verify=verify)
             if r.status_code == 429:
                 try:
                     t = int(r.headers["Retry-After"])
