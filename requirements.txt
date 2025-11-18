@@ -1,1 +1,1 @@
-gismap
+git+https://github.com/balouf/gismap.git@main#egg=gismap

@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
-from bof.fuzz import Process
+from bof.fuzz import jit_square_factors
+from bof.feature_extraction import CountVectorizer
 import numpy as np
 
 from gismap.sources.models import Publication, Author
@@ -158,17 +159,18 @@ def regroup_publications(pub_dict, threshold=85, length_impact=0.05, n_range=5):
     """
     pub_list = [p for p in pub_dict.values()]
     res = dict()
-
-    if pub_list:
-        p = Process(length_impact=length_impact, n_range=n_range)
-        p.fit([paper.title for paper in pub_list])
-
-        done = np.zeros(len(pub_list), dtype=bool)
-        for i, paper in enumerate(pub_list):
-            if done[i]:
-                continue
-            locs = np.where(p.transform([paper.title])[0, :] > threshold)[0]
-            pub = SourcedPublication.from_sources([pub_list[i] for i in locs])
-            res[pub.key] = pub
-            done[locs] = True
+    vectorizer = CountVectorizer(n_range=n_range)
+    x = vectorizer.fit_transform([p.title for p in pub_list])
+    y = x.T.tocsr()
+    jc_matrix = jit_square_factors(
+        x.indices, x.indptr, y.indices, y.indptr, len(pub_list), length_impact
+    )
+    done = np.zeros(len(pub_list), dtype=bool)
+    for i, paper in enumerate(pub_list):
+        if done[i]:
+            continue
+        locs = np.where(jc_matrix[i, :] > threshold)[0]
+        pub = SourcedPublication.from_sources([pub_list[i] for i in locs])
+        res[pub.key] = pub
+        done[locs] = True
     return res
