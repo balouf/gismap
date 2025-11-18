@@ -23,7 +23,7 @@ from gismap.lab.filters import (
     publication_size_filter,
     publication_oneword_filter,
 )
-from gismap.lab.graph import lab2graph
+from gismap.gisgraphs.builder import make_vis
 
 
 class LabMap(MixInIO):
@@ -97,6 +97,9 @@ class LabMap(MixInIO):
                 self.authors[author.key] = author
             if author.metadata.img is None:
                 author.auto_img()
+            if author.metadata.group is None:
+                author.metadata.group = self.name
+
 
     def update_publis(self, desc="Publications information"):
         """
@@ -151,7 +154,7 @@ class LabMap(MixInIO):
         return None
 
     def html(self, **kwargs):
-        return lab2graph(self, **kwargs)
+        return make_vis(self, **kwargs)
 
     def save_html(self, name=None, **kwargs):
         if name is None:

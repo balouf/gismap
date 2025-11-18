@@ -74,7 +74,7 @@ class LabAuthor(SourcedAuthor):
 def labify_author(author, rosetta):
     if isinstance(author, LabAuthor):
         return author
-    return rosetta.get(author.key, author)
+    return rosetta.get(author.key, rosetta.get(author.name, author))
 
 
 def labify_publications(pubs, rosetta):

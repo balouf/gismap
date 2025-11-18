@@ -22,7 +22,7 @@ class LINCS(Map):
     name = "LINCS"
 
     def _author_iterator(self):
-        soup = Soup(get("https://www.lincs.fr/people/"))
+        soup = Soup(get("https://www.lincs.fr/people/"), features="lxml")
         for entry in soup.main("div", class_="trombinoscope-row"):
             cols = entry("div")
             name = cols[1].text
@@ -36,7 +36,7 @@ class LINCS(Map):
             if group:
                 group = group[-1].text
             else:
-                group = None
+                group = "External"
             author = LabAuthor(name)
             author.metadata.img = img
             author.metadata.group = group

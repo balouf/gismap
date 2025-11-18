@@ -135,7 +135,7 @@ def regroup_authors(auth_dict, pub_dict):
     }
 
     for pub in pub_dict.values():
-        pub.authors = [redirection.get(a.key, a) for a in pub.authors]
+        pub.authors = [redirection.get(a.key, redirection.get(a.name, a)) for a in pub.authors]
 
 
 def regroup_publications(pub_dict, threshold=85, length_impact=0.05, n_range=5):

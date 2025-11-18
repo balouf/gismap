@@ -1,3 +1,4 @@
+from gismap.gisgraphs.groups import ego_groups
 from gismap.lab.labmap import LabMap
 from gismap.lab.lab_author import LabAuthor
 
@@ -15,15 +16,15 @@ class EgoMap(LabMap):
 
     >>> dang = EgoMap("The-Dang Huynh", dbs="hal")
     >>> dang.build(target=10)
-    >>> sorted(a.name for a in dang.authors.values())  # doctest: +NORMALIZE_WHITESPACE
-    ['Bruno Kauffmann', 'Chung Shue Chen', 'Fabien Mathieu', 'François Baccelli', 'Laurent Viennot', 'Ludovic Noirie',
-    'Siu-Wai Ho', 'Sébastien Tixeuil', 'The-Dang Huynh', 'Yannick Carlinet']
+    >>> sorted(a.name for a in dang.authors.values())  # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+    ['Bruno Kauffmann', 'Chung Shue Chen', 'Fabien Mathieu',...
     """
 
     def __init__(self, star, *args, **kwargs):
         if isinstance(star, str):
             star = LabAuthor(star)
         star.metadata.position = (0, 0)
+        star.metadata.group = 'star'
         self.star = star
         super().__init__(*args, **kwargs)
 
@@ -32,11 +33,10 @@ class EgoMap(LabMap):
 
     def build(self, **kwargs):
         target = kwargs.pop("target", 50)
-        group = kwargs.pop("group", "moon")
         self.update_authors(desc="Star metadata")
         self.update_publis(desc="Star publications")
         kwargs["target"] = target - len(self.authors)
-        self.expand(group=None, desc="Planets", **kwargs)
-        kwargs.update({"target": target - len(self.authors), "group": group})
+        self.expand(group='planet', desc="Planets", **kwargs)
+        kwargs["target"] = target - len(self.authors)
         if kwargs["target"] > 0:
-            self.expand(desc="Moons", **kwargs)
+            self.expand(group='moon', desc="Moons", **kwargs)

@@ -45,4 +45,4 @@ class SolaceMap(LabMap):
         for name, _ in self.regex.findall(html):
             soup = Soup(name, features="lxml")
             url = soup.a["href"] if soup.a else None
-            yield LabAuthor(name=soup.text.strip(), metadata=AuthorMetadata(url=url))
+            yield LabAuthor(name=soup.text.strip(), metadata=AuthorMetadata(url=url, group=self.name.upper()))

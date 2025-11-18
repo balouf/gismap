@@ -327,3 +327,4 @@ def generate_html(nodes, edges):
         "edges_json": edges_json,
     }
     return vis_template.substitute(dico)  # html_template
+

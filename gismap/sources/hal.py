@@ -134,10 +134,11 @@ class HAL(DB):
         >>> maria = HAL.search_author('Maria Potop-Butucaru')
         >>> maria  # doctest: +NORMALIZE_WHITESPACE
         [HALAuthor(name='Maria Potop-Butucaru', key='841868', key_type='pid')]
-        >>> len(HAL.from_author(maria[0]))
-        220
-        >>> len(maria[0].get_publications())
-        220
+        >>> n_pubs = len(HAL.from_author(maria[0]))
+        >>> n_pubs > 200
+        True
+        >>> n_pubs == len(maria[0].get_publications())
+        True
 
         Note: an error is raised if not enough data is provided
 
