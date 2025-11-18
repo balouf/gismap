@@ -38,7 +38,7 @@ function draw_graph() {
     var visibleNodeIds = new Set(visibleNodes.map(node => node.id));
     const visibleEdges = new DataSet(edges.get({
         filter: edge => visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)}));
-    if (!document.getElementById("comet-$uid").checked) {
+    if (!document.getElementById("comet-$uid")?.checked) {
         visibleNodeIds = new Set();
         visibleEdges.forEach(edge => {
             visibleNodeIds.add(edge.from);
