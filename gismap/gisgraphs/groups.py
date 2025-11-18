@@ -52,7 +52,7 @@ def auto_groups(lab, groups=None, rng=None, pastel_factor=.3):
 
 
 ego_groups = {'star': {'display': "Star", "color": "rgb(210, 190, 70)", "hidden": False},
-              'planet': {'display': "Planets", "color": "rgb(59, 101, 178)", "hidden": False},
+              'planet': {'display': "Planets", "color": "rgb(80, 120, 200)", "hidden": False},
               'moon': {'display': 'Moons', "color": "rgb(140, 140, 140)", "hidden": False}}
 
 

@@ -109,7 +109,7 @@ def publications_list(publications, n=10):
             lis.append(f'<li class="extra-publication" style="display:none;">{pub_html(pub)}</li>')
     if len(publications) > n:
         lis.append(f'<li><a href="#" onclick="{expand_script}">Show more…</a></li>')
-    return f"<ul>\n{'\n'.join(lis)}</ul>\n"
+    return "<ul>\n"+'\n'.join(lis)+"</ul>\n"
 
 
 def to_node(s, node_pubs):

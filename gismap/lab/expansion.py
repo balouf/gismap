@@ -222,9 +222,10 @@ def proper_prospects(
         locs = [j for j in np.where(jc[i, :] > threshold)[0] if not done[j]]
         done[locs] = True
         sources = sort_author_sources([prospects[j].author for j in locs])
-        strength = sum(prospects[j].score for j in locs)
-        new_author = LabAuthor.from_sources(sources)
-        new_lab.append((strength, new_author))
+        if sources:
+            strength = sum(prospects[j].score for j in locs)
+            new_author = LabAuthor.from_sources(sources)
+            new_lab.append((strength, new_author))
 
     # Extract top prospects
     new_lab = [l[1] for l in sorted(new_lab, key=lambda l: l[0], reverse=True)][
