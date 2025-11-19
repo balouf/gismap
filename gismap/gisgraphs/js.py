@@ -15,7 +15,7 @@ let hoveredNodeId = null;
 // Get the group color and position of a node. Useful for gradient edges
 function getNodeInfos(network, node) {
     if (node && !options.groups?.[node.group]?.hidden) {
-        return [options.groups[node.group].color, network.getPositions([node.id])[node.id]]
+        return [options.groups[node.group]?.color, network.getPositions([node.id])[node.id]]
     }
     return [false, false];
 }
