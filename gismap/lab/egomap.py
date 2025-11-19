@@ -1,4 +1,3 @@
-from gismap.gisgraphs.groups import ego_groups
 from gismap.lab.labmap import LabMap
 from gismap.lab.lab_author import LabAuthor
 

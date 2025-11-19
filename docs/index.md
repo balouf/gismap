@@ -7,6 +7,7 @@
 
 presentation/index
 tutorials/index
+tutorials/examples
 reference/index
 :::
 
