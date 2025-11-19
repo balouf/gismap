@@ -21,6 +21,7 @@ dependencies = [
     "domonic>=0.9.13",
     "gismo>=0.5.2",
     "ipykernel>=6.30.1",
+    "ipywidgets>=8.1.8",
     "tqdm>=4.67.1",
 ]
 

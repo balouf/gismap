@@ -24,20 +24,21 @@ function getNodeInfos(network, node) {
 // main course
 function draw_graph() {
     // No clean redraw so far, so we re-create everything :(
-    // const show_comets = document.getElementById("comet-$uid").checked;
+    // Set hidden groups according to legend, if any
     document.querySelectorAll('#legend-$uid .legend-checkbox').forEach(cb => {
     const group = cb.getAttribute('data-group');
     options.groups[group].hidden = !cb.checked;
         });
 
-    //nodes.forEach(node => nodes.update({id: node.id, hidden: !show_comets && !node.connected}));
 
     // First compute the nodes to display.
     var visibleNodes = new DataSet(nodes.get({
       filter: node => !options.groups?.[node.group]?.hidden}));
     var visibleNodeIds = new Set(visibleNodes.map(node => node.id));
+    // Reduce edges
     const visibleEdges = new DataSet(edges.get({
         filter: edge => visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)}));
+    //  Optiional: remove comets
     if (!document.getElementById("comet-$uid")?.checked) {
         visibleNodeIds = new Set();
         visibleEdges.forEach(edge => {
@@ -48,7 +49,7 @@ function draw_graph() {
     }
 
 
-
+    // Set graph, nodes, and edges
     const network = new Network(container, {nodes: visibleNodes, edges: visibleEdges}, options);
     network.once("afterDrawing", function () {
       network.fit({ maxZoomLevel: 3 });
@@ -177,20 +178,7 @@ document.getElementById('fullscreen-$uid').addEventListener('click', function(ev
 
 # language=javascript
 legend_script = """
-function updateGroupsVisibility() {
-  document.querySelectorAll('#legend-$uid .legend-checkbox').forEach(cb => {
-    const group = cb.getAttribute('data-group');
-    options.groups[group].hidden = !cb.checked;
-  });
-  draw_graph();
-}
-
-// Ajout de l’event à chaque checkbox
-// document.querySelectorAll('#legend-$uid .legend-checkbox').forEach(cb => {
-//  cb.addEventListener('change', updateGroupsVisibility);
-//});
-
-// Ajout de l’event à chaque checkbox
+// Refresh when boxes are changed
 document.querySelectorAll("#legend-$uid input").forEach(cb => {
   cb.addEventListener('change', draw_graph);
 });

@@ -172,6 +172,9 @@ class HAL(DB):
         r = get(api, params=params)
         response = json.loads(r)["response"]
         res = [HALPublication.from_json(r) for r in response.get("docs", [])]
+        if len(res) == 0 and a.key_type != "fullname":
+            name = a.name
+            return HAL.from_author(HALAuthor(name=name, key=name, key_type="fullname"))
         return res
 
 

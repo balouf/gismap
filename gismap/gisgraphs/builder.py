@@ -17,6 +17,24 @@ gislink = tags.a("&copy; Gismap 2025", _href="https://balouf.github.io/gismap/",
 
 
 def make_vis(lab, **kwargs):
+    """
+    Parameters
+    ----------
+    lab: :class:`~gismap.lab.labmap.LabMap`
+        Lab to display.
+
+    Other parameters
+    ----------------
+    uid: :class:`str`
+        Unique identifier.
+    vis_url: :class:`str`
+        Location of visJS network.
+
+    Returns
+    -------
+    :class:`str`
+        HTML code.
+    """
     uid = kwargs.pop('uid', None)
     if uid is None:
         uid = str(uuid.uuid4())[:8]

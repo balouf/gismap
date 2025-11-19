@@ -157,6 +157,8 @@ def regroup_publications(pub_dict, threshold=85, length_impact=0.05, n_range=5):
     :class:`dict`
         Unified publications.
     """
+    if len(pub_dict) == 0:
+        return dict()
     pub_list = [p for p in pub_dict.values()]
     res = dict()
     vectorizer = CountVectorizer(n_range=n_range)

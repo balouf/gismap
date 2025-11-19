@@ -1,31 +1,5 @@
 from domonic import tags
 import distinctipy
-import colorsys
-
-
-# def colors(i, s=0.65, l=0.55):
-#     """
-#     Creates deterministic colors. AI-coded.
-#
-#     Parameters
-#     ----------
-#     i: :class:`int`
-#         Color number.
-#     s: :class:`float`
-#         Saturation.
-#     l: :class:`float`
-#         Lightness.
-#
-#     Returns
-#     -------
-#     :class:`str`
-#         Color string.
-#     """
-#     # Use "golden angle" to make nice evolution (not i * 360/N)
-#     golden_angle = 137.508  # recommended by AI
-#     h = (200 + (i * golden_angle) % 360) / 360.0
-#     r, g, b = colorsys.hls_to_rgb(h, l, s)
-#     return '#{0:02x}{1:02x}{2:02x}'.format(int(r * 255), int(g * 255), int(b * 255))
 
 
 def auto_groups(lab, groups=None, rng=None, pastel_factor=.3):

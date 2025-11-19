@@ -14,6 +14,7 @@ from gismap.search import (
     search_to_html as search_to_html,
     search_to_text as search_to_text,
 )
+from gismap.gisgraphs.widget import GismapWidget as GismapWidget
 
 
 infos = metadata(__name__)
