@@ -12,7 +12,7 @@ physics = {
     'minVelocity': 0.9,
     'stabilization': {
       'enabled': True,
-      'iterations': 2000,
+      'iterations': 500,
       'updateInterval': 50,
       'onlyDynamicEdges': False,
       'fit': True

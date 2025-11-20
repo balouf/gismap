@@ -9,6 +9,7 @@ presentation/index
 tutorials/index
 Make your graph! <https://mybinder.org/v2/gh/balouf/gismap/HEAD?urlpath=%2Fdoc%2Ftree%2Fbinder%2Finteractive.ipynb>
 tutorials/examples
+faq
 reference/index
 :::
 
