@@ -214,6 +214,7 @@ def lab_to_graph(lab):
     'mini'
     >>> edges[0]['hover']
     'Show joint publications from Mathieu Fabien and Tixeuil Sébastien'
+    >>> html = lab.html(groups={"mini": {"color": "#777"}})
     """
     node_pubs = defaultdict(list)  # {k: [] for k in lab.authors}
     edges_dict = defaultdict(list)

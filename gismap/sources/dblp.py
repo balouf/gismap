@@ -72,23 +72,6 @@ class DBLP(DB):
             Papers available in DBLP.
         wait: :class:`bool`
             Wait a bit to avoid 429.
-
-        Examples
-        --------
-
-        >>> fabien = DBLPAuthor('Fabien Mathieu', key='66/2077')
-        >>> publications = sorted(DBLP.from_author(fabien),
-        ...                 key=lambda p: p.title)
-        >>> publications[0] # doctest:  +NORMALIZE_WHITESPACE
-        DBLPPublication(title='Achievable catalog size in peer-to-peer video-on-demand systems.',
-        authors=[DBLPAuthor(name='Yacine Boufkhad', key='75/5742'), DBLPAuthor(name='Fabien Mathieu', key='66/2077'),
-        DBLPAuthor(name='Fabien de Montgolfier', key='57/6313'), DBLPAuthor(name='Diego Perino', key='03/3645'),
-        DBLPAuthor(name='Laurent Viennot', key='v/LaurentViennot')],
-        venue='IPTPS', type='conference', year=2008, key='conf/iptps/BoufkhadMMPV08')
-        >>> publications[-1] # doctest:  +NORMALIZE_WHITESPACE
-        DBLPPublication(title='Upper Bounds for Stabilization in Acyclic Preference-Based Systems.',
-        authors=[DBLPAuthor(name='Fabien Mathieu', key='66/2077')], venue='SSS', type='conference', year=2007,
-        key='conf/sss/Mathieu07')
         """
         r = get(f"https://dblp.org/pid/{a.key}.xml")
         soup = Soup(r, features="xml")
@@ -100,6 +83,21 @@ class DBLP(DB):
 
 @dataclass(repr=False)
 class DBLPAuthor(Author, DBLP):
+    """
+    Examples
+    --------
+
+    >>> fabien = DBLPAuthor('Fabien Mathieu', key='66/2077')
+    >>> publications = sorted(fabien.get_publications(),
+    ...                 key=lambda p: p.title)
+    >>> publications[0].url # doctest:  +NORMALIZE_WHITESPACE
+     'https://dblp.org/rec/conf/iptps/BoufkhadMMPV08.html'
+    >>> publications[-1] # doctest:  +NORMALIZE_WHITESPACE
+    DBLPPublication(title='Upper Bounds for Stabilization in Acyclic Preference-Based Systems.',
+    authors=[DBLPAuthor(name='Fabien Mathieu', key='66/2077')], venue='SSS', type='conference', year=2007,
+    key='conf/sss/Mathieu07')
+
+    """
     key: str
     aliases: list = field(default_factory=list)
 
