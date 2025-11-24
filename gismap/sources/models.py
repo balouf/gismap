@@ -29,3 +29,10 @@ class DB(LazyRepr):
     @classmethod
     def from_author(cls, a):
         raise NotImplementedError
+
+
+def db_class_to_auth_class(db_class):
+    for subclass in Author.__subclasses__():
+        if db_class in subclass.__mro__:
+            return subclass
+    return None

@@ -100,7 +100,6 @@ class LabMap(MixInIO):
             if author.metadata.group is None:
                 author.metadata.group = self.name
 
-
     def update_publis(self, desc="Publications information"):
         """
         Populate the publications attribute (:class:`dict` [:class:`str`, :class:`~gismap.sources.multi.SourcedPublication`]).

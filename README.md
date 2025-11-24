@@ -2,6 +2,7 @@
 
 
 [![PyPI Status](https://img.shields.io/pypi/v/gismap.svg)](https://pypi.python.org/pypi/gismap)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/balouf/gismap/HEAD?urlpath=%2Fdoc%2Ftree%2Fbinder%2Finteractive.ipynb)
 [![Build Status](https://github.com/balouf/gismap/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/balouf/gismap/actions?query=workflow%3Abuild)
 [![Documentation Status](https://github.com/balouf/gismap/actions/workflows/docs.yml/badge.svg?branch=main)](https://github.com/balouf/gismap/actions?query=workflow%3Adocs)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -19,6 +20,18 @@ GISMAP leverages DBLP and HAL databases to provide cartography tools for you and
 - Aggregate publications from multiple databases, including multiple author keys inside the same database.
 - Automatically keeps track of a Lab/Department members and publications.
 - Builds interactive collaboration graphs.
+
+## Test Gismap online!
+
+Don't want to install Gismap on your computer (yet)? No worries, you can play with it using https://mybinder.org/.
+
+For example:
+
+- [A simple interface to display and save collaboration graphs](https://mybinder.org/v2/gh/balouf/gismap/HEAD?urlpath=%2Fdoc%2Ftree%2Fbinder%2Finteractive.ipynb)
+- [Tutorial: Making LabMaps](https://mybinder.org/v2/gh/balouf/gismap/HEAD?urlpath=%2Fdoc%2Ftree%2Fdocs%2Ftutorials%2Flab_tutorial.ipynb)
+- [Tutorial: Making EgoMaps](https://mybinder.org/v2/gh/balouf/gismap/HEAD?urlpath=%2Fdoc%2Ftree%2Fdocs%2Ftutorials%2Fegomap.ipynb)
+- [Jupyter Lab instance with GisMap installed](https://mybinder.org/v2/gh/balouf/gismap/HEAD)
+
 
 ## Quickstart
 

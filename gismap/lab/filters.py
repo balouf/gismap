@@ -3,7 +3,7 @@ import re
 # editorials = re.compile(r"ditorial|foreword", re.IGNORECASE)
 # charlatans = re.compile(r"Raoult|Kofman|Buob")
 
-editorials = ["ditorial", "Foreword", "Brief Announcement"]
+editorials = ["ditorial", "Foreword", "Brief Announcement", "Preface", "Préface"]
 charlatans = ["Raoult", "Kofman", "Buob"]
 
 

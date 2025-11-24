@@ -23,7 +23,7 @@ class EgoMap(LabMap):
         if isinstance(star, str):
             star = LabAuthor(star)
         star.metadata.position = (0, 0)
-        star.metadata.group = 'star'
+        star.metadata.group = "star"
         self.star = star
         super().__init__(*args, **kwargs)
 
@@ -35,7 +35,7 @@ class EgoMap(LabMap):
         self.update_authors(desc="Star metadata")
         self.update_publis(desc="Star publications")
         kwargs["target"] = target - len(self.authors)
-        self.expand(group='planet', desc="Planets", **kwargs)
+        self.expand(group="planet", desc="Planets", **kwargs)
         kwargs["target"] = target - len(self.authors)
         if kwargs["target"] > 0:
-            self.expand(group='moon', desc="Moons", **kwargs)
+            self.expand(group="moon", desc="Moons", **kwargs)

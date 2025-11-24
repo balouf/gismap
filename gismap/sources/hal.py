@@ -187,6 +187,13 @@ class HALAuthor(Author, HAL):
     _img: str = None
     _cv: bool = None
 
+    def __post_init__(self):
+        if self.key and self.key_type is None:
+            if self.key.isdigit():
+                self.key_type = "pid"
+            if " " in self.key:
+                self.key_type = "fullname"
+
     def check_cv(self):
         if self.key_type is not None:
             self._cv = False

@@ -187,4 +187,4 @@ document.querySelectorAll("#legend-$uid input").forEach(cb => {
 """
 
 
-default_script = Template(draw_script+redraw_script+fs_script+legend_script)
+default_script = Template(draw_script + redraw_script + fs_script + legend_script)

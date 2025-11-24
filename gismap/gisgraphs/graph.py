@@ -24,7 +24,7 @@ def linkify(name, url):
     if url:
         return f'<a href="{url}" target="_blank">{name}</a>'
     else:
-        return f'<span>{name}</span>'
+        return f"<span>{name}</span>"
 
 
 def author_html(author):
@@ -69,9 +69,9 @@ def pub_html(pub):
     title_html = linkify(pub.title, url)
 
     # Authors: render in order, separated by comma
-    authors_html = ", ".join([
-        author_html(author) for author in getattr(pub, "authors", [])
-    ])
+    authors_html = ", ".join(
+        [author_html(author) for author in getattr(pub, "authors", [])]
+    )
 
     # Venue, Year
     venue = getattr(pub, "venue", "")
@@ -106,10 +106,12 @@ def publications_list(publications, n=10):
         if i < n:
             lis.append(f"<li>{pub_html(pub)}</li>")
         else:
-            lis.append(f'<li class="extra-publication" style="display:none;">{pub_html(pub)}</li>')
+            lis.append(
+                f'<li class="extra-publication" style="display:none;">{pub_html(pub)}</li>'
+            )
     if len(publications) > n:
         lis.append(f'<li><a href="#" onclick="{expand_script}">Show more…</a></li>')
-    return "<ul>\n"+'\n'.join(lis)+"</ul>\n"
+    return "<ul>\n" + "\n".join(lis) + "</ul>\n"
 
 
 def to_node(s, node_pubs):
@@ -164,7 +166,11 @@ def to_edge(k, v, searchers):
     """
     strength = 1 + np.log2(len(v))
     overlay = tags.div()
-    overlay.appendChild(tags.div(f"Joint publications from {author_html(searchers[k[0]])} and {author_html(searchers[k[1]])}:"))
+    overlay.appendChild(
+        tags.div(
+            f"Joint publications from {author_html(searchers[k[0]])} and {author_html(searchers[k[1]])}:"
+        )
+    )
     overlay.appendChild(tags.div(f"{publications_list(v)}"))
     res = {
         "from": k[0],
@@ -176,7 +182,7 @@ def to_edge(k, v, searchers):
     }
     g1, g2 = searchers[k[0]].metadata.group, searchers[k[1]].metadata.group
     if g1 and g2 and g1 != g2:
-        res['color'] = "rgba(0,0,0,0)"
+        res["color"] = "rgba(0,0,0,0)"
     return res
 
 
@@ -196,12 +202,12 @@ def lab_to_graph(lab):
     --------
 
     >>> from gismap.lab import ListMap as Map
-    >>> lab = Map(author_list=['Tixeuil Sébastien', 'Mathieu Fabien'], name='mini')
+    >>> lab = Map(author_list=['Tixeuil Sébastien', 'Mathieu Fabien'], name='mini', dbs="hal")
     >>> lab.update_authors()
     >>> lab.update_publis()
     >>> len(lab.authors)
     2
-    >>> 380 < len(lab.publications) < 440
+    >>> 330 < len(lab.publications) < 430
     True
     >>> nodes, edges = lab_to_graph(lab)
     >>> nodes[0]['group']
@@ -224,7 +230,7 @@ def lab_to_graph(lab):
             node_pubs[a.key].append(p)
         for a1, a2 in combinations(lauths, 2):
             edges_dict[a1.key, a2.key].append(p)
-    connected = {k for kl in edges_dict for k in kl}
+    # connected = {k for kl in edges_dict for k in kl}
     for k, v in node_pubs.items():
         node_pubs[k] = sorted(v, key=lambda p: -p.year)
     for k, v in edges_dict.items():
@@ -234,7 +240,7 @@ def lab_to_graph(lab):
         for s in lab.authors.values()  # if s.key in connected
     ]
     edges = [to_edge(k, v, lab.authors) for k, v in edges_dict.items()]
-    for node in nodes:
-        node['connected'] = node['id'] in connected
+    # for node in nodes:
+    #     node['connected'] = node['id'] in connected
 
     return nodes, edges

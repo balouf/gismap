@@ -73,8 +73,8 @@ def count_prospect_entries(lab):
                     count_publications.append(a.key)
                 else:
                     lab_authors.add(a.key)
-            for l in lab_authors:
-                count_coauthors[l].update(new_authors)
+            for a in lab_authors:
+                count_coauthors[a].update(new_authors)
 
     count_coauthors = Counter(
         k for new_authors in count_coauthors.values() for k in new_authors
@@ -228,7 +228,7 @@ def proper_prospects(
             new_lab.append((strength, new_author))
 
     # Extract top prospects
-    new_lab = [l[1] for l in sorted(new_lab, key=lambda l: l[0], reverse=True)][
+    new_lab = [a[1] for a in sorted(new_lab, key=lambda a: a[0], reverse=True)][
         :max_new
     ]
     new_rosetta = {s.key: a for a in new_lab for s in a.sources}
