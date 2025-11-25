@@ -11,10 +11,14 @@
 - Gismo integration
 
 
-## 0.3.0 (2025-11-26): Bigger, faster, prettier
+## 0.3.0 (2025-11-25): Bigger, faster, prettier
 
 - VisJS integration has been fully revamped to reduce JS errors and resource consumption.
-- A gallery is now available in the documentation to showcase the possibilities (enjoy the LIP6 and Laas graphs!).
+- A gallery is now available in the documentation to showcase the possibilities:
+  - Lip6 (Sorbonne university CS lab, single team / whole lab);
+  - Laas (Toulouse university CS lab, single team / whole lab) + Solace (collab team);
+  - Cédric (CNAM, whole CS Lab);
+  - LINCS (legacy Paris-based collaboration project).
 - Binder integration: you can now play with GisMap directly in your browser, no local Python required!
 - A FAQ, because when the developer (me) starts to forget some how-tos, you know it’s time for a FAQ.
 - GisGraphs can now have groups with automatic color selection and a selectable legend.
