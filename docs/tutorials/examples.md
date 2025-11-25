@@ -3,5 +3,6 @@
 :::{toctree}
 toulouse
 lip6
+cedric
 lincs
 :::
