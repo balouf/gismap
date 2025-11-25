@@ -5,7 +5,7 @@ Classes and functions to interact with databases of publications.
 
 ## Models
 
-Abstract description of GISMAP' DB interface.
+Abstract description of GisMap DB interface.
 
 ```{eval-rst}
 .. automodule:: gismap.sources.models

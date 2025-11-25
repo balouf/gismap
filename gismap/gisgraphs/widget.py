@@ -24,7 +24,7 @@ def safe_filename(name):
     Returns
     -------
     :class:`str`
-        Gismap filename.
+        GisMap filename.
     """
     normalized = unicodedata.normalize("NFKD", name)
     ascii_only = normalized.encode("ascii", "ignore").decode("ascii")
@@ -136,7 +136,7 @@ class GismapWidget:
         payload = f"data:text/html;base64,{b64}"
         savename = safe_filename(self.names.value)
         link_html = (
-            f"<a href='{payload}' download='{savename}'>Download the GisMap!</a>"
+            f"<a href='{payload}' download='{savename}'>Download the Map!</a>"
         )
         self.save_link.value = link_html
         if show:

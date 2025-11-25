@@ -1,4 +1,4 @@
-# Welcome to GISMAP documentation!
+# Welcome to GisMap documentation!
 
 
 :::{toctree}

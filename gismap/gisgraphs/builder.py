@@ -18,7 +18,7 @@ from gismap.gisgraphs.groups import make_legend
 default_vis_url = '"https://unpkg.com/vis-network/standalone/esm/vis-network.min.js"'
 
 gislink = tags.a(
-    "&copy; Gismap 2025",
+    "&copy; GisMap 2025",
     _href="https://balouf.github.io/gismap/",
     _target="_blank",
     _class="watermark gislink",

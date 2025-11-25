@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code Coverage](https://codecov.io/gh/balouf/gismap/branch/main/graphs/badge.svg)](https://codecov.io/gh/balouf/gismap/tree/main)
 
-GISMAP leverages DBLP and HAL databases to provide cartography tools for you and your lab.
+GisMap leverages DBLP and HAL databases to provide cartography tools for you and your lab.
 
 - Free software: MIT
 - Documentation: <https://balouf.github.io/gismap/>.
@@ -21,9 +21,9 @@ GISMAP leverages DBLP and HAL databases to provide cartography tools for you and
 - Automatically keeps track of a Lab/Department members and publications.
 - Builds interactive collaboration graphs.
 
-## Test Gismap online!
+## Test GisMap online!
 
-Don't want to install Gismap on your computer (yet)? No worries, you can play with it using https://mybinder.org/.
+Don't want to install GisMap on your computer (yet)? No worries, you can play with it using https://mybinder.org/.
 
 For example:
 
@@ -35,13 +35,13 @@ For example:
 
 ## Quickstart
 
-Install GISMAP:
+Install GisMap:
 
 ```console
 $ pip install gismap
 ```
 
-Use GISMAP to produce a collaboration graph (HTML):
+Use GisMap to produce a collaboration graph (HTML):
 
 ```pycon
 >>> from gismap.sources.hal import HAL
