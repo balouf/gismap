@@ -41,16 +41,27 @@ Install GisMap:
 $ pip install gismap
 ```
 
-Use GisMap to produce a collaboration graph (HTML):
+Use GisMap to display a collaboration graph (HTML) from a Notebook:
 
 ```pycon
->>> from gismap.sources.hal import HAL
->>> from gismap.lab import ListLab
->>> lab = ListLab(["Fabien Mathieu", "François Baccelli", "Ludovic Noirie", "Céline Comte", "Sébastien Tixeuil"], dbs="hal")
+>>> from gismap.lab import ListMap
+>>> lab = ListMap(["Fabien Mathieu", "François Baccelli", "Ludovic Noirie", "Céline Comte", "Sébastien Tixeuil"], dbs="hal")
 >>> lab.update_authors()
 >>> lab.update_publis()
 >>> lab.show_html()
 ```
+
+If you are not using Jupyter Lab/Notebook, rich display will not work.
+Instead, save the HTML and display it on your browser:
+
+```pycon
+>>> from gismap.lab import ListMap
+>>> lab = ListMap(["Fabien Mathieu", "François Baccelli", "Ludovic Noirie", "Céline Comte", "Sébastien Tixeuil"], dbs="hal")
+>>> lab.update_authors()
+>>> lab.update_publis()
+>>> lab.save_html("my_graph")
+```
+
 
 ## Credits
 

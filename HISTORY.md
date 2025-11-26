@@ -10,6 +10,10 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
+## 0.3.1 (2025-11-27): Bug fixes
+
+- Fix BS4 dependency issue.
+- Errors in readme
 
 ## 0.3.0 (2025-11-25): Bigger, faster, prettier
 
