@@ -15,7 +15,7 @@ def score_author_source(dbauthor):
             return 2
         else:
             return 3
-    elif dbauthor.db_name == "dblp":
+    elif dbauthor.db_name in ["dblp", "ldb"]:
         return 1
     else:
         return 0
@@ -69,7 +69,7 @@ class SourcedAuthor(Author):
 
 
 publication_score_rosetta = {
-    "db_name": {"dblp": 1, "hal": 2},
+    "db_name": {"dblp": 1, "ldb": 1, "hal": 2},
     "venue": {"CoRR": -1, "unpublished": -2},
     "type": {"conference": 1, "journal": 2},
 }

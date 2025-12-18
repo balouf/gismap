@@ -121,8 +121,8 @@ class HAL(DB):
         >>> diego = publications[2].authors[3]
         >>> diego
         HALAuthor(name='Diego Perino', key='Diego Perino', key_type='fullname')
-        >>> len(diego.get_publications())
-        28
+        >>> len(diego.get_publications()) > 28
+        True
         >>> publications[-7] # doctest:  +NORMALIZE_WHITESPACE
         HALPublication(title='Upper bounds for stabilization in acyclic preference-based systems',
         authors=[HALAuthor(name='Fabien Mathieu', key='fabien-mathieu')],

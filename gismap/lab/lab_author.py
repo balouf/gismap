@@ -1,14 +1,16 @@
 from dataclasses import dataclass, field
 import re
 
-from gismap import get_classes, HAL, DBLP
+from gismap import get_classes
+from gismap.sources.ldb import ldb
 from gismap.sources.models import DB, db_class_to_auth_class
 from gismap.sources.multi import SourcedAuthor, sort_author_sources
 from gismap.utils.common import LazyRepr, list_of_objects
 from gismap.utils.logger import logger
 
 db_dict = get_classes(DB, key="db_name")
-default_dbs = [HAL, DBLP]
+db_dict["ldb"] = ldb
+default_dbs = ["hal", "ldb"]
 
 
 @dataclass(repr=False)
@@ -27,8 +29,6 @@ class AuthorMetadata(LazyRepr):
         Group of the author.
     position: :class:`tuple`
         Coordinates of the author.
-    keys: :class:`dict`
-        Some DB key values of the author.
     """
 
     url: str = None

@@ -12,6 +12,21 @@ Abstract description of GisMap DB interface.
     :members:
 ```
 
+## LDB (Local DBLP)
+
+Interface for *dblp computer science bibliography* (https://dblp.org/) using a local copy of the database.
+
+```{eval-rst}
+.. automodule:: gismap.sources.ldb
+    :members:
+```
+
+
+```{eval-rst}
+.. automodule:: gismap.sources.dblp_ttl
+    :members:
+```
+
 
 ## DBLP (online)
 

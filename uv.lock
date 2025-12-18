@@ -567,6 +567,7 @@ dependencies = [
     { name = "gismo" },
     { name = "ipykernel" },
     { name = "ipywidgets" },
+    { name = "platformdirs" },
     { name = "tqdm" },
 ]
 
@@ -591,6 +592,7 @@ requires-dist = [
     { name = "gismo", specifier = ">=0.5.2" },
     { name = "ipykernel", specifier = ">=6.30.1" },
     { name = "ipywidgets", specifier = ">=8.1.8" },
+    { name = "platformdirs", specifier = ">=4.5.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
 ]
 

@@ -57,8 +57,7 @@ class LabMap(MixInIO):
     def __init__(self, name=None, dbs=None):
         if name is not None:
             self.name = name
-        if dbs is not None:
-            self.dbs = list_of_objects(dbs, db_dict, default=default_dbs)
+        self.dbs = dbs
         self.author_selectors = [author_taboo_filter()]
         self.publication_selectors = [
             publication_size_filter(),
@@ -92,7 +91,7 @@ class LabMap(MixInIO):
             if not all(f(author) for f in self.author_selectors):
                 continue
             if len(author.sources) == 0:
-                author.auto_sources(dbs=self.dbs)
+                author.auto_sources(dbs=list_of_objects(self.dbs, db_dict, default=default_dbs))
             if author.sources:
                 self.authors[author.key] = author
             if author.metadata.img is None:

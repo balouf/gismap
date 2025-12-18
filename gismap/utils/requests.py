@@ -21,7 +21,9 @@ def get(url, params=None, n_trials=10, verify=True):
         Entry point to fetch.
     params: :class:`dict`, optional
         Get arguments (appended to URL).
-    verify: :class:`bool`, optional
+    n_trials: :class:`int`, default=10
+        Number of attempts to fetch URL.
+    verify: :class:`bool`, default=True
         Verify certificates.
 
     Returns

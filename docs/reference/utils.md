@@ -29,6 +29,16 @@ Keep track of things.
     :members:
 ```
 
+## Zlist
+
+Convert a list into a succession of compressed frames. Reduces memory footprint at the price of slower random access (sequential access is unaffected).
+
+```{eval-rst}
+.. automodule:: gismap.utils.zlist
+    :members:
+```
+
+
 ## Text
 
 Text manipulation tools.

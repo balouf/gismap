@@ -50,7 +50,9 @@ def get_classes(root, key="name"):
     >>> from gismap.sources.models import DB
     >>> subclasses = get_classes(DB, key='db_name')
     >>> dict(sorted(subclasses.items())) # doctest: +NORMALIZE_WHITESPACE
-    {'dblp': <class 'gismap.sources.dblp.DBLP'>, 'hal': <class 'gismap.sources.hal.HAL'>}
+    {'dblp': <class 'gismap.sources.dblp.DBLP'>,
+    'hal': <class 'gismap.sources.hal.HAL'>,
+    'ldb': <class 'gismap.sources.ldb.LDB'>}
     """
     result = {
         getattr(c, key): c for c in root.__subclasses__() if getattr(c, key, None)
@@ -96,7 +98,7 @@ def list_of_objects(clss, dico, default=None):
     if default is None:
         default = []
     if clss is None:
-        return default
+        return list_of_objects(clss=default, dico=dico)
     elif isinstance(clss, str):
         return [dico[clss]]
     elif isinstance(clss, list):

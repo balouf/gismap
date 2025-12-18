@@ -10,6 +10,13 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
+## 0.4.0 (tentative)
+
+- New DB: LDB (Local DB). All the strengths of DBLP, None of its weaknesses.
+  - Convert the whole DBLP relational DB into a Gismap compatible local object.
+  - Introduces new compressed list format (Zlist) to keep the DB in memory.
+  - Use Bag-of-Factors to enable approximate search.
+
 ## 0.3.1 (2025-11-27): Bug fixes
 
 - Fix BS4 dependency issue.
