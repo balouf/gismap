@@ -1,0 +1,21 @@
+#!/bin/bash
+set -ex
+
+# Create gismap data directory (Linux path from platformdirs)
+mkdir -p ~/.local/share/gismap
+
+# Download LDB from the pinned release
+# UPDATE THIS URL when releasing new versions
+LDB_URL="https://github.com/balouf/gismap/releases/download/v0.4.0/ldb.pkl.zst"
+
+echo "Downloading LDB database for Binder image..."
+curl -L -o ~/.local/share/gismap/ldb.pkl.zst "$LDB_URL"
+
+# Verify download
+if [ ! -f ~/.local/share/gismap/ldb.pkl.zst ]; then
+    echo "ERROR: Failed to download ldb.pkl.zst"
+    exit 1
+fi
+
+ls -lh ~/.local/share/gismap/ldb.pkl.zst
+echo "LDB database successfully embedded in Binder image"

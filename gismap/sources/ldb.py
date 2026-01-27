@@ -3,7 +3,9 @@ from functools import lru_cache
 from typing import ClassVar
 from platformdirs import user_data_dir
 from pathlib import Path
+from datetime import datetime, timezone
 import errno
+import json
 import os
 
 import zstandard as zstd
@@ -13,6 +15,7 @@ import numba as nb
 from bof.fuzz import Process
 from gismo.common import safe_write
 from tqdm.auto import tqdm
+import requests
 
 from gismap.sources.dblp_ttl import publis_streamer
 from gismap.sources.models import DB, Author, Publication
@@ -31,6 +34,12 @@ LDB_STEM = "ldb"
 LDB_PATH = DATA_DIR / f"{LDB_STEM}.pkl.zst"
 
 TTL_URL = "https://dblp.org/rdf/dblp.ttl.gz"
+
+# GitHub release asset constants
+GITHUB_REPO = "balouf/gismap"
+GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/releases"
+LDB_ASSET_NAME = "ldb.pkl.zst"
+LDB_META_PATH = DATA_DIR / "ldb_meta.json"
 
 
 @dataclass(repr=False)
@@ -61,16 +70,25 @@ class LDB(DB):
     @classmethod
     def _ensure_loaded(cls):
         """Lazy-load the database if not already loaded."""
-        if not cls._initialized and LDB_PATH.exists():
+        if cls._initialized:
+            return
+        if LDB_PATH.exists():
             cls.load_db()
+        else:
+            logger.info("LDB not found locally. Attempting to retrieve from GitHub...")
+            try:
+                cls.retrieve()
+                cls.load_db()
+            except RuntimeError as e:
+                logger.warning(f"Could not auto-retrieve LDB: {e}")
 
     @classmethod
-    def build_db(cls, source=None, limit=None, n_range=2, length_impact=.2):
+    def build_db(cls, source=None, limit=None, n_range=2, length_impact=.1, authors_frame=512, publis_frame=256):
         if source is None:
             source = cls.source
         authors_dict = dict()
         logger.info("Retrieve publications")
-        with ZList() as publis:
+        with ZList(frame_size=publis_frame) as publis:
             for i, (key, title, typ, authors, url, streams, pages, venue, year) in enumerate(publis_streamer(source)):
                 auth_indices = []
                 for auth_key, auth_name in authors.items():
@@ -85,7 +103,7 @@ class LDB(DB):
         cls.publis = publis
         logger.info(f"{len(publis)} publications retrieved.")
         logger.info("Compact authors")
-        with ZList() as authors:
+        with ZList(frame_size=authors_frame) as authors:
             for key, (_, name, pubs) in tqdm(authors_dict.items()):
                 authors.append((key, name, pubs))
         cls.authors = authors
@@ -139,7 +157,7 @@ class LDB(DB):
 
     @classmethod
     @lru_cache(maxsize=1000)
-    def search_author(cls, name, limit=5, score_cutoff=40.0, slack=10.0):
+    def search_author(cls, name, limit=2, score_cutoff=40.0, slack=10.0):
         cls._ensure_loaded()
         res = cls.search_engine.extract(asciify(name), limit=limit, score_cutoff=score_cutoff)
         res = [r[0] for r in res if r[1] > res[0][1] - slack]
@@ -157,8 +175,220 @@ class LDB(DB):
         return cls.author_publications(a.key)
 
     @classmethod
-    def retrieve(cls):
-        raise NotImplementedError()
+    def _get_release_info(cls, tag: str | None = None) -> dict:
+        """
+        Fetch release metadata from GitHub API.
+
+        Parameters
+        ----------
+        tag: :class:`str`, optional
+            Specific release tag (e.g., "v0.4.0"). If None, fetches latest.
+
+        Returns
+        -------
+        :class:`dict`
+            Release metadata including tag_name and assets.
+
+        Raises
+        ------
+        :class:`RuntimeError`
+            If release not found or API request fails.
+        """
+        if tag is None:
+            url = f"{GITHUB_API_URL}/latest"
+        else:
+            url = f"{GITHUB_API_URL}/tags/{tag}"
+
+        try:
+            response = requests.get(url, timeout=30)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.HTTPError as e:
+            if response.status_code == 404:
+                raise RuntimeError(f"Release not found: {tag or 'latest'}") from e
+            raise RuntimeError(f"GitHub API error: {e}") from e
+        except requests.exceptions.RequestException as e:
+            raise RuntimeError(f"Network error fetching release info: {e}") from e
+
+    @classmethod
+    def _download_file(cls, url: str, dest: Path, desc: str = "Downloading"):
+        """
+        Download file with progress bar.
+
+        Parameters
+        ----------
+        url : str
+            URL to download from.
+        dest : Path
+            Destination file path.
+        desc : str
+            Description for progress bar.
+        """
+        dest.parent.mkdir(parents=True, exist_ok=True)
+
+        response = requests.get(url, stream=True, timeout=30)
+        response.raise_for_status()
+
+        total_size = int(response.headers.get('content-length', 0))
+
+        with open(dest, 'wb') as f, tqdm(
+            desc=desc,
+            total=total_size,
+            unit='B',
+            unit_scale=True,
+            unit_divisor=1024,
+        ) as pbar:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk)
+                    pbar.update(len(chunk))
+
+    @classmethod
+    def _save_meta(cls, tag: str, url: str, size: int):
+        """Save version metadata to JSON file."""
+        meta = {
+            "tag": tag,
+            "url": url,
+            "size": size,
+            "downloaded_at": datetime.now(timezone.utc).isoformat(),
+        }
+        LDB_META_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with open(LDB_META_PATH, 'w') as f:
+            json.dump(meta, f, indent=2)
+
+    @classmethod
+    def _load_meta(cls) -> dict | None:
+        """Load version metadata from JSON file."""
+        if not LDB_META_PATH.exists():
+            return None
+        try:
+            with open(LDB_META_PATH, 'r') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError):
+            return None
+
+    @classmethod
+    def retrieve(cls, version: str | None = None, force: bool = False):
+        """
+        Download LDB database from GitHub releases.
+
+        Parameters
+        ----------
+        version: :class:`str`, optional
+            Specific release version (e.g., "v0.4.0" or "0.4.0").
+            If None, downloads from latest release.
+        force: :class:`bool`, default=False
+            Download even if same version is installed.
+
+        Examples
+        --------
+        >>> LDB.retrieve()           # Latest release (freshest data)
+        >>> LDB.retrieve("v0.4.0")   # Specific version
+        >>> LDB.retrieve("0.4.0")    # Also works without 'v' prefix
+
+        Raises
+        ------
+        RuntimeError
+            If release or asset not found, or download fails.
+        """
+        # Normalize version string (add "v" prefix if missing)
+        tag = None
+        if version is not None:
+            tag = version if version.startswith("v") else f"v{version}"
+
+        # Fetch release info
+        logger.info(f"Fetching release info for: {tag or 'latest'}")
+        release_info = cls._get_release_info(tag)
+        release_tag = release_info["tag_name"]
+
+        # Check if already installed (unless force=True)
+        if not force:
+            meta = cls._load_meta()
+            if meta and meta.get("tag") == release_tag and LDB_PATH.exists():
+                logger.info(f"LDB version {release_tag} already installed. Use force=True to re-download.")
+                return
+
+        # Find ldb.pkl.zst asset in release
+        assets = release_info.get("assets", [])
+        ldb_asset = None
+        for asset in assets:
+            if asset["name"] == LDB_ASSET_NAME:
+                ldb_asset = asset
+                break
+
+        if ldb_asset is None:
+            raise RuntimeError(
+                f"Asset '{LDB_ASSET_NAME}' not found in release {release_tag}. "
+                f"Available assets: {[a['name'] for a in assets]}"
+            )
+
+        download_url = ldb_asset["browser_download_url"]
+        asset_size = ldb_asset["size"]
+
+        logger.info(f"Downloading LDB from release {release_tag} ({asset_size / 1e9:.2f} GB)")
+
+        # Download with progress bar
+        cls._download_file(download_url, LDB_PATH, desc=f"LDB {release_tag}")
+
+        # Save version metadata
+        cls._save_meta(release_tag, download_url, asset_size)
+
+        # Reset initialized flag so next access reloads
+        cls._initialized = False
+        cls._invalidate_cache()
+
+        logger.info(f"LDB {release_tag} successfully installed to {LDB_PATH}")
+
+    @classmethod
+    def db_info(cls) -> dict | None:
+        """
+        Return installed version info.
+
+        Returns
+        -------
+        :class:`dict` or :class:`None`
+            Dictionary with tag, date, size, path; or None if not installed.
+        """
+        meta = cls._load_meta()
+        if meta is None or not LDB_PATH.exists():
+            return None
+
+        return {
+            "tag": meta.get("tag"),
+            "downloaded_at": meta.get("downloaded_at"),
+            "size": meta.get("size"),
+            "path": str(LDB_PATH),
+        }
+
+    @classmethod
+    def check_update(cls) -> dict | None:
+        """
+        Check if a newer version is available on GitHub.
+
+        Returns
+        -------
+        :class:`dict` or None
+            Dictionary with update info if available, None if up to date.
+        """
+        try:
+            release_info = cls._get_release_info()
+            latest_tag = release_info["tag_name"]
+
+            meta = cls._load_meta()
+            current_tag = meta.get("tag") if meta else None
+
+            if current_tag == latest_tag:
+                logger.info(f"LDB is up to date: {current_tag}")
+                return None
+
+            return {
+                "current": current_tag,
+                "latest": latest_tag,
+                "message": f"Update available: {current_tag or 'not installed'} -> {latest_tag}",
+            }
+        except RuntimeError as e:
+            logger.warning(f"Could not check for updates: {e}")
+            return None
 
     @classmethod
     def dump(cls, filename: str, path=".", overwrite=False):
