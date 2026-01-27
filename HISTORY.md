@@ -2,7 +2,6 @@
 
 ## Pipeline
 
-- Offline DBLP
 - anHALyze: tools to spot HAL issues (bad author metada, DBLP comparison, widget)
 - EgoConf: find your conferences journals
 - Easier access to graph customization
@@ -10,12 +9,14 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
-## 0.4.0 (tentative)
+## 0.4.0 (2026-01-27): Local DB
 
-- New DB: LDB (Local DB). All the strengths of DBLP, None of its weaknesses.
-  - Convert the whole DBLP relational DB into a Gismap compatible local object.
-  - Introduces new compressed list format (Zlist) to keep the DB in memory.
-  - Use Bag-of-Factors to enable approximate search.
+New DB: LDB (Local DB). All the strengths of DBLP, None of its weaknesses.
+
+- Convert the whole DBLP relational DB into a Gismap compatible local object.
+- Introduces new compressed list format (Zlist) to keep the DB in memory.
+- Use Bag-of-Factors to enable approximate search.
+- You can build your own dataset or just rely on the one we provide and update.
 
 ## 0.3.1 (2025-11-27): Bug fixes
 

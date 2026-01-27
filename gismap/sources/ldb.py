@@ -282,9 +282,9 @@ class LDB(DB):
 
         Examples
         --------
-        >>> LDB.retrieve()           # Latest release (freshest data)
-        >>> LDB.retrieve("v0.4.0")   # Specific version
-        >>> LDB.retrieve("0.4.0")    # Also works without 'v' prefix
+        >> LDB.retrieve()           # Latest release (freshest data)
+        >> LDB.retrieve("v0.4.0")   # Specific version
+        >> LDB.retrieve("0.4.0")    # Also works without 'v' prefix
 
         Raises
         ------
