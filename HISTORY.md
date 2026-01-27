@@ -18,6 +18,8 @@ New DB: LDB (Local DB). All the strengths of DBLP, None of its weaknesses.
 - Use Bag-of-Factors to enable approximate search.
 - You can build your own dataset or just rely on the one we provide and update.
 
+Also, Lamsade added to the gallery.
+
 ## 0.3.1 (2025-11-27): Bug fixes
 
 - Fix BS4 dependency issue.
