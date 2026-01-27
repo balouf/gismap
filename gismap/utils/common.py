@@ -3,7 +3,10 @@ HIDDEN_KEYS = {"sources", "aliases", "abstract", "metadata"}
 
 class LazyRepr:
     """
-    MixIn that hides empty fields in dataclasses repr's.
+    MixIn that provides a clean repr for dataclasses.
+
+    Hides empty fields and fields in HIDDEN_KEYS from the repr string.
+    Private attributes (starting with '_') are also hidden.
     """
 
     def __repr__(self):

@@ -21,6 +21,21 @@ def initials(name):
 
 
 def linkify(name, url):
+    """
+    Wrap a name in an HTML link if URL is provided.
+
+    Parameters
+    ----------
+    name : :class:`str`
+        Display text.
+    url : :class:`str` or None
+        Target URL, or None for no link.
+
+    Returns
+    -------
+    :class:`str`
+        HTML anchor tag or span.
+    """
     if url:
         return f'<a href="{url}" target="_blank">{name}</a>'
     else:

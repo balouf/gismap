@@ -116,12 +116,41 @@ class LabAuthor(SourcedAuthor):
 
 
 def labify_author(author, rosetta):
+    """
+    Convert a database author to a LabAuthor if possible.
+
+    Parameters
+    ----------
+    author : :class:`~gismap.sources.models.Author`
+        Author to convert.
+    rosetta : :class:`dict`
+        Mapping from keys/names to LabAuthor objects.
+
+    Returns
+    -------
+    :class:`~gismap.lab.lab_author.LabAuthor` or original author
+        LabAuthor if found in rosetta, otherwise the original author.
+    """
     if isinstance(author, LabAuthor):
         return author
     return rosetta.get(author.key, rosetta.get(author.name, author))
 
 
 def labify_publications(pubs, rosetta):
+    """
+    Convert publication authors to LabAuthors in place.
+
+    Parameters
+    ----------
+    pubs : :class:`list`
+        Publications to update.
+    rosetta : :class:`dict`
+        Mapping from keys/names to LabAuthor objects.
+
+    Returns
+    -------
+    None
+    """
     for pub in pubs:
         pub.authors = [labify_author(a, rosetta) for a in pub.authors]
         for source in getattr(pub, "sources", []):

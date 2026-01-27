@@ -4,11 +4,19 @@ from gismap.lab.lab_author import LabAuthor
 
 class EgoMap(LabMap):
     """
+    Egocentric view of a researcher's collaboration network.
+
+    Displays the *star* (central researcher), their *planets* (direct co-authors),
+    and optionally *moons* (co-authors of co-authors).
+
     Parameters
     ----------
-    star
-    args
-    kwargs
+    star: :class:`str` or :class:`~gismap.lab.lab_author.LabAuthor`
+        The central researcher. Can be a name string or LabAuthor object.
+    *args
+        Passed to :class:`~gismap.lab.labmap.LabMap`.
+    **kwargs
+        Passed to :class:`~gismap.lab.labmap.LabMap`.
 
     Examples
     --------
@@ -31,6 +39,20 @@ class EgoMap(LabMap):
         yield self.star
 
     def build(self, **kwargs):
+        """
+        Build the ego network by fetching publications and adding planets/moons.
+
+        Parameters
+        ----------
+        target : :class:`int`, default=50
+            Target number of authors in the final map.
+        **kwargs
+            Passed to :meth:`~gismap.lab.labmap.LabMap.expand`.
+
+        Returns
+        -------
+        None
+        """
         target = kwargs.pop("target", 50)
         self.update_authors(desc="Star metadata")
         self.update_publis(desc="Star publications")

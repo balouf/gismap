@@ -139,7 +139,14 @@ def get_prospects(lab):
 @dataclass
 class Member:
     """
-    Basic information
+    Basic information about a lab member for name matching.
+
+    Parameters
+    ----------
+    name : :class:`str`
+        Normalized name.
+    key : :class:`str`
+        Author key.
     """
 
     name: str
@@ -190,6 +197,33 @@ def trim_sources(author):
 def proper_prospects(
     lab, length_impact=0.05, threshold=80, n_range=4, max_new=None, trim=True
 ):
+    """
+    Find and rank external collaborators for potential lab expansion.
+
+    Identifies authors from publications who are not already lab members,
+    groups them by name similarity, and ranks by collaboration strength.
+
+    Parameters
+    ----------
+    lab : :class:`~gismap.lab.labmap.LabMap`
+        Reference lab.
+    length_impact : :class:`float`, default=0.05
+        Length impact for name similarity matching.
+    threshold : :class:`int`, default=80
+        Similarity threshold for grouping authors.
+    n_range : :class:`int`, default=4
+        N-gram range for name comparison.
+    max_new : :class:`int`, optional
+        Maximum number of new authors to return.
+    trim : :class:`bool`, default=True
+        If True, keep only one source per database for each author.
+
+    Returns
+    -------
+    :class:`tuple`
+        (existing, new_rosetta) where existing maps external keys to lab member keys,
+        and new_rosetta maps source keys to new LabAuthor objects.
+    """
     member_names = get_member_names(lab)
     prospects = get_prospects(lab)
 

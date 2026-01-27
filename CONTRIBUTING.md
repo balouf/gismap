@@ -29,8 +29,8 @@ and "help wanted" is open to whoever wants to implement it.
 
 ### Write Documentation
 
-Generic Information Search: Mapping and Analysis of Publications could always use more documentation, whether as part of the
-official Generic Information Search: Mapping and Analysis of Publications docs, in docstrings, or even on the web in blog posts,
+GisMap could always use more documentation, whether as part of the
+official GisMap docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 ### Submit Feedback
@@ -50,7 +50,7 @@ Ready to contribute? Here's how to set up `gismap` for local development.
 
 1. Fork the `gismap` repo on GitHub.
 
-2. Clone your fork locally::
+2. Clone your fork locally:
     ```console
     $ git clone git@github.com:your_name_here/gismap.git
     ```
@@ -61,7 +61,7 @@ Ready to contribute? Here's how to set up `gismap` for local development.
     $ uv sync --all-extras
     ```
 
-4. Create a branch for local development::
+4. Create a branch for local development:
     ```console
     $ git checkout -b name-of-your-bugfix-or-feature
     ```
@@ -73,7 +73,7 @@ Ready to contribute? Here's how to set up `gismap` for local development.
     $ uv run pytest
     ```
 
-6. Commit your changes and push your branch to GitHub::
+6. Commit your changes and push your branch to GitHub:
     ```bash
     $ git add .
     $ git commit -m "Your detailed description of your changes."

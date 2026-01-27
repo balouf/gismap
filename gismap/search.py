@@ -6,7 +6,17 @@ from gismap.utils.text import reduce_keywords, Corrector
 
 class SearchAction:
     """
-    Blueprint for extracting search results out of a gismo.
+    Base class for extracting search results from a Gismo.
+
+    Subclasses should implement :meth:`process` to define
+    how to extract results from the gismo.
+
+    Parameters
+    ----------
+    name : :class:`str`, optional
+        Name of this action (used as key in results dict).
+    post : callable, optional
+        Post-processing function applied to results.
     """
 
     def __init__(self, name=None, post=None):
@@ -14,9 +24,33 @@ class SearchAction:
         self.post = (lambda x: x) if post is None else post
 
     def process(self, gismo):
+        """
+        Extract results from the gismo. Must be implemented by subclasses.
+
+        Parameters
+        ----------
+        gismo : :class:`~gismo.gismo.Gismo`
+            The gismo to query.
+
+        Returns
+        -------
+        Results (type depends on subclass).
+        """
         raise NotImplementedError
 
     def run(self, gismo):
+        """
+        Execute the action and apply post-processing.
+
+        Parameters
+        ----------
+        gismo : :class:`~gismo.gismo.Gismo`
+            The gismo to query.
+
+        Returns
+        -------
+        Post-processed results.
+        """
         return self.post(self.process(gismo))
 
 
@@ -153,6 +187,19 @@ publi_template = Template("""
 
 
 def publi_to_html(publi):
+    """
+    Convert a publication to an HTML list item.
+
+    Parameters
+    ----------
+    publi : :class:`~gismap.sources.models.Publication`
+        Publication to convert.
+
+    Returns
+    -------
+    :class:`str`
+        HTML list item string.
+    """
     dico = dict()
     for db in ["hal", "dblp"]:
         source = publi.sources.get(db)
@@ -167,6 +214,19 @@ def publi_to_html(publi):
 
 
 def publis_to_html(publis):
+    """
+    Convert a list of publications to an HTML unordered list.
+
+    Parameters
+    ----------
+    publis : :class:`list`
+        List of publications.
+
+    Returns
+    -------
+    :class:`str`
+        HTML unordered list string.
+    """
     rows = "\n".join(publi_to_html(p) for p in publis)
     return f"<ul>\n{rows}\n</ul>"
 

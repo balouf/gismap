@@ -98,7 +98,7 @@ def asciify(text):
     """
     Parameters
     ----------
-    text::class:`str`
+    text: :class:`str`
         Some text (typically names) with annoying accents.
 
     Returns

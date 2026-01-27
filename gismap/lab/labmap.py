@@ -152,9 +152,36 @@ class LabMap(MixInIO):
         return None
 
     def html(self, **kwargs):
+        """
+        Generate HTML representation of the collaboration graph.
+
+        Parameters
+        ----------
+        **kwargs
+            Passed to :func:`~gismap.gisgraphs.builder.make_vis`.
+
+        Returns
+        -------
+        :class:`str`
+            HTML content as a string.
+        """
         return make_vis(self, **kwargs)
 
     def save_html(self, name=None, **kwargs):
+        """
+        Save the collaboration graph as an HTML file.
+
+        Parameters
+        ----------
+        name: :class:`str`, optional
+            Output filename. Defaults to lab name.
+        **kwargs
+            Passed to :meth:`html`.
+
+        Returns
+        -------
+        None
+        """
         if name is None:
             name = self.name
         name = Path(name).with_suffix(".html")
@@ -162,6 +189,18 @@ class LabMap(MixInIO):
             f.write(self.html(**kwargs))
 
     def show_html(self, **kwargs):
+        """
+        Display the collaboration graph in a Jupyter notebook.
+
+        Parameters
+        ----------
+        **kwargs
+            Passed to :meth:`html`.
+
+        Returns
+        -------
+        None
+        """
         display(HTML(self.html(**kwargs)))
 
 
@@ -174,9 +213,9 @@ class ListMap(LabMap):
     author_list: :class:`list` of :class:`str`
         List of authors names.
     args: :class:`list`
-        Arguments to pass to the :class:`~gismap.lab.lab.Lab` constuctor.
+        Arguments to pass to the :class:`~gismap.lab.lab.Lab` constructor.
     kwargs: :class:`dict`
-        Keyword arguments to pass to the :class:`~gismap.lab.lab.Lab` constuctor.
+        Keyword arguments to pass to the :class:`~gismap.lab.lab.Lab` constructor.
     """
 
     def __init__(self, author_list, *args, **kwargs):

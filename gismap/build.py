@@ -1,3 +1,13 @@
+"""
+Build script for creating the LDB (Local DBLP) database.
+
+Run as a module to download and process the DBLP dataset:
+
+    python -m gismap.build
+
+This will fetch the DBLP RDF dump from the website and create a compressed local database.
+"""
+
 if __name__ == "__main__":
     from gismap.sources.ldb import LDB
     LDB.build_db()

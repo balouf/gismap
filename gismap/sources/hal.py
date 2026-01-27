@@ -180,6 +180,22 @@ class HAL(DB):
 
 @dataclass(repr=False)
 class HALAuthor(Author, HAL):
+    """
+    Author from the HAL (Hyper Articles en Ligne) database.
+
+    HAL is a French open archive for scholarly publications.
+
+    Parameters
+    ----------
+    name: :class:`str`
+        The author's name.
+    key: :class:`str` or :class:`int`, optional
+        HAL identifier for the author.
+    key_type: :class:`str`, optional
+        Type of key ('pid', 'fullname', or None for idHal).
+    aliases: :class:`list`
+        Alternative names for the author.
+    """
     key: str | int = None
     key_type: str = None
     aliases: list = field(default_factory=list)
@@ -277,6 +293,26 @@ HAL_KEYS = {
 
 @dataclass(repr=False)
 class HALPublication(Publication, HAL):
+    """
+    Publication from the HAL database.
+
+    Parameters
+    ----------
+    title: :class:`str`
+        Publication title.
+    authors: :class:`list`
+        List of :class:`HALAuthor` objects.
+    venue: :class:`str`
+        Publication venue.
+    type: :class:`str`
+        Publication type.
+    year: :class:`int`
+        Publication year.
+    key: :class:`str`
+        HAL document identifier.
+    metadata: :class:`dict`
+        Additional metadata (abstract, URL, etc.).
+    """
     key: str
     metadata: dict = field(default_factory=dict)
 

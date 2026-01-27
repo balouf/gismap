@@ -9,12 +9,21 @@ cctx = zstd.ZstdCompressor()
 
 class ZList(MixInIO):
     """
-    List compressed by frames of elements. Allows to store compressed data in memory with decent seek and scan.
+    Compressed list with frame-based storage.
+
+    Stores elements in compressed frames, allowing efficient memory usage
+    while maintaining random access. Uses zstandard compression.
+
+    Use as a context manager for building:
+
+        with ZList(frame_size=1000) as z:
+            for item in data:
+                z.append(item)
 
     Parameters
     ----------
-    frame_size: :class:`int`
-        Size of each frame in number of elements.
+    frame_size : :class:`int`, default=1000
+        Number of elements per compressed frame.
     """
     def __init__(self, frame_size=1000):
         self.frame_size = frame_size
@@ -33,6 +42,14 @@ class ZList(MixInIO):
             self._batch = []
 
     def append(self, entry):
+        """
+        Add an element to the list.
+
+        Parameters
+        ----------
+        entry
+            Element to add.
+        """
         self._batch.append(entry)
         self._n += 1
         if len(self._batch) == self.frame_size:

@@ -124,6 +124,26 @@ DBLP_TYPES = {
 
 @dataclass(repr=False)
 class DBLPPublication(Publication, DBLP):
+    """
+    Publication from the DBLP database.
+
+    Parameters
+    ----------
+    title: :class:`str`
+        Publication title.
+    authors: :class:`list`
+        List of :class:`DBLPAuthor` objects.
+    venue: :class:`str`
+        Publication venue.
+    type: :class:`str`
+        Publication type.
+    year: :class:`int`
+        Publication year.
+    key: :class:`str`
+        DBLP record key.
+    metadata: :class:`dict`
+        Additional metadata (pages, volume, etc.).
+    """
     key: str
     metadata: dict = field(default_factory=dict)
 

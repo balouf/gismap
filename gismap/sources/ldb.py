@@ -482,6 +482,20 @@ class LDB(DB):
 
 @dataclass(repr=False)
 class LDBAuthor(Author, LDB):
+    """
+    Author from the LDB (Local DBLP) database.
+
+    LDB provides local access to DBLP data without rate limiting.
+
+    Parameters
+    ----------
+    name: :class:`str`
+        The author's name.
+    key: :class:`str`
+        DBLP person identifier (pid).
+    aliases: :class:`list`
+        Alternative names for the author.
+    """
     key: str
     aliases: list = field(default_factory=list)
 
@@ -496,6 +510,26 @@ class LDBAuthor(Author, LDB):
 
 @dataclass(repr=False)
 class LDBPublication(Publication, LDB):
+    """
+    Publication from the LDB (Local DBLP) database.
+
+    Parameters
+    ----------
+    title: :class:`str`
+        Publication title.
+    authors: :class:`list`
+        List of :class:`LDBAuthor` objects.
+    venue: :class:`str`
+        Publication venue.
+    type: :class:`str`
+        Publication type.
+    year: :class:`int`
+        Publication year.
+    key: :class:`str`
+        DBLP record key.
+    metadata: :class:`dict`
+        Additional metadata (URL, streams, pages).
+    """
     key: str
     metadata: dict = field(default_factory=dict)
 

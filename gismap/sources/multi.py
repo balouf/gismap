@@ -8,6 +8,22 @@ from gismap.utils.text import clean_aliases
 
 
 def score_author_source(dbauthor):
+    """
+    Compute a quality score for an author source.
+
+    Higher scores indicate more reliable author identification.
+    HAL idHal keys are preferred, followed by HAL pid, then DBLP/LDB.
+
+    Parameters
+    ----------
+    dbauthor: :class:`~gismap.sources.models.Author`
+        A database-specific author object.
+
+    Returns
+    -------
+    :class:`int`
+        Score value (higher is better).
+    """
     if dbauthor.db_name == "hal":
         if dbauthor.key_type == "fullname":
             return -1
@@ -22,11 +38,37 @@ def score_author_source(dbauthor):
 
 
 def sort_author_sources(sources):
+    """
+    Sort author sources by quality score in descending order.
+
+    Parameters
+    ----------
+    sources: :class:`list`
+        List of database-specific author objects.
+
+    Returns
+    -------
+    :class:`list`
+        Sorted list with highest-quality sources first.
+    """
     return sorted(sources, key=score_author_source, reverse=True)
 
 
 @dataclass(repr=False)
 class SourcedAuthor(Author):
+    """
+    An author aggregated from multiple database sources.
+
+    Combines author information from HAL, DBLP, and/or LDB into a single entity.
+    The primary source (first in the sorted list) determines the author's key.
+
+    Parameters
+    ----------
+    name: :class:`str`
+        The author's name.
+    sources: :class:`list`
+        List of database-specific author objects (HALAuthor, DBLPAuthor, LDBAuthor).
+    """
     sources: list = field(default_factory=list)
 
     @property
@@ -89,6 +131,27 @@ def sort_publication_sources(sources):
 
 @dataclass(repr=False)
 class SourcedPublication(Publication):
+    """
+    A publication aggregated from multiple database sources.
+
+    Combines publication entries from HAL, DBLP, and/or LDB that refer
+    to the same paper. The primary source determines the publication's metadata.
+
+    Parameters
+    ----------
+    title: :class:`str`
+        Publication title.
+    authors: :class:`list`
+        List of author objects.
+    venue: :class:`str`
+        Publication venue.
+    type: :class:`str`
+        Publication type.
+    year: :class:`int`
+        Publication year.
+    sources: :class:`list`
+        List of database-specific publication objects.
+    """
     sources: list = field(default_factory=list)
 
     @property

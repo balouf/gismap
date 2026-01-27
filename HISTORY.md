@@ -2,7 +2,7 @@
 
 ## Pipeline
 
-- anHALyze: tools to spot HAL issues (bad author metada, DBLP comparison, widget)
+- anHALyze: tools to spot HAL issues (bad author metadata, DBLP comparison, widget)
 - EgoConf: find your conferences journals
 - Easier access to graph customization
 - Additional graph option (e.g. time filtering and coloring, default group checks...)
@@ -56,7 +56,7 @@ Also, Lamsade added to the gallery.
 - New lab structure: EgoMap shows the people that revolves around you!
 - New lab method: expansion, which adds *moons* (neighbor researchers).
 - Add filters when building authors and publications.
-- Physic engine changed fo better visualization.
+- Physic engine changed for better visualization.
 - Multi-source handling fine-tuned.
 - Better display (size and theme).
 
@@ -65,5 +65,5 @@ Also, Lamsade added to the gallery.
 
 - First release on PyPI.
 - Online DBLP and HAL DB implemented.
-- Lab stuctures implemented.
+- Lab structures implemented.
 - Early version of collaboration graph available.

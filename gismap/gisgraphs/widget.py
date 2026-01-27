@@ -97,6 +97,14 @@ class GismapWidget:
         self.show = True
 
     def html(self):
+        """
+        Generate the HTML visualization based on widget inputs.
+
+        Returns
+        -------
+        :class:`str`
+            HTML content for the collaboration graph.
+        """
         dbs = (
             "hal"
             if self.dbs.value == "HAL"
@@ -128,6 +136,20 @@ class GismapWidget:
         return lab.html()
 
     def compute_function(self, b, show=True):
+        """
+        Handle compute button click and generate visualization.
+
+        Parameters
+        ----------
+        b : :class:`ipywidgets.Button`
+            The button widget that triggered this callback.
+        show : :class:`bool`, default=True
+            Whether to display the result in the widget.
+
+        Returns
+        -------
+        None
+        """
         self.show = show
         full = self.html()
         b64 = base64.b64encode(

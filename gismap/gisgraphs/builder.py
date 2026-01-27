@@ -27,22 +27,37 @@ gislink = tags.a(
 
 def make_vis(lab, **kwargs):
     """
+    Generate HTML visualization of a lab's collaboration network.
+
     Parameters
     ----------
     lab: :class:`~gismap.lab.labmap.LabMap`
         Lab to display.
-
-    Other parameters
-    ----------------
-    uid: :class:`str`
-        Unique identifier.
-    vis_url: :class:`str`
-        Location of visJS network.
+    uid: :class:`str`, optional
+        Unique identifier for DOM elements. Auto-generated if not provided.
+    vis_url: :class:`str`, optional
+        URL to vis-network library.
+    groups: :class:`dict`, optional
+        Group styling configuration.
+    draw_legend: :class:`bool`, optional
+        Whether to draw the legend. Defaults to True if multiple groups.
+    physics: :class:`dict`, optional
+        Physics engine configuration.
+    nodes_options: :class:`dict`, optional
+        Node styling options.
+    edges_options: :class:`dict`, optional
+        Edge styling options.
+    interaction_options: :class:`dict`, optional
+        Interaction settings.
+    style: :class:`string.Template`, optional
+        CSS template.
+    script: :class:`string.Template`, optional
+        JavaScript template.
 
     Returns
     -------
     :class:`str`
-        HTML code.
+        HTML code as a string.
     """
     uid = kwargs.pop("uid", None)
     if uid is None:
