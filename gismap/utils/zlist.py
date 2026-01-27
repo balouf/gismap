@@ -38,6 +38,10 @@ class ZList(MixInIO):
         if len(self._batch) == self.frame_size:
             self._merge_batch()
 
+    @property
+    def size(self):
+        return len(self._blob)
+
     def __enter__(self):
         self._blob = bytearray()
         self._off = [0]

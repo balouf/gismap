@@ -38,7 +38,7 @@ class LabMap(MixInIO):
     ----------
     name: :class:`str`
         Name of the lab. Can be set as class or instance attribute.
-    dbs: :class:`list`, default=[:class:`~gismap.sources.hal.HAL`, :class:`~gismap.sources.dblp.DBLP`]
+    dbs: :class:`list`, default=[:class:`~gismap.sources.hal.HAL`, :class:`~gismap.sources.ldb.LDB`]
         List of DB sources to use.
 
 

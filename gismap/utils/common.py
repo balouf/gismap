@@ -30,7 +30,7 @@ def unlist(x):
     return x[0] if (isinstance(x, list) and x) else x
 
 
-def get_classes(root, key="name"):
+def get_classes(root, key="name", recurse=False):
     """
     Parameters
     ----------
@@ -38,6 +38,8 @@ def get_classes(root, key="name"):
         Starting class (can be abstract).
     key: :class:`str`, default='name'
         Attribute to look-up
+    recurse: bool, default=False
+        Recursively traverse subclasses.
 
     Returns
     -------
@@ -57,8 +59,9 @@ def get_classes(root, key="name"):
     result = {
         getattr(c, key): c for c in root.__subclasses__() if getattr(c, key, None)
     }
-    for c in root.__subclasses__():
-        result.update(get_classes(c))
+    if recurse:
+        for c in root.__subclasses__():
+            result.update(get_classes(c, key=key, recurse=True))
     return result
 
 
@@ -85,13 +88,13 @@ def list_of_objects(clss, dico, default=None):
 
     >>> from gismap.sources.models import DB
     >>> subclasses = get_classes(DB, key='db_name')
-    >>> from gismap import HAL, DBLP
-    >>> list_of_objects([HAL, 'dblp'], subclasses)
-    [<class 'gismap.sources.hal.HAL'>, <class 'gismap.sources.dblp.DBLP'>]
+    >>> from gismap import HAL, DBLP, LDB
+    >>> list_of_objects([HAL, 'ldb'], subclasses)
+    [<class 'gismap.sources.hal.HAL'>, <class 'gismap.sources.ldb.LDB'>]
     >>> list_of_objects(None, subclasses, [DBLP])
     [<class 'gismap.sources.dblp.DBLP'>]
-    >>> list_of_objects(DBLP, subclasses)
-    [<class 'gismap.sources.dblp.DBLP'>]
+    >>> list_of_objects(LDB, subclasses)
+    [<class 'gismap.sources.ldb.LDB'>]
     >>> list_of_objects('hal', subclasses)
     [<class 'gismap.sources.hal.HAL'>]
     """

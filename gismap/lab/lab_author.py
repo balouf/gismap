@@ -2,14 +2,12 @@ from dataclasses import dataclass, field
 import re
 
 from gismap import get_classes
-from gismap.sources.ldb import ldb
 from gismap.sources.models import DB, db_class_to_auth_class
 from gismap.sources.multi import SourcedAuthor, sort_author_sources
 from gismap.utils.common import LazyRepr, list_of_objects
 from gismap.utils.logger import logger
 
 db_dict = get_classes(DB, key="db_name")
-db_dict["ldb"] = ldb
 default_dbs = ["hal", "ldb"]
 
 
@@ -46,12 +44,11 @@ class LabAuthor(SourcedAuthor):
 
     Improper key/values are ignored (with a warning).
 
-
-    >>> dummy= LabAuthor("My Name(img: https://my.url.img, group:me,url:https://mysite.org,hal:key1,dblp:toto,badkey:hello,no_colon_separator)")
+    >>> dummy= LabAuthor("My Name(img: https://my.url.img, group:me,url:https://mysite.org,hal:key1,ldb:toto,badkey:hello,no_colon_separator)")
     >>> dummy.metadata
     AuthorMetadata(url='https://mysite.org', img='https://my.url.img', group='me')
     >>> dummy.sources
-    [HALAuthor(name='My Name', key='key1'), DBLPAuthor(name='My Name', key='toto')]
+    [HALAuthor(name='My Name', key='key1'), LDBAuthor(name='My Name', key='toto')]
 
     You can enter multiple keys for the same DB. HAL key types are automatically detected.
 

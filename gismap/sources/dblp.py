@@ -13,7 +13,7 @@ from gismap.utils.requests import get
 class DBLP(DB):
     db_name: ClassVar[str] = "dblp"
     author_backoff: ClassVar[float] = 5.0
-    publi_backoff: ClassVar[float] = 1.0
+    publi_backoff: ClassVar[float] = 5.0
 
     @classmethod
     def search_author(cls, name, wait=True):

@@ -1,4 +1,4 @@
 if __name__ == "__main__":
-    from gismap.sources.ldb import ldb
-    ldb.build_db()
-    ldb.dump_db()
+    from gismap.sources.ldb import LDB
+    LDB.build_db()
+    LDB.dump_db()

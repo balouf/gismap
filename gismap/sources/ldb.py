@@ -3,11 +3,15 @@ from functools import lru_cache
 from typing import ClassVar
 from platformdirs import user_data_dir
 from pathlib import Path
+import errno
+import os
 
+import zstandard as zstd
+import dill as pickle
 import numpy as np
 import numba as nb
 from bof.fuzz import Process
-from gismo import MixInIO
+from gismo.common import safe_write
 from tqdm.auto import tqdm
 
 from gismap.sources.dblp_ttl import publis_streamer
@@ -28,26 +32,42 @@ LDB_PATH = DATA_DIR / f"{LDB_STEM}.pkl.zst"
 
 TTL_URL = "https://dblp.org/rdf/dblp.ttl.gz"
 
+
 @dataclass(repr=False)
-class LDB(DB, MixInIO):
+class LDB(DB):
     """
     Browse DBLP from a local copy of the database.
+
+    LDB is a class-only database - it should not be instantiated.
+    All methods are classmethods and state is stored in class variables.
     """
     db_name: ClassVar[str] = LDB_STEM
     source: ClassVar[str] = TTL_URL
+
+    # Class-level state (replaces instance attributes)
+    authors: ClassVar[ZList | None] = None
+    publis: ClassVar[ZList | None] = None
+    keys: ClassVar[dict | None] = None
+    search_engine: ClassVar[Process | None] = None
+    _initialized: ClassVar[bool] = False
+
     __hash__ = object.__hash__
 
     def __init__(self):
-        self.authors = None
-        self.publis = None
-        self.keys = None
-        self.search_engine = None
-        if LDB_PATH.exists():
-            self.load_db_inplace()
+        raise TypeError(
+            "LDB should not be instantiated. Use class methods directly, e.g., LDB.search_author(name)"
+        )
 
-    def build_db(self, source=None, limit=None, n_range=2, length_impact=.2):
+    @classmethod
+    def _ensure_loaded(cls):
+        """Lazy-load the database if not already loaded."""
+        if not cls._initialized and LDB_PATH.exists():
+            cls.load_db()
+
+    @classmethod
+    def build_db(cls, source=None, limit=None, n_range=2, length_impact=.2):
         if source is None:
-            source = self.source
+            source = cls.source
         authors_dict = dict()
         logger.info("Retrieve publications")
         with ZList() as publis:
@@ -62,33 +82,37 @@ class LDB(DB, MixInIO):
                 publis.append((key, title, typ, auth_indices, url, streams, pages, venue, year))
                 if i == limit:
                     break
-        self.publis = publis
+        cls.publis = publis
         logger.info(f"{len(publis)} publications retrieved.")
         logger.info("Compact authors")
         with ZList() as authors:
             for key, (_, name, pubs) in tqdm(authors_dict.items()):
                 authors.append((key, name, pubs))
-        self.authors = authors
-        self.keys = {k: v[0] for k, v in authors_dict.items()}
+        cls.authors = authors
+        cls.keys = {k: v[0] for k, v in authors_dict.items()}
         del authors_dict
-        self.search_engine = Process(n_range=n_range, length_impact=length_impact)
-        self.search_engine.fit([asciify(a[1]) for a in authors])
-        self.search_engine.choices = np.arange(len(authors))
-        self.search_engine.vectorizer.features_ = self.numbify_dict(self.search_engine.vectorizer.features_)
-        logger.info(f"{len(self.authors)} compacted.")
-        self._invalidate_cache()
+        cls.search_engine = Process(n_range=n_range, length_impact=length_impact)
+        cls.search_engine.fit([asciify(a[1]) for a in authors])
+        cls.search_engine.choices = np.arange(len(authors))
+        cls.search_engine.vectorizer.features_ = cls.numbify_dict(cls.search_engine.vectorizer.features_)
+        logger.info(f"{len(cls.authors)} compacted.")
+        cls._invalidate_cache()
+        cls._initialized = True
 
+    @classmethod
     @lru_cache(maxsize=50000)
-    def author_by_index(self, i):
-        key, name, _ = self.authors[i]
+    def author_by_index(cls, i):
+        key, name, _ = cls.authors[i]
         return LDBAuthor(key=key, name=name)
 
-    def author_by_key(self, key):
-        return self.author_by_index(self.keys[key])
+    @classmethod
+    def author_by_key(cls, key):
+        return cls.author_by_index(cls.keys[key])
 
+    @classmethod
     @lru_cache(maxsize=50000)
-    def publication_by_index(self, i):
-        key, title, typ, authors, url, streams, pages, venue, year = self.publis[i]
+    def publication_by_index(cls, i):
+        key, title, typ, authors, url, streams, pages, venue, year = cls.publis[i]
         if venue is None:
             venue = "unpublished"
         return {"key": key, "title": title, "type": typ,
@@ -96,11 +120,13 @@ class LDB(DB, MixInIO):
                 "url": url, "streams": streams, "pages": pages,
                 "venue": venue, "year": year}
 
-    def author_publications(self, key):
-        _, name, pubs = self.authors[self.keys[key]]
-        pubs = [self.publication_by_index(k).copy() for k in pubs]
+    @classmethod
+    def author_publications(cls, key):
+        cls._ensure_loaded()
+        _, name, pubs = cls.authors[cls.keys[key]]
+        pubs = [cls.publication_by_index(k).copy() for k in pubs]
         auth_ids = sorted({k for p in pubs for k in p["authors"]})
-        auths = {k: self.author_by_index(k) for k in auth_ids}
+        auths = {k: cls.author_by_index(k) for k in auth_ids}
         for pub in pubs:
             pub["authors"] = [auths[k] for k in pub["authors"]]
             metadata = dict()
@@ -111,60 +137,96 @@ class LDB(DB, MixInIO):
             pub["metadata"] = metadata
         return [LDBPublication(**pub) for pub in pubs]
 
+    @classmethod
     @lru_cache(maxsize=1000)
-    def search_author(self, name, limit=5, score_cutoff=40.0, slack=10.0):
-        res = self.search_engine.extract(asciify(name), limit=limit, score_cutoff=score_cutoff)
+    def search_author(cls, name, limit=5, score_cutoff=40.0, slack=10.0):
+        cls._ensure_loaded()
+        res = cls.search_engine.extract(asciify(name), limit=limit, score_cutoff=score_cutoff)
         res = [r[0] for r in res if r[1] > res[0][1] - slack]
-        sorted_ids = {i: self.author_by_index(i) for i in sorted(res)}
+        sorted_ids = {i: cls.author_by_index(i) for i in sorted(res)}
         return [sorted_ids[i] for i in res]
 
-    def _invalidate_cache(self):
-        self.search_author.cache_clear()
-        self.publication_by_index.cache_clear()
-        self.author_by_index.cache_clear()
-
-    def from_author(self, a):
-        return self.author_publications(a.key)
-
-    def dump(self, *args, **kwargs):
-        if self.search_engine is not None:
-            nb_dict = self.search_engine.vectorizer.features_
-            self.search_engine.vectorizer.features_ = dict(nb_dict)
-            super().dump(*args, **kwargs)
-            self.search_engine.vectorizer.features_ = nb_dict
-        else:
-            super().dump(*args, **kwargs)
-
-    def dump_db(self):
-        DATA_DIR.mkdir(parents=True, exist_ok=True)
-        self.dump(LDB_STEM, path=DATA_DIR, overwrite=True)
+    @classmethod
+    def _invalidate_cache(cls):
+        cls.search_author.cache_clear()
+        cls.publication_by_index.cache_clear()
+        cls.author_by_index.cache_clear()
 
     @classmethod
-    def load(cls, *args, **kwargs):
-        res = super().load(*args, **kwargs)
-        res._invalidate_cache()
-        if res.search_engine is not None:
-            res.search_engine.vectorizer.features_ = cls.numbify_dict(res.search_engine.vectorizer.features_)
-        return res
+    def from_author(cls, a):
+        return cls.author_publications(a.key)
+
+    @classmethod
+    def retrieve(cls):
+        raise NotImplementedError()
+
+    @classmethod
+    def dump(cls, filename: str, path=".", overwrite=False):
+        """Save class state to file."""
+        # Convert numba dict to regular dict for pickling
+        nb_dict = None
+        if cls.search_engine is not None:
+            nb_dict = cls.search_engine.vectorizer.features_
+            cls.search_engine.vectorizer.features_ = dict(nb_dict)
+
+        state = {
+            'authors': cls.authors,
+            'publis': cls.publis,
+            'keys': cls.keys,
+            'search_engine': cls.search_engine,
+        }
+
+        # Use safe_write pattern from gismo.common
+        destination = Path(path) / f"{Path(filename).stem}.pkl.zst"
+        if destination.exists() and not overwrite:
+            print(f"File {destination} already exists! Use overwrite option to overwrite.")
+        else:
+            with safe_write(destination) as f:
+                cctx = zstd.ZstdCompressor(level=3)
+                with cctx.stream_writer(f) as z:
+                    pickle.dump(state, z, protocol=5)
+
+        # Restore numba dict
+        if cls.search_engine is not None:
+            cls.search_engine.vectorizer.features_ = nb_dict
+
+    @classmethod
+    def load(cls, filename: str, path="."):
+        """Load class state from file."""
+        dest = Path(path) / f"{Path(filename).stem}.pkl.zst"
+        if not dest.exists():
+            dest = dest.with_suffix(".pkl")
+        if not dest.exists():
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), dest)
+
+        dctx = zstd.ZstdDecompressor()
+        with open(dest, "rb") as f, dctx.stream_reader(f) as z:
+            state = pickle.load(z)
+
+        cls.authors = state['authors']
+        cls.publis = state['publis']
+        cls.keys = state['keys']
+        cls.search_engine = state['search_engine']
+
+        if cls.search_engine is not None:
+            cls.search_engine.vectorizer.features_ = cls.numbify_dict(
+                cls.search_engine.vectorizer.features_
+            )
+
+        cls._invalidate_cache()
+        cls._initialized = True
+
+    @classmethod
+    def dump_db(cls):
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        cls.dump(LDB_STEM, path=DATA_DIR, overwrite=True)
 
     @classmethod
     def load_db(cls):
         try:
-            return cls.load(LDB_STEM, path=DATA_DIR)
+            cls.load(LDB_STEM, path=DATA_DIR)
         except FileNotFoundError:
             logger.warning("No LDB installed. Build or retrieve before using.")
-            return LDB()
-
-    def load_db_inplace(self):
-        other = self.load_db()
-        self.publis = other.publis
-        self.authors = other.authors
-        self.keys = other.keys
-        self.search_engine = other.search_engine
-        self._invalidate_cache()
-
-    def retrieve(self):
-        raise NotImplementedError()
 
     @staticmethod
     def delete_db():
@@ -179,8 +241,6 @@ class LDB(DB, MixInIO):
         return nb_dict
 
 
-ldb = LDB()
-
 @dataclass(repr=False)
 class LDBAuthor(Author, LDB):
     key: str
@@ -191,7 +251,7 @@ class LDBAuthor(Author, LDB):
         return f"https://dblp.org/pid/{self.key}.html"
 
     def get_publications(self):
-        return ldb.from_author(self)
+        return LDB.from_author(self)
 
 
 
