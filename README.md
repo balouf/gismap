@@ -19,6 +19,7 @@ GisMap leverages DBLP and HAL databases to provide cartography tools for you and
 - Can be used by all researchers in Computer Science (DBLP endpoint) or based in France (HAL endpoint).
 - Aggregate publications from multiple databases, including multiple author keys inside the same database.
 - Automatically keeps track of a Lab/Department members and publications.
+- DBLP database can be used locally (LDB endpoint) to improve speed and reliability.
 - Builds interactive collaboration graphs.
 
 ## Test GisMap online!
@@ -32,6 +33,7 @@ For example:
 - [Tutorial: Making EgoMaps](https://mybinder.org/v2/gh/balouf/gismap/HEAD?urlpath=%2Fdoc%2Ftree%2Fdocs%2Ftutorials%2Fegomap.ipynb)
 - [Jupyter Lab instance with GisMap installed](https://mybinder.org/v2/gh/balouf/gismap/HEAD)
 
+**WARNING**: don't use LDB on `binder`, which does not provide enough memory yet. Only HAL and legacy DBLP work on binder.
 
 ## Quickstart
 

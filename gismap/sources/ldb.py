@@ -282,9 +282,18 @@ class LDB(DB):
 
         Examples
         --------
-        >> LDB.retrieve()           # Latest release (freshest data)
-        >> LDB.retrieve("v0.4.0")   # Specific version
-        >> LDB.retrieve("0.4.0")    # Also works without 'v' prefix
+
+        The following will get you a LDB if you do not have one.
+
+        >>> LDB.retrieve()           # Latest release (freshest data)
+        >>> LDB.retrieve("v0.4.0")   # Specific version
+        >>> LDB.retrieve("0.4.0")    # Also works without 'v' prefix
+
+        Of course, the tag/version must be LDB-ready.
+        >>> LDB.retrieve("v0.3.0")   # Too old for LDB
+        Traceback (most recent call last):
+        ...
+        RuntimeError: Asset 'ldb.pkl.zst' not found in release v0.3.0. Available assets: []
 
         Raises
         ------

@@ -33,7 +33,7 @@ def safe_filename(name):
     return f"gismap-{safe_str[:60]}.html"
 
 
-place_holder = "Diego Perino, The-Dang Huynh, François Durand (hal: fradurand, ldb: 38/11269), Rim Kaddah, Leonardo Linguaglossa, Céline Comte"
+place_holder = "Diego Perino, The-Dang Huynh, François Durand (hal: fradurand, dblp: 38/11269), Rim Kaddah, Leonardo Linguaglossa, Céline Comte"
 
 
 class GismapWidget:
@@ -66,7 +66,7 @@ class GismapWidget:
             layout=widgets.Layout(width="50%", height="100px"),
         )
         self.dbs = widgets.RadioButtons(
-            options=["HAL", "LDB", "Both"],
+            options=["HAL", "DBLP", "Both"],
             description="DB(s):",
             layout=widgets.Layout(width="80px", max_width="20%"),
         )
@@ -100,9 +100,9 @@ class GismapWidget:
         dbs = (
             "hal"
             if self.dbs.value == "HAL"
-            else "ldb"
-            if self.dbs.value == "LDB"
-            else ["hal", "ldb"]
+            else "dblp"
+            if self.dbs.value == "DBLP"
+            else ["hal", "dblp"]
         )
         name = self.names.value
         pattern = r",\s*(?![^()]*\))"
