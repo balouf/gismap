@@ -12,7 +12,7 @@ on:
   schedule:
     - cron: '30 5 1,15 * *'
 env:
-  NUMBA_DISABLE_JIT: 1
+  NUMBA_DISABLE_JIT: 0
 
 jobs:
   build:

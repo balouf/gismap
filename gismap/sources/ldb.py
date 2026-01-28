@@ -49,6 +49,26 @@ class LDB(DB):
 
     LDB is a class-only database - it should not be instantiated.
     All methods are classmethods and state is stored in class variables.
+
+    Examples
+    --------
+
+    Public DB methods ensure that the DB is loaded but if you need to use a specific LDB method, prepare the DB first.
+
+    >>> LDB._ensure_loaded()
+    >>> LDB.author_by_key("66/2077")
+    LDBAuthor(name='Fabien Mathieu', key='66/2077')
+    >>> pubs = sorted(LDB.author_publications('66/2077'), key = lambda p: p.year)
+    >>> pub = pubs[0]
+    >>> pub.metadata
+    {'url': 'http://www2003.org/cdrom/papers/poster/p102/p102-mathieu.htm', 'streams': ['conf/www']}
+    >>> LDB.db_info()  # doctest: +ELLIPSIS
+    {'tag': 'v0.4.0', 'downloaded_at': '2026-...', 'size': ..., 'path': ...}
+    >>> LDB.check_update()
+    >>> ldb = LDB()
+    Traceback (most recent call last):
+    ...
+    TypeError: LDB should not be instantiated. Use class methods directly, e.g., LDB.search_author(name)
     """
     db_name: ClassVar[str] = LDB_STEM
     source: ClassVar[str] = TTL_URL
@@ -84,6 +104,71 @@ class LDB(DB):
 
     @classmethod
     def build_db(cls, source=None, limit=None, n_range=2, length_impact=.1, authors_frame=512, publis_frame=256):
+        """
+        Build the LDB database from a DBLP TTL dump.
+
+        Parses the DBLP RDF/TTL file to extract publications and authors,
+        stores them in compressed ZList structures, and builds a fuzzy
+        search engine for author name lookups.
+
+        Parameters
+        ----------
+        source : :class:`str`, optional
+            Path or URL to the DBLP TTL file (gzipped).
+            Defaults to :const:`TTL_URL` (``https://dblp.org/rdf/dblp.ttl.gz``).
+        limit : :class:`int`, optional
+            Maximum number of publications to process. If None, processes
+            the entire database. Useful for testing with a subset.
+        n_range : :class:`int`, default=2
+            N-gram range for the fuzzy search engine. Passed to
+            :class:`bof.fuzz.Process`.
+        length_impact : :class:`float`, default=0.1
+            Length impact factor for fuzzy matching scores. Passed to
+            :class:`bof.fuzz.Process`.
+        authors_frame : :class:`int`, default=512
+            Frame size for the authors :class:`~gismap.utils.zlist.ZList`.
+            Larger values reduce overhead but increase random access time.
+        publis_frame : :class:`int`, default=256
+            Frame size for the publications :class:`~gismap.utils.zlist.ZList`.
+            Larger values reduce overhead but increase random access time.
+
+        Notes
+        -----
+        This method populates the class-level attributes:
+
+        - ``authors``: ZList of (key, name, publication_indices) tuples
+        - ``publis``: ZList of publication records
+        - ``keys``: dict mapping author keys to indices
+        - ``search_engine``: fuzzy search Process for author lookups
+
+        After building, call :meth:`dump_db` to persist the database.
+
+        Examples
+        --------
+        Build from the default DBLP source:
+
+        >>> LDB.build_db()  # doctest: +SKIP
+        >>> LDB.dump_db()   # doctest: +SKIP
+
+        Build a small test database:
+
+        >>> LDB.build_db(limit=1000)
+        >>> LDB.authors[0]
+        ('78/459-1', 'Manish Singh', [0])
+
+        Save your build in a non-default file:
+
+        >>> from tempfile import TemporaryDirectory
+        >>> from pathlib import Path
+        >>> with TemporaryDirectory() as tmpdirname:
+        ...     LDB.dump(filename="test", path=tmpdirname)
+        ...     [file.name for file in Path(tmpdirname).glob("*")]
+        ['test.pkl.zst']
+
+        In case you don't like your build and want to reload your local database from disk:
+
+        >>> LDB.load_db()
+        """
         if source is None:
             source = cls.source
         authors_dict = dict()

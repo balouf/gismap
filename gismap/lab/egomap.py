@@ -21,10 +21,10 @@ class EgoMap(LabMap):
     Examples
     --------
 
-    >>> dang = EgoMap("The-Dang Huynh", dbs="hal")
-    >>> dang.build(target=10)
-    >>> sorted(a.name for a in dang.authors.values())  # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
-    ['Bruno Kauffmann', 'Chung Shue Chen', 'Fabien Mathieu',...
+    >>> dang = EgoMap("The-Dang Huynh")
+    >>> dang.build(target=20)
+    >>> sorted(a.name for a in dang.authors.values() if len(a.name.split())<3)  # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+    ['Bruno Kauffmann', 'Fabien Mathieu', 'Hai Phan', 'Laurent Viennot', 'Ludovic Noirie',...
     """
 
     def __init__(self, star, *args, **kwargs):
