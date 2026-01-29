@@ -91,7 +91,9 @@ class LabMap(MixInIO):
             if not all(f(author) for f in self.author_selectors):
                 continue
             if len(author.sources) == 0:
-                author.auto_sources(dbs=list_of_objects(self.dbs, db_dict, default=default_dbs))
+                author.auto_sources(
+                    dbs=list_of_objects(self.dbs, db_dict, default=default_dbs)
+                )
             if author.sources:
                 self.authors[author.key] = author
             if author.metadata.img is None:

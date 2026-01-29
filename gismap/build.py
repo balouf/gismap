@@ -10,5 +10,6 @@ This will fetch the DBLP RDF dump from the website and create a compressed local
 
 if __name__ == "__main__":
     from gismap.sources.ldb import LDB
+
     LDB.build_db()
     LDB.dump_db()

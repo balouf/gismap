@@ -98,6 +98,7 @@ class DBLPAuthor(Author, DBLP):
     key='conf/sss/Mathieu07')
 
     """
+
     key: str
     aliases: list = field(default_factory=list)
 
@@ -144,6 +145,7 @@ class DBLPPublication(Publication, DBLP):
     metadata: :class:`dict`
         Additional metadata (pages, volume, etc.).
     """
+
     key: str
     metadata: dict = field(default_factory=dict)
 

@@ -56,6 +56,7 @@ class LabAuthor(SourcedAuthor):
     >>> dummy2.sources
     [HALAuthor(name='My Name', key='key1'), HALAuthor(name='My Name', key='123456', key_type='pid'), HALAuthor(name='My Name', key='My Other Name', key_type='fullname')]
     """
+
     metadata: AuthorMetadata = field(default_factory=AuthorMetadata)
 
     def auto_img(self):

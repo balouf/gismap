@@ -29,18 +29,22 @@ class LaasMap(LabMap):
                 if "public_avatar" in a.img["class"]
                 else None
             )
-            yield LabAuthor(name=name, metadata=AuthorMetadata(url=url, img=img, group=self.name.upper()))
+            yield LabAuthor(
+                name=name,
+                metadata=AuthorMetadata(url=url, img=img, group=self.name.upper()),
+            )
 
 
 class LaasFull(LabMap):
     """
     Class for handling all LAAS teams using `https://www.laas.fr/fr/equipes/` to get team names.
     """
+
     name = "LAAS"
 
     def _author_iterator(self):
         soup = Soup(get("https://www.laas.fr/fr/equipes/"), features="lxml")
-        teams = [a['href'].split('/')[-2] for a in soup('a', {'class': "badge"})]
+        teams = [a["href"].split("/")[-2] for a in soup("a", {"class": "badge"})]
         for team in teams:
             for author in LaasMap(name=team)._author_iterator():
                 yield author

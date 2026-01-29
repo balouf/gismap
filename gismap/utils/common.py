@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 HIDDEN_KEYS = {"sources", "aliases", "abstract", "metadata"}
 
 
@@ -111,3 +113,55 @@ def list_of_objects(clss, dico, default=None):
         return [cls for lcls in clss for cls in list_of_objects(lcls, dico, default)]
     else:
         return [clss]
+
+
+@dataclass(repr=False)
+class Data(LazyRepr):
+    """
+    Easy-going converter of dict to dataclass. Useful when you want to use attribute access
+    and do not care about giving a full description.
+
+    Examples
+    --------
+
+    >>> data = Data({
+    ... 'name': 'Alice',
+    ... 'age': 30,
+    ... 'address': {'street': '123 Main', 'city': 'Paris'},
+    ... 'hobbies': [{'name': 'jazz', 'level': 5}, {'name': 'code'}]})
+    >>> data # doctest: +NORMALIZE_WHITESPACE
+    Data(name='Alice', age=30, address=Data(street='123 Main', city='Paris'),
+    hobbies=[Data(name='jazz', level=5), Data(name='code')])
+    >>> data.hobbies[0].name
+    'jazz'
+    >>> data.todict()  # doctest: +NORMALIZE_WHITESPACE
+    {'name': 'Alice', 'age': 30, 'address': {'street': '123 Main', 'city': 'Paris'},
+    'hobbies': [{'name': 'jazz', 'level': 5}, {'name': 'code'}]}
+    """
+
+    def __init__(self, data):
+        self._wrap(data)
+
+    def _wrap(self, d):
+        for key, value in d.items():
+            wrapped = self._wrap_item(value)
+            setattr(self, key, wrapped)
+
+    def _wrap_item(self, item):
+        if isinstance(item, dict):
+            return Data(item)
+        elif isinstance(item, list):
+            return [self._wrap_item(subitem) for subitem in item]
+        return item
+
+    def todict(self):
+        res = {}
+        for key in self.__dict__:
+            value = getattr(self, key)
+            if hasattr(value, "todict"):
+                res[key] = value.todict()
+            elif isinstance(value, list):
+                res[key] = [v.todict() if hasattr(v, "todict") else v for v in value]
+            else:
+                res[key] = value
+        return res

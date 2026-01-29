@@ -69,6 +69,7 @@ class SourcedAuthor(Author):
     sources: :class:`list`
         List of database-specific author objects (HALAuthor, DBLPAuthor, LDBAuthor).
     """
+
     sources: list = field(default_factory=list)
 
     @property
@@ -152,6 +153,7 @@ class SourcedPublication(Publication):
     sources: :class:`list`
         List of database-specific publication objects.
     """
+
     sources: list = field(default_factory=list)
 
     @property

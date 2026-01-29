@@ -18,8 +18,8 @@ def lamsade_parse(div):
     :class:`tuple`
         name, image url (or None), webpage (or None)
     """
-    img = div.img['src'] if div.img else None
-    url = div.a['href'] if div.a else None
+    img = div.img["src"] if div.img else None
+    url = div.a["href"] if div.a else None
     name = div.h2.text.strip().title()
     name = " ".join(name.split(" ", 1)[::-1])
     return name, img, url
@@ -35,9 +35,11 @@ class Lamsade(LabMap):
     directory = "fr/personnes/enseignants-chercheurs-et-chercheurs.html"
 
     def _author_iterator(self):
-        soup = Soup(get(self.base_url+self.directory), features="lxml")
-        for a in soup('div', class_="dauphinecv-item"):
+        soup = Soup(get(self.base_url + self.directory), features="lxml")
+        for a in soup("div", class_="dauphinecv-item"):
             name, img, url = lamsade_parse(a)
-            img = self.base_url+img if img else None
-            url = self.base_url+url if url else None
-            yield LabAuthor(name=name, metadata=AuthorMetadata(url=url, img=img, group=self.name))
+            img = self.base_url + img if img else None
+            url = self.base_url + url if url else None
+            yield LabAuthor(
+                name=name, metadata=AuthorMetadata(url=url, img=img, group=self.name)
+            )

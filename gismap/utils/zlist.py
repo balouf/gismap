@@ -25,6 +25,7 @@ class ZList(MixInIO):
     frame_size : :class:`int`, default=1000
         Number of elements per compressed frame.
     """
+
     def __init__(self, frame_size=1000):
         self.frame_size = frame_size
         self.frame = None
@@ -72,7 +73,9 @@ class ZList(MixInIO):
         self._off = np.array(self._off, dtype=int)
 
     def load_frame(self, f):
-        self.frame = pickle.loads(dctx.decompress(self._blob[self._off[f]:self._off[f + 1]]))
+        self.frame = pickle.loads(
+            dctx.decompress(self._blob[self._off[f] : self._off[f + 1]])
+        )
 
     def __getitem__(self, i):
         g, f = i // self.frame_size, i % self.frame_size

@@ -8,24 +8,39 @@ from tqdm.auto import tqdm
 from gismap.utils.requests import session
 from gismap.sources.dblp import DBLP_TYPES
 
-key_re = r'<https://dblp.org/rec/([^>]+)>'
+key_re = r"<https://dblp.org/rec/([^>]+)>"
 title_re = r'.*?dblp:title\s+"([^"]+)"'
-type_re = r'.*?dblp:bibtexType\s+bibtex:(\w+)'
-authors_re = r'.*?dblp:hasSignature\s+(\[.*\])\s*;'
-url_re = r'(?:.*?dblp:primaryDocumentPage <([^>]+)>)?'
-stream_re = r'(?:.*?dblp:publishedInStream ([^;]+) ;)?'
+type_re = r".*?dblp:bibtexType\s+bibtex:(\w+)"
+authors_re = r".*?dblp:hasSignature\s+(\[.*\])\s*;"
+url_re = r"(?:.*?dblp:primaryDocumentPage <([^>]+)>)?"
+stream_re = r"(?:.*?dblp:publishedInStream ([^;]+) ;)?"
 pages_re = r'(?:.*?dblp:pagination "([^"]+)")?'
 venue_re = r'(?:.*?dblp:publishedIn\s+"([^"]+?)")?'
 year_re = r'.*?"(\d{4})"\^\^<http://www.w3.org/2001/XMLSchema#gYear>'
 
-pub_re = re.compile("".join([key_re, title_re, type_re, authors_re,
-                             url_re, stream_re, pages_re, venue_re, year_re]), flags=re.S)
+pub_re = re.compile(
+    "".join(
+        [
+            key_re,
+            title_re,
+            type_re,
+            authors_re,
+            url_re,
+            stream_re,
+            pages_re,
+            venue_re,
+            year_re,
+        ]
+    ),
+    flags=re.S,
+)
 
-streams_re = re.compile(r'<https://dblp.org/streams/((?:conf|journals)/[^>]+)>')
+streams_re = re.compile(r"<https://dblp.org/streams/((?:conf|journals)/[^>]+)>")
 
 authid_re = re.compile(
     r'\[.*?signatureDblpName\s*?"([^"]+?)(?:\s+\d+)?".*?signatureCreator\s*<https://dblp.org/pid/([^>]+?)>.*?]',
-    flags=re.S)
+    flags=re.S,
+)
 
 
 def parse_block(dblp_block):
@@ -100,12 +115,14 @@ def get_stream(source, chunk_size=1024 * 64):
             return None
         total = source.stat().st_size
         with source.open("rb") as file_handle:
+
             def read_chunks():
                 while True:
                     chunk = file_handle.read(chunk_size)
                     if not chunk:
                         break
                     yield chunk
+
             yield read_chunks(), total
 
 
@@ -136,7 +153,9 @@ def publis_streamer(source, chunk_size=1024 * 64, encoding="unicode_escape"):
         Year of publication.
     """
     with get_stream(source, chunk_size=chunk_size) as (stream, total):
-        with tqdm(total=total, unit="B", unit_scale=True, unit_divisor=1024, desc="Processing") as pbar:
+        with tqdm(
+            total=total, unit="B", unit_scale=True, unit_divisor=1024, desc="Processing"
+        ) as pbar:
             decomp = zlib.decompressobj(16 + zlib.MAX_WBITS)
             text_buffer = ""
             for chunk in stream:

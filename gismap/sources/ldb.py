@@ -19,27 +19,58 @@ import requests
 
 from gismap.sources.dblp_ttl import publis_streamer
 from gismap.sources.models import DB, Author, Publication
+from gismap.utils.common import Data
 from gismap.utils.logger import logger
 from gismap.utils.text import asciify
 from gismap.utils.zlist import ZList
 
 
-DATA_DIR = Path(user_data_dir(
-    appname="gismap",
-    appauthor=False,
-))
-
+DATA_DIR = Path(
+    user_data_dir(
+        appname="gismap",
+        appauthor=False,
+    )
+)
 LDB_STEM = "ldb"
-
-LDB_PATH = DATA_DIR / f"{LDB_STEM}.pkl.zst"
-
-TTL_URL = "https://dblp.org/rdf/dblp.ttl.gz"
-
-# GitHub release asset constants
 GITHUB_REPO = "balouf/gismap"
-GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/releases"
-LDB_ASSET_NAME = "ldb.pkl.zst"
-LDB_META_PATH = DATA_DIR / "ldb_meta.json"
+
+LDB_PARAMETERS = Data(
+    {
+        "search": {"limit": 2, "cutoff": 40.0, "slack": 10.0},
+        "bof": {"n_range": 2, "length_impact": 0.1},
+        "frame_size": {"authors": 512, "publis": 256},
+        "io": {
+            "source": "https://dblp.org/rdf/dblp.ttl.gz",
+            "destination": DATA_DIR / f"{LDB_STEM}.pkl.zst",
+            "metadata": DATA_DIR / f"{LDB_STEM}.json",
+            "gh_api": f"https://api.github.com/repos/{GITHUB_REPO}/releases",
+        },
+    }
+)
+"""
+Global configuration parameters for the Local DBLP (LDB) pipeline.
+
+Structure:
+- search:
+    - limit: maximum number of candidates retrieved per query.
+    - cutoff: minimal similarity score required to keep a candidate.
+    - slack: tolerance around the cutoff for borderline matches.
+- bof (Bag-of-Factors):
+    - n_range: max factor size (higher is better but more expensive).
+    - length_impact: how to compare two inputs of different size.
+- frame_size:
+    - authors: maximum number of authors kept in a single frame/batch.
+    - publis: maximum number of publications kept in a single frame/batch.
+- io:
+    - source: URL/file location of the DBLP RDF dump used as raw input.
+    - destination: local path where the compressed preprocessed dataset is / will be stored.
+    - gh_api: GitHub API endpoint used to fetch release information for the project.
+
+LDB_PARAMETERS is a Data (RecursiveDict) instance, so nested fields can be
+accessed with attribute notation, e.g.:
+    LDB_PARAMETERS.search.limit
+    LDB_PARAMETERS.io.destination
+"""
 
 
 @dataclass(repr=False)
@@ -70,8 +101,9 @@ class LDB(DB):
     ...
     TypeError: LDB should not be instantiated. Use class methods directly, e.g., LDB.search_author(name)
     """
+
     db_name: ClassVar[str] = LDB_STEM
-    source: ClassVar[str] = TTL_URL
+    parameters: ClassVar[Data] = LDB_PARAMETERS
 
     # Class-level state (replaces instance attributes)
     authors: ClassVar[ZList | None] = None
@@ -92,18 +124,16 @@ class LDB(DB):
         """Lazy-load the database if not already loaded."""
         if cls._initialized:
             return
-        if LDB_PATH.exists():
-            cls.load_db()
-        else:
+        if not cls.parameters.io.destination.exists():
             logger.info("LDB not found locally. Attempting to retrieve from GitHub...")
             try:
                 cls.retrieve()
-                cls.load_db()
             except RuntimeError as e:
                 logger.warning(f"Could not auto-retrieve LDB: {e}")
+        cls.load_db()
 
     @classmethod
-    def build_db(cls, source=None, limit=None, n_range=2, length_impact=.1, authors_frame=512, publis_frame=256):
+    def build_db(cls, limit=None):
         """
         Build the LDB database from a DBLP TTL dump.
 
@@ -113,24 +143,9 @@ class LDB(DB):
 
         Parameters
         ----------
-        source : :class:`str`, optional
-            Path or URL to the DBLP TTL file (gzipped).
-            Defaults to :const:`TTL_URL` (``https://dblp.org/rdf/dblp.ttl.gz``).
-        limit : :class:`int`, optional
+        limit: :class:`int`, optional
             Maximum number of publications to process. If None, processes
             the entire database. Useful for testing with a subset.
-        n_range : :class:`int`, default=2
-            N-gram range for the fuzzy search engine. Passed to
-            :class:`bof.fuzz.Process`.
-        length_impact : :class:`float`, default=0.1
-            Length impact factor for fuzzy matching scores. Passed to
-            :class:`bof.fuzz.Process`.
-        authors_frame : :class:`int`, default=512
-            Frame size for the authors :class:`~gismap.utils.zlist.ZList`.
-            Larger values reduce overhead but increase random access time.
-        publis_frame : :class:`int`, default=256
-            Frame size for the publications :class:`~gismap.utils.zlist.ZList`.
-            Larger values reduce overhead but increase random access time.
 
         Notes
         -----
@@ -161,20 +176,29 @@ class LDB(DB):
         >>> from tempfile import TemporaryDirectory
         >>> from pathlib import Path
         >>> with TemporaryDirectory() as tmpdirname:
-        ...     LDB.dump(filename="test", path=tmpdirname)
+        ...     LDB.dump(filename="test.zst", path=tmpdirname)
         ...     [file.name for file in Path(tmpdirname).glob("*")]
-        ['test.pkl.zst']
+        ['test.zst']
 
         In case you don't like your build and want to reload your local database from disk:
 
         >>> LDB.load_db()
         """
-        if source is None:
-            source = cls.source
+        source = cls.parameters.io.source
         authors_dict = dict()
         logger.info("Retrieve publications")
-        with ZList(frame_size=publis_frame) as publis:
-            for i, (key, title, typ, authors, url, streams, pages, venue, year) in enumerate(publis_streamer(source)):
+        with ZList(frame_size=cls.parameters.frame_size.publis) as publis:
+            for i, (
+                key,
+                title,
+                typ,
+                authors,
+                url,
+                streams,
+                pages,
+                venue,
+                year,
+            ) in enumerate(publis_streamer(source)):
                 auth_indices = []
                 for auth_key, auth_name in authors.items():
                     if auth_key not in authors_dict:
@@ -182,22 +206,29 @@ class LDB(DB):
                     else:
                         authors_dict[auth_key][2].append(i)
                     auth_indices.append(authors_dict[auth_key][0])
-                publis.append((key, title, typ, auth_indices, url, streams, pages, venue, year))
+                publis.append(
+                    (key, title, typ, auth_indices, url, streams, pages, venue, year)
+                )
                 if i == limit:
                     break
         cls.publis = publis
         logger.info(f"{len(publis)} publications retrieved.")
         logger.info("Compact authors")
-        with ZList(frame_size=authors_frame) as authors:
+        with ZList(frame_size=cls.parameters.frame_size.authors) as authors:
             for key, (_, name, pubs) in tqdm(authors_dict.items()):
                 authors.append((key, name, pubs))
         cls.authors = authors
         cls.keys = {k: v[0] for k, v in authors_dict.items()}
         del authors_dict
-        cls.search_engine = Process(n_range=n_range, length_impact=length_impact)
+        cls.search_engine = Process(
+            n_range=cls.parameters.bof.n_range,
+            length_impact=cls.parameters.bof.length_impact,
+        )
         cls.search_engine.fit([asciify(a[1]) for a in authors])
         cls.search_engine.choices = np.arange(len(authors))
-        cls.search_engine.vectorizer.features_ = cls.numbify_dict(cls.search_engine.vectorizer.features_)
+        cls.search_engine.vectorizer.features_ = cls.numbify_dict(
+            cls.search_engine.vectorizer.features_
+        )
         logger.info(f"{len(cls.authors)} compacted.")
         cls._invalidate_cache()
         cls._initialized = True
@@ -218,10 +249,17 @@ class LDB(DB):
         key, title, typ, authors, url, streams, pages, venue, year = cls.publis[i]
         if venue is None:
             venue = "unpublished"
-        return {"key": key, "title": title, "type": typ,
-                "authors": authors,
-                "url": url, "streams": streams, "pages": pages,
-                "venue": venue, "year": year}
+        return {
+            "key": key,
+            "title": title,
+            "type": typ,
+            "authors": authors,
+            "url": url,
+            "streams": streams,
+            "pages": pages,
+            "venue": venue,
+            "year": year,
+        }
 
     @classmethod
     def author_publications(cls, key):
@@ -242,10 +280,14 @@ class LDB(DB):
 
     @classmethod
     @lru_cache(maxsize=1000)
-    def search_author(cls, name, limit=2, score_cutoff=40.0, slack=10.0):
+    def search_author(cls, name):
         cls._ensure_loaded()
-        res = cls.search_engine.extract(asciify(name), limit=limit, score_cutoff=score_cutoff)
-        res = [r[0] for r in res if r[1] > res[0][1] - slack]
+        res = cls.search_engine.extract(
+            asciify(name),
+            limit=cls.parameters.search.limit,
+            score_cutoff=cls.parameters.search.cutoff,
+        )
+        res = [r[0] for r in res if r[1] > res[0][1] - cls.parameters.search.slack]
         sorted_ids = {i: cls.author_by_index(i) for i in sorted(res)}
         return [sorted_ids[i] for i in res]
 
@@ -279,10 +321,11 @@ class LDB(DB):
         :class:`RuntimeError`
             If release not found or API request fails.
         """
+        api_url = cls.parameters.io.gh_api
         if tag is None:
-            url = f"{GITHUB_API_URL}/latest"
+            url = f"{api_url}/latest"
         else:
-            url = f"{GITHUB_API_URL}/tags/{tag}"
+            url = f"{api_url}/tags/{tag}"
 
         try:
             response = requests.get(url, timeout=30)
@@ -314,15 +357,18 @@ class LDB(DB):
         response = requests.get(url, stream=True, timeout=30)
         response.raise_for_status()
 
-        total_size = int(response.headers.get('content-length', 0))
+        total_size = int(response.headers.get("content-length", 0))
 
-        with open(dest, 'wb') as f, tqdm(
-            desc=desc,
-            total=total_size,
-            unit='B',
-            unit_scale=True,
-            unit_divisor=1024,
-        ) as pbar:
+        with (
+            open(dest, "wb") as f,
+            tqdm(
+                desc=desc,
+                total=total_size,
+                unit="B",
+                unit_scale=True,
+                unit_divisor=1024,
+            ) as pbar,
+        ):
             for chunk in response.iter_content(chunk_size=8192):
                 if chunk:
                     f.write(chunk)
@@ -337,17 +383,19 @@ class LDB(DB):
             "size": size,
             "downloaded_at": datetime.now(timezone.utc).isoformat(),
         }
-        LDB_META_PATH.parent.mkdir(parents=True, exist_ok=True)
-        with open(LDB_META_PATH, 'w') as f:
+        meta_path = cls.parameters.io.metadata
+        meta_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(meta_path, "w") as f:
             json.dump(meta, f, indent=2)
 
     @classmethod
     def _load_meta(cls) -> dict | None:
         """Load version metadata from JSON file."""
-        if not LDB_META_PATH.exists():
+        meta_path = cls.parameters.io.metadata
+        if not meta_path.exists():
             return None
         try:
-            with open(LDB_META_PATH, 'r') as f:
+            with open(meta_path, "r") as f:
                 return json.load(f)
         except (json.JSONDecodeError, IOError):
             return None
@@ -395,34 +443,40 @@ class LDB(DB):
         release_info = cls._get_release_info(tag)
         release_tag = release_info["tag_name"]
 
+        destination = cls.parameters.io.destination
+
         # Check if already installed (unless force=True)
         if not force:
             meta = cls._load_meta()
-            if meta and meta.get("tag") == release_tag and LDB_PATH.exists():
-                logger.info(f"LDB version {release_tag} already installed. Use force=True to re-download.")
+            if meta and meta.get("tag") == release_tag and destination.exists():
+                logger.info(
+                    f"LDB version {release_tag} already installed. Use force=True to re-download."
+                )
                 return
 
         # Find ldb.pkl.zst asset in release
         assets = release_info.get("assets", [])
         ldb_asset = None
         for asset in assets:
-            if asset["name"] == LDB_ASSET_NAME:
+            if asset["name"] == destination.name:
                 ldb_asset = asset
                 break
 
         if ldb_asset is None:
             raise RuntimeError(
-                f"Asset '{LDB_ASSET_NAME}' not found in release {release_tag}. "
+                f"Asset '{destination.name}' not found in release {release_tag}. "
                 f"Available assets: {[a['name'] for a in assets]}"
             )
 
         download_url = ldb_asset["browser_download_url"]
         asset_size = ldb_asset["size"]
 
-        logger.info(f"Downloading LDB from release {release_tag} ({asset_size / 1e9:.2f} GB)")
+        logger.info(
+            f"Downloading LDB from release {release_tag} ({asset_size / 1e9:.2f} GB)"
+        )
 
         # Download with progress bar
-        cls._download_file(download_url, LDB_PATH, desc=f"LDB {release_tag}")
+        cls._download_file(download_url, destination, desc=f"LDB {release_tag}")
 
         # Save version metadata
         cls._save_meta(release_tag, download_url, asset_size)
@@ -431,7 +485,7 @@ class LDB(DB):
         cls._initialized = False
         cls._invalidate_cache()
 
-        logger.info(f"LDB {release_tag} successfully installed to {LDB_PATH}")
+        logger.info(f"LDB {release_tag} successfully installed to {destination}")
 
     @classmethod
     def db_info(cls) -> dict | None:
@@ -444,14 +498,15 @@ class LDB(DB):
             Dictionary with tag, date, size, path; or None if not installed.
         """
         meta = cls._load_meta()
-        if meta is None or not LDB_PATH.exists():
+        destination = cls.parameters.io.destination
+        if meta is None or not destination.exists():
             return None
 
         return {
             "tag": meta.get("tag"),
             "downloaded_at": meta.get("downloaded_at"),
             "size": meta.get("size"),
-            "path": str(LDB_PATH),
+            "path": str(destination),
         }
 
     @classmethod
@@ -494,16 +549,18 @@ class LDB(DB):
             cls.search_engine.vectorizer.features_ = dict(nb_dict)
 
         state = {
-            'authors': cls.authors,
-            'publis': cls.publis,
-            'keys': cls.keys,
-            'search_engine': cls.search_engine,
+            "authors": cls.authors,
+            "publis": cls.publis,
+            "keys": cls.keys,
+            "search_engine": cls.search_engine,
         }
 
         # Use safe_write pattern from gismo.common
-        destination = Path(path) / f"{Path(filename).stem}.pkl.zst"
+        destination = Path(path) / filename
         if destination.exists() and not overwrite:
-            print(f"File {destination} already exists! Use overwrite option to overwrite.")
+            print(
+                f"File {destination} already exists! Use overwrite option to overwrite."
+            )
         else:
             with safe_write(destination) as f:
                 cctx = zstd.ZstdCompressor(level=3)
@@ -517,9 +574,7 @@ class LDB(DB):
     @classmethod
     def load(cls, filename: str, path="."):
         """Load class state from file."""
-        dest = Path(path) / f"{Path(filename).stem}.pkl.zst"
-        if not dest.exists():
-            dest = dest.with_suffix(".pkl")
+        dest = Path(path) / filename
         if not dest.exists():
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), dest)
 
@@ -527,10 +582,10 @@ class LDB(DB):
         with open(dest, "rb") as f, dctx.stream_reader(f) as z:
             state = pickle.load(z)
 
-        cls.authors = state['authors']
-        cls.publis = state['publis']
-        cls.keys = state['keys']
-        cls.search_engine = state['search_engine']
+        cls.authors = state["authors"]
+        cls.publis = state["publis"]
+        cls.keys = state["keys"]
+        cls.search_engine = state["search_engine"]
 
         if cls.search_engine is not None:
             cls.search_engine.vectorizer.features_ = cls.numbify_dict(
@@ -542,24 +597,40 @@ class LDB(DB):
 
     @classmethod
     def dump_db(cls):
-        DATA_DIR.mkdir(parents=True, exist_ok=True)
-        cls.dump(LDB_STEM, path=DATA_DIR, overwrite=True)
+        destination = cls.parameters.io.destination
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        cls.dump(destination.name, path=destination.parent, overwrite=True)
 
     @classmethod
     def load_db(cls):
+        destination = cls.parameters.io.destination
         try:
-            cls.load(LDB_STEM, path=DATA_DIR)
+            cls.load(destination.name, path=destination.parent)
         except FileNotFoundError:
-            logger.warning("No LDB installed. Build or retrieve before using.")
+            logger.warning("No LDB found. Building from source...")
+            cls.build_db()
+            cls.dump_db()
+        except TypeError as e:
+            if "code expected at most" in str(e):
+                logger.warning(
+                    "LDB file incompatible with this Python version. Rebuilding from source..."
+                )
+                cls.build_db()
+                cls.dump_db()
+            else:
+                raise
 
-    @staticmethod
-    def delete_db():
-        if LDB_PATH.exists():
-            LDB_PATH.unlink()
+    @classmethod
+    def delete_db(cls):
+        destination = cls.parameters.io.destination
+        if destination.exists():
+            destination.unlink()
 
     @staticmethod
     def numbify_dict(input_dict):
-        nb_dict = nb.typed.Dict.empty(key_type=nb.types.unicode_type, value_type=nb.types.int64)
+        nb_dict = nb.typed.Dict.empty(
+            key_type=nb.types.unicode_type, value_type=nb.types.int64
+        )
         for k, v in input_dict.items():
             nb_dict[k] = v
         return nb_dict
@@ -581,6 +652,7 @@ class LDBAuthor(Author, LDB):
     aliases: :class:`list`
         Alternative names for the author.
     """
+
     key: str
     aliases: list = field(default_factory=list)
 
@@ -590,7 +662,6 @@ class LDBAuthor(Author, LDB):
 
     def get_publications(self):
         return LDB.from_author(self)
-
 
 
 @dataclass(repr=False)
@@ -615,6 +686,7 @@ class LDBPublication(Publication, LDB):
     metadata: :class:`dict`
         Additional metadata (URL, streams, pages).
     """
+
     key: str
     metadata: dict = field(default_factory=dict)
 
@@ -625,5 +697,5 @@ class LDBPublication(Publication, LDB):
     @property
     def stream(self):
         if "streams" in self.metadata:
-            return f'https://dblp.org/streams/{self.metadata["streams"][0]}'
+            return f"https://dblp.org/streams/{self.metadata['streams'][0]}"
         return None

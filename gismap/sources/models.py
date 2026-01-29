@@ -17,6 +17,7 @@ class Author(LazyRepr):
     name : :class:`str`
         The author's name.
     """
+
     name: str
 
 
@@ -41,6 +42,7 @@ class Publication(LazyRepr):
     year : :class:`int`
         Year of publication.
     """
+
     title: str
     authors: list
     venue: str
@@ -61,6 +63,7 @@ class DB(LazyRepr):
     db_name : :class:`str`
         Identifier for the database backend (e.g., 'hal', 'dblp', 'ldb').
     """
+
     db_name: ClassVar[str] = None
 
     @classmethod

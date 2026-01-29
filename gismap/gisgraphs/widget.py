@@ -157,9 +157,7 @@ class GismapWidget:
         ).decode("utf8")
         payload = f"data:text/html;base64,{b64}"
         savename = safe_filename(self.names.value)
-        link_html = (
-            f"<a href='{payload}' download='{savename}'>Download the Map!</a>"
-        )
+        link_html = f"<a href='{payload}' download='{savename}'>Download the Map!</a>"
         self.save_link.value = link_html
         if show:
             self.out.clear_output()

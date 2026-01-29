@@ -196,6 +196,7 @@ class HALAuthor(Author, HAL):
     aliases: :class:`list`
         Alternative names for the author.
     """
+
     key: str | int = None
     key_type: str = None
     aliases: list = field(default_factory=list)
@@ -313,6 +314,7 @@ class HALPublication(Publication, HAL):
     metadata: :class:`dict`
         Additional metadata (abstract, URL, etc.).
     """
+
     key: str
     metadata: dict = field(default_factory=dict)
 
