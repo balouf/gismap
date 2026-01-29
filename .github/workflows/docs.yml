@@ -7,7 +7,7 @@ name: docs
 on:
   push:
     branches:
-      - main
+      - nothing
 
 jobs:
   build-and-deploy:
