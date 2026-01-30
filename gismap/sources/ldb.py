@@ -220,18 +220,22 @@ class LDB(DB):
         cls.authors = authors
         cls.keys = {k: v[0] for k, v in authors_dict.items()}
         del authors_dict
+        cls._build_search_engine()
+        cls._invalidate_cache()
+        cls._initialized = True
+
+    @classmethod
+    def _build_search_engine(cls):
         cls.search_engine = Process(
             n_range=cls.parameters.bof.n_range,
             length_impact=cls.parameters.bof.length_impact,
         )
-        cls.search_engine.fit([asciify(a[1]) for a in authors])
-        cls.search_engine.choices = np.arange(len(authors))
+        cls.search_engine.fit([asciify(a[1]) for a in cls.authors])
+        cls.search_engine.choices = np.arange(len(cls.authors))
         cls.search_engine.vectorizer.features_ = cls.numbify_dict(
             cls.search_engine.vectorizer.features_
         )
-        logger.info(f"{len(cls.authors)} compacted.")
-        cls._invalidate_cache()
-        cls._initialized = True
+        logger.info(f"{len(cls.authors)} authors indexed.")
 
     @classmethod
     @lru_cache(maxsize=50000)
@@ -481,9 +485,8 @@ class LDB(DB):
         # Save version metadata
         cls._save_meta(release_tag, download_url, asset_size)
 
-        # Reset initialized flag so next access reloads
-        cls._initialized = False
-        cls._invalidate_cache()
+        # Load database and rebuild search engine locally
+        cls.load_db(restore_search=True)
 
         logger.info(f"LDB {release_tag} successfully installed to {destination}")
 
@@ -540,11 +543,11 @@ class LDB(DB):
             return None
 
     @classmethod
-    def dump(cls, filename: str, path=".", overwrite=False):
+    def dump(cls, filename: str, path=".", overwrite=False, include_search=True):
         """Save class state to file."""
         # Convert numba dict to regular dict for pickling
         nb_dict = None
-        if cls.search_engine is not None:
+        if include_search and cls.search_engine is not None:
             nb_dict = cls.search_engine.vectorizer.features_
             cls.search_engine.vectorizer.features_ = dict(nb_dict)
 
@@ -552,7 +555,7 @@ class LDB(DB):
             "authors": cls.authors,
             "publis": cls.publis,
             "keys": cls.keys,
-            "search_engine": cls.search_engine,
+            "search_engine": cls.search_engine if include_search else None,
         }
 
         # Use safe_write pattern from gismo.common
@@ -568,11 +571,11 @@ class LDB(DB):
                     pickle.dump(state, z, protocol=5)
 
         # Restore numba dict
-        if cls.search_engine is not None:
+        if include_search and cls.search_engine is not None:
             cls.search_engine.vectorizer.features_ = nb_dict
 
     @classmethod
-    def load(cls, filename: str, path="."):
+    def load(cls, filename: str, path=".", restore_search=False):
         """Load class state from file."""
         dest = Path(path) / filename
         if not dest.exists():
@@ -587,7 +590,10 @@ class LDB(DB):
         cls.keys = state["keys"]
         cls.search_engine = state["search_engine"]
 
-        if cls.search_engine is not None:
+        if restore_search:
+            cls._build_search_engine()
+            cls.dump(filename=filename, path=path, overwrite=True, include_search=True)
+        elif cls.search_engine is not None:
             cls.search_engine.vectorizer.features_ = cls.numbify_dict(
                 cls.search_engine.vectorizer.features_
             )
@@ -596,16 +602,23 @@ class LDB(DB):
         cls._initialized = True
 
     @classmethod
-    def dump_db(cls):
+    def dump_db(cls, include_search=True):
         destination = cls.parameters.io.destination
         destination.parent.mkdir(parents=True, exist_ok=True)
-        cls.dump(destination.name, path=destination.parent, overwrite=True)
+        cls.dump(
+            destination.name,
+            path=destination.parent,
+            overwrite=True,
+            include_search=include_search,
+        )
 
     @classmethod
-    def load_db(cls):
+    def load_db(cls, restore_search=False):
         destination = cls.parameters.io.destination
         try:
-            cls.load(destination.name, path=destination.parent)
+            cls.load(
+                destination.name, path=destination.parent, restore_search=restore_search
+            )
         except FileNotFoundError:
             logger.warning("No LDB found. Building from source...")
             cls.build_db()

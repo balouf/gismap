@@ -33,14 +33,14 @@ jobs:
       - name: Build LDB database
         run: |
           echo "Building LDB database from DBLP TTL..."
-          uv run python -m gismap.build
+          uv run python -m gismap.build --no-search
           echo "Build complete."
 
       - name: Locate and verify database
         id: locate-db
         run: |
           # Find database in platformdirs location
-          DB_PATH=$(uv run python -c "from gismap.sources.ldb import LDB_PATH; print(LDB_PATH)")
+          DB_PATH=$(uv run python -c "from gismap.sources.ldb import LDB_PARAMETERS; print(LDB_PARAMETERS.io.destination)")
           echo "Database path: $DB_PATH"
 
           if [ ! -f "$DB_PATH" ]; then
