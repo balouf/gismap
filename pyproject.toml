@@ -7,7 +7,7 @@ name = "gismap"
 version = "0.4.0"
 description = "GisMap leverages DBLP and HAL databases to provide cartography tools for you and your lab."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 authors = [
     {name = "Fabien Mathieu", email = "fabien.mathieu@normalesup.org"}
 ]
@@ -16,14 +16,14 @@ maintainers = [
 ]
 license = "MIT"
 dependencies = [
-    "beautifulsoup4>=4.14.2",
+    "beautifulsoup4>=4.14.3",
     "bof>=0.3.5",
     "distinctipy>=1.3.4",
     "domonic>=0.9.13",
     "gismo>=0.5.2",
     "ipykernel>=6.30.1",
     "ipywidgets>=8.1.8",
-    "platformdirs>=4.5.0",
+    "platformdirs>=4.5.1",
     "tqdm>=4.67.1",
 ]
 
@@ -33,12 +33,12 @@ Documentation = "https://balouf.github.io/gismap"
 
 [dependency-groups]
 dev = [
-    "ipython>=8.35.0",
+    "ipython>=9.9.0",
     "myst-parser[linkify]>=4.0.1",
     "nbsphinx>=0.9.7",
     "pydata-sphinx-theme>=0.16.1",
-    "pytest-cov>=6.1.1",
-    "ruff>=0.11.8",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.14",
     "sphinx-copybutton>=0.5.2"
 ]
 
