@@ -87,7 +87,7 @@ source_suffix = [".rst", ".md"]
 master_doc = "index"
 
 # General information about the project.
-project = "Generic Information Search: Mapping and Analysis of Publications"
+project = "GisMap"
 copyright = "2025, Fabien Mathieu"
 author = "Fabien Mathieu"
 

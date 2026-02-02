@@ -1,4 +1,4 @@
-# Generic Information Search: Mapping and Analysis of Publications
+# GisMap: for researchers, by researchers
 
 
 [![PyPI Status](https://img.shields.io/pypi/v/gismap.svg)](https://pypi.python.org/pypi/gismap)
@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code Coverage](https://codecov.io/gh/balouf/gismap/branch/main/graphs/badge.svg)](https://codecov.io/gh/balouf/gismap/tree/main)
 
-GisMap leverages DBLP and HAL databases to provide cartography tools for you and your lab.
+GisMap (Generic Information Search: Mapping and Analysis of Publications) leverages DBLP and HAL databases to provide cartography tools for you and your lab.
 
 - Free software: MIT
 - Documentation: <https://balouf.github.io/gismap/>.

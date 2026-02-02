@@ -1,4 +1,4 @@
-* Generic Information Search: Mapping and Analysis of Publications version:
+* GisMap version:
 * Python version:
 * Operating System:
 

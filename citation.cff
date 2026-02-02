@@ -1,6 +1,6 @@
 
 cff-version: 1.2.0
-title: Generic Information Search: Mapping and Analysis of Publications
+title: GisMap
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
@@ -11,5 +11,5 @@ authors:
     email: fabien.mathieu@normalesup.org
 repository-code: "https://github.com/balouf/gismap/"
 url: "https://balouf.github.io/gismap/"
-abstract: GISMAP leverages DBLP and HAL databases to provide cartography tools for you and your lab.
+abstract: "GisMap: for researchers, by researchers. Generic Information Search: Mapping and Analysis of Publications. Leverages DBLP and HAL databases to provide research cartography tools."
 license: MIT
