@@ -13,6 +13,7 @@
 
 - Add Python 3.14 compatibility (requires gismo>=0.5.4).
 - Drop Python 3.10 support (now requires 3.11+).
+- LDB search engine fine-tuned.
 - Various typo fixes.
 
 ## 0.4.0 (2026-01-27): Local DB
