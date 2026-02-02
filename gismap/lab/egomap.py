@@ -24,7 +24,7 @@ class EgoMap(LabMap):
     >>> dang = EgoMap("The-Dang Huynh")
     >>> dang.build(target=20)
     >>> sorted(a.name for a in dang.authors.values() if len(a.name.split())<3)  # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
-    ['Bruno Kauffmann', 'Fabien Mathieu', 'Hai Phan', 'Laurent Viennot', 'Ludovic Noirie',...
+    ['Bruno Kauffmann', 'Diego Perino', 'Dohy Hong', 'Fabien Mathieu', 'François Baccelli',...]
     """
 
     def __init__(self, star, *args, **kwargs):

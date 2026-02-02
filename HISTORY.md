@@ -9,6 +9,12 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
+## 0.4.1 (2026-02-02): Python 3.14 support
+
+- Add Python 3.14 compatibility (requires gismo>=0.5.4).
+- Drop Python 3.10 support (now requires 3.11+).
+- Various typo fixes.
+
 ## 0.4.0 (2026-01-27): Local DB
 
 New DB: LDB (Local DB). All the strengths of DBLP, None of its weaknesses.

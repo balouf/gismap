@@ -21,7 +21,7 @@ from gismap.sources.dblp_ttl import publis_streamer
 from gismap.sources.models import DB, Author, Publication
 from gismap.utils.common import Data
 from gismap.utils.logger import logger
-from gismap.utils.text import asciify
+from gismap.utils.text import normalized_name
 from gismap.utils.zlist import ZList
 
 
@@ -36,7 +36,7 @@ GITHUB_REPO = "balouf/gismap"
 
 LDB_PARAMETERS = Data(
     {
-        "search": {"limit": 2, "cutoff": 40.0, "slack": 10.0},
+        "search": {"limit": 3, "cutoff": 87.0, "slack": 1.0},
         "bof": {"n_range": 2, "length_impact": 0.1},
         "frame_size": {"authors": 512, "publis": 256},
         "io": {
@@ -230,7 +230,7 @@ class LDB(DB):
             n_range=cls.parameters.bof.n_range,
             length_impact=cls.parameters.bof.length_impact,
         )
-        cls.search_engine.fit([asciify(a[1]) for a in cls.authors])
+        cls.search_engine.fit([normalized_name(a[1]) for a in cls.authors])
         cls.search_engine.choices = np.arange(len(cls.authors))
         cls.search_engine.vectorizer.features_ = cls.numbify_dict(
             cls.search_engine.vectorizer.features_
@@ -287,11 +287,13 @@ class LDB(DB):
     def search_author(cls, name):
         cls._ensure_loaded()
         res = cls.search_engine.extract(
-            asciify(name),
+            normalized_name(name),
             limit=cls.parameters.search.limit,
-            score_cutoff=cls.parameters.search.cutoff,
         )
-        res = [r[0] for r in res if r[1] > res[0][1] - cls.parameters.search.slack]
+        if not res:
+            return []
+        target = max(cls.parameters.search.cutoff, res[0][1] - cls.parameters.search.slack)
+        res = [r[0] for r in res if r[1] > target]
         sorted_ids = {i: cls.author_by_index(i) for i in sorted(res)}
         return [sorted_ids[i] for i in res]
 

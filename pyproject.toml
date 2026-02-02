@@ -4,10 +4,10 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gismap"
-version = "0.4.0"
+version = "0.4.1"
 description = "GisMap leverages DBLP and HAL databases to provide cartography tools for you and your lab."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.15"
 authors = [
     {name = "Fabien Mathieu", email = "fabien.mathieu@normalesup.org"}
 ]
@@ -17,10 +17,10 @@ maintainers = [
 license = "MIT"
 dependencies = [
     "beautifulsoup4>=4.14.3",
-    "bof>=0.3.5",
+    "bof>=0.4.2",
     "distinctipy>=1.3.4",
     "domonic>=0.9.13",
-    "gismo>=0.5.2",
+    "gismo>=0.5.4",  # spacy (optional in gismo) incompatible with Python 3.14
     "ipykernel>=6.30.1",
     "ipywidgets>=8.1.8",
     "platformdirs>=4.5.1",
