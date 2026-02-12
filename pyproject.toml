@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gismap"
-version = "0.4.1"
+version = "0.5.0"
 description = "GisMap: for researchers, by researchers. Research cartography tools leveraging DBLP and HAL."
 readme = "README.md"
 requires-python = ">=3.11,<3.15"

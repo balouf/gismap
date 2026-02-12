@@ -9,6 +9,11 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
+## 0.5.0 (2026-02-14)
+
+- **BREAKING CHANGE** LDB now supports aliases (old assets not compatible)
+- Algotel/Cores added to the gallery
+
 ## 0.4.1 (2026-02-02): Python 3.14 support
 
 - Add Python 3.14 compatibility (requires gismo>=0.5.4).

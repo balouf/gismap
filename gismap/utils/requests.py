@@ -13,7 +13,7 @@ session.headers.update(
 )
 
 
-def get(url, params=None, n_trials=10, verify=True):
+def get(url, params=None, n_trials=10, verify=True, encoding=None):
     """
     Parameters
     ----------
@@ -25,6 +25,9 @@ def get(url, params=None, n_trials=10, verify=True):
         Number of attempts to fetch URL.
     verify: :class:`bool`, default=True
         Verify certificates.
+    encoding: :class:`str`, optional
+        Force response encoding (e.g. ``"utf-8"``). Useful when the server
+        does not declare the charset and ``requests`` falls back to ISO-8859-1.
 
     Returns
     -------
@@ -42,6 +45,8 @@ def get(url, params=None, n_trials=10, verify=True):
                 logger.warning(f"Too many requests. Auto-retry in {t} seconds.")
                 sleep(t)
             else:
+                if encoding is not None:
+                    r.encoding = encoding
                 return r.text
         except requests.exceptions.ConnectionError:
             t = 6

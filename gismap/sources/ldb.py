@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from functools import lru_cache
+from importlib.metadata import version as pkg_version
 from typing import ClassVar
 from platformdirs import user_data_dir
 from pathlib import Path
@@ -73,6 +74,15 @@ accessed with attribute notation, e.g.:
 """
 
 
+def _compatible_tag(tag: str) -> bool:
+    """Check that release tag is compatible with the installed package (same major.minor)."""
+    v = pkg_version("gismap")
+    pkg_minor = ".".join(v.split(".")[:2])
+    tag_clean = tag.lstrip("v")
+    tag_minor = ".".join(tag_clean.split(".")[:2])
+    return pkg_minor == tag_minor
+
+
 @dataclass(repr=False)
 class LDB(DB):
     """
@@ -93,8 +103,13 @@ class LDB(DB):
     >>> pub = pubs[0]
     >>> pub.metadata
     {'url': 'http://www2003.org/cdrom/papers/poster/p102/p102-mathieu.htm', 'streams': ['conf/www']}
+    >>> christelle = LDB.search_author("Christelle Caillouet")
+    >>> christelle
+    [LDBAuthor(name='Christelle Molle', key='10/8725')]
+    >>> christelle[0].aliases
+    ['Christelle Caillouet']
     >>> LDB.db_info()  # doctest: +ELLIPSIS
-    {'tag': 'v0.4.0', 'downloaded_at': '2026-...', 'size': ..., 'path': ...}
+    {'tag': 'v0...', 'downloaded_at': '...', 'size': ..., 'path': ...}
     >>> LDB.check_update()
     >>> ldb = LDB()
     Traceback (most recent call last):
@@ -169,7 +184,7 @@ class LDB(DB):
 
         >>> LDB.build_db(limit=1000)
         >>> LDB.authors[0]
-        ('78/459-1', 'Manish Singh', [0])
+        ('78/459-1', ['Manish Singh'], [0])
 
         Save your build in a non-default file:
 
@@ -202,8 +217,9 @@ class LDB(DB):
                 auth_indices = []
                 for auth_key, auth_name in authors.items():
                     if auth_key not in authors_dict:
-                        authors_dict[auth_key] = (len(authors_dict), auth_name, [i])
+                        authors_dict[auth_key] = (len(authors_dict), {auth_name}, [i])
                     else:
+                        authors_dict[auth_key][1].add(auth_name)
                         authors_dict[auth_key][2].append(i)
                     auth_indices.append(authors_dict[auth_key][0])
                 publis.append(
@@ -215,8 +231,8 @@ class LDB(DB):
         logger.info(f"{len(publis)} publications retrieved.")
         logger.info("Compact authors")
         with ZList(frame_size=cls.parameters.frame_size.authors) as authors:
-            for key, (_, name, pubs) in tqdm(authors_dict.items()):
-                authors.append((key, name, pubs))
+            for key, (_, names, pubs) in tqdm(authors_dict.items()):
+                authors.append((key, list(names), pubs))
         cls.authors = authors
         cls.keys = {k: v[0] for k, v in authors_dict.items()}
         del authors_dict
@@ -230,8 +246,19 @@ class LDB(DB):
             n_range=cls.parameters.bof.n_range,
             length_impact=cls.parameters.bof.length_impact,
         )
-        cls.search_engine.fit([normalized_name(a[1]) for a in cls.authors])
-        cls.search_engine.choices = np.arange(len(cls.authors))
+        main_names = []
+        aliases = []
+        aliases_indices = []
+        for i, a in enumerate(cls.authors):
+            main_names.append(normalized_name(a[1][0]))
+            for alias in a[1][1:]:
+                aliases_indices.append(i)
+                aliases.append(normalized_name(alias))
+        cls.search_engine.fit(main_names+aliases)
+        aliases_indices = np.array(aliases_indices)
+        cls.search_engine.choices = np.concatenate((np.arange(len(cls.authors)), aliases_indices))
+        # cls.search_engine.fit([normalized_name(a[1]) for a in cls.authors])
+        # cls.search_engine.choices = np.arange(len(cls.authors))
         cls.search_engine.vectorizer.features_ = cls.numbify_dict(
             cls.search_engine.vectorizer.features_
         )
@@ -240,8 +267,8 @@ class LDB(DB):
     @classmethod
     @lru_cache(maxsize=50000)
     def author_by_index(cls, i):
-        key, name, _ = cls.authors[i]
-        return LDBAuthor(key=key, name=name)
+        key, names, _ = cls.authors[i]
+        return LDBAuthor(key=key, name=names[0], aliases=names[1:])
 
     @classmethod
     def author_by_key(cls, key):
@@ -424,11 +451,12 @@ class LDB(DB):
 
         The following will get you a LDB if you do not have one.
 
-        >>> LDB.retrieve()           # Latest release (freshest data)
-        >>> LDB.retrieve("v0.4.0")   # Specific version
-        >>> LDB.retrieve("0.4.0")    # Also works without 'v' prefix
+        >>> LDB.retrieve()           # Latest compatible release  # doctest: +SKIP
+        >>> LDB.retrieve("v0.5.0")   # Specific version  # doctest: +SKIP
+        >>> LDB.retrieve("0.5.0")    # Also works without 'v' prefix  # doctest: +SKIP
 
         Of course, the tag/version must be LDB-ready.
+
         >>> LDB.retrieve("v0.3.0")   # Too old for LDB
         Traceback (most recent call last):
         ...
@@ -437,7 +465,7 @@ class LDB(DB):
         Raises
         ------
         RuntimeError
-            If release or asset not found, or download fails.
+            If release or asset not found, download fails, or version is incompatible.
         """
         # Normalize version string (add "v" prefix if missing)
         tag = None
@@ -448,6 +476,13 @@ class LDB(DB):
         logger.info(f"Fetching release info for: {tag or 'latest'}")
         release_info = cls._get_release_info(tag)
         release_tag = release_info["tag_name"]
+
+        # Check version compatibility (only when no explicit version requested)
+        if tag is None and not _compatible_tag(release_tag):
+            raise RuntimeError(
+                f"Latest release {release_tag} is not compatible with installed gismap {pkg_version('gismap')}. "
+                f"Use retrieve(version='v...') to force a specific version."
+            )
 
         destination = cls.parameters.io.destination
 
@@ -471,7 +506,7 @@ class LDB(DB):
         if ldb_asset is None:
             raise RuntimeError(
                 f"Asset '{destination.name}' not found in release {release_tag}. "
-                f"Available assets: {[a['name'] for a in assets]}"
+                f"Available assets: {[a['name'] for a in assets[:3]]}"
             )
 
         download_url = ldb_asset["browser_download_url"]
@@ -527,6 +562,10 @@ class LDB(DB):
         try:
             release_info = cls._get_release_info()
             latest_tag = release_info["tag_name"]
+
+            if not _compatible_tag(latest_tag):
+                logger.info(f"Latest release {latest_tag} is not compatible with gismap {pkg_version('gismap')}.")
+                return None
 
             meta = cls._load_meta()
             current_tag = meta.get("tag") if meta else None

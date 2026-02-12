@@ -14,6 +14,12 @@
     :members:
 ```
 
+## Algotel-Cores
+
+```{eval-rst}
+.. automodule:: gismap.lab_examples.cotel
+    :members:
+```
 
 ## Cedric
 

@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from bof.fuzz import jit_square_factors
 from bof.feature_extraction import CountVectorizer
 import numpy as np
+import unicodedata
 
 from gismap.sources.models import Publication, Author
 from gismap.utils.text import clean_aliases
@@ -231,7 +232,7 @@ def regroup_publications(pub_dict, threshold=85, length_impact=0.05, n_range=5):
     pub_list = [p for p in pub_dict.values()]
     res = dict()
     vectorizer = CountVectorizer(n_range=n_range)
-    x = vectorizer.fit_transform([p.title for p in pub_list])
+    x = vectorizer.fit_transform([unicodedata.normalize("NFKC", p.title) for p in pub_list])
     y = x.T.tocsr()
     jc_matrix = jit_square_factors(
         x.indices, x.indptr, y.indices, y.indptr, len(pub_list), length_impact
