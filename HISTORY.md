@@ -13,6 +13,7 @@
 
 - **BREAKING CHANGE** LDB now supports aliases (old assets not compatible)
 - Algotel/Cores added to the gallery
+- Add throttling to HAL requests, as they apparently started to limit the traffic
 
 ## 0.4.1 (2026-02-02): Python 3.14 support
 

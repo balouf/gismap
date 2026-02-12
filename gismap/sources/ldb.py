@@ -105,9 +105,9 @@ class LDB(DB):
     {'url': 'http://www2003.org/cdrom/papers/poster/p102/p102-mathieu.htm', 'streams': ['conf/www']}
     >>> christelle = LDB.search_author("Christelle Caillouet")
     >>> christelle
-    [LDBAuthor(name='Christelle Molle', key='10/8725')]
+    [LDBAuthor(name='Christelle Caillouet', key='10/8725')]
     >>> christelle[0].aliases
-    ['Christelle Caillouet']
+    ['Christelle Molle']
     >>> LDB.db_info()  # doctest: +ELLIPSIS
     {'tag': 'v0...', 'downloaded_at': '...', 'size': ..., 'path': ...}
     >>> LDB.check_update()
@@ -268,6 +268,7 @@ class LDB(DB):
     @lru_cache(maxsize=50000)
     def author_by_index(cls, i):
         key, names, _ = cls.authors[i]
+        names = sorted(names)
         return LDBAuthor(key=key, name=names[0], aliases=names[1:])
 
     @classmethod

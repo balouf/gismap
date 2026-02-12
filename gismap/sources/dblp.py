@@ -22,7 +22,7 @@ class DBLP(DB):
         ----------
         name: :class:`str`
             People to find.
-        wait: :class:`bool`
+        wait: :class:`bool`, default=True
             Wait a bit to avoid 429.
 
         Returns

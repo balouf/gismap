@@ -1,3 +1,4 @@
+from time import sleep
 from typing import ClassVar
 from dataclasses import dataclass, field
 from collections import defaultdict
@@ -14,14 +15,18 @@ from gismap.utils.common import unlist
 @dataclass(repr=False)
 class HAL(DB):
     db_name: ClassVar[str] = "hal"
+    author_backoff: ClassVar[float] = .5
+    publi_backoff: ClassVar[float] = .5
 
     @classmethod
-    def search_author(cls, name):
+    def search_author(cls, name, wait=True):
         """
         Parameters
         ----------
         name: :class:`str`
             People to find.
+        wait: :class:`bool`, default=True
+            Wait a bit to avoid 429.
 
         Returns
         -------
@@ -77,6 +82,8 @@ class HAL(DB):
             )
             for k, v in pids.items()
         ]
+        if wait:
+            sleep(cls.author_backoff)
         return (
             res
             if res
@@ -92,12 +99,14 @@ class HAL(DB):
         )
 
     @classmethod
-    def from_author(cls, a):
+    def from_author(cls, a, wait=True):
         """
         Parameters
         ----------
         a: :class:`~gismap.sources.hal.HALAuthor`
             Hal researcher.
+        wait: :class:`bool`, default=True
+            Wait a bit to avoid 429.
 
         Returns
         -------
@@ -172,6 +181,8 @@ class HAL(DB):
         r = get(api, params=params)
         response = json.loads(r)["response"]
         res = [HALPublication.from_json(r) for r in response.get("docs", [])]
+        if wait:
+            sleep(cls.author_backoff)
         if len(res) == 0 and a.key_type != "fullname":
             name = a.name
             return HAL.from_author(HALAuthor(name=name, key=name, key_type="fullname"))
