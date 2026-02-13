@@ -1,0 +1,1166 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index &#8212; GisMap 0.5.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/vis-network/styles/vis-network.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=1dd76d02"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="GisMap 0.5.0 documentation - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="GisMap 0.5.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials/examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials/examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#Z"><strong>Z</strong></a>
+ 
+</div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.AlgoRes2016">AlgoRes2016 (class in gismap.lab_examples.cotel)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.AlgoRes2017">AlgoRes2017 (class in gismap.lab_examples.cotel)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.AlgoRes2018">AlgoRes2018 (class in gismap.lab_examples.cotel)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.AlgoRes2019">AlgoRes2019 (class in gismap.lab_examples.cotel)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.AlgoRes2020">AlgoRes2020 (class in gismap.lab_examples.cotel)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.AlgoRes2021">AlgoRes2021 (class in gismap.lab_examples.cotel)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.AlgoRes2022">AlgoRes2022 (class in gismap.lab_examples.cotel)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.AlgoRes2023">AlgoRes2023 (class in gismap.lab_examples.cotel)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.AlgoRes2024">AlgoRes2024 (class in gismap.lab_examples.cotel)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.AlgoRes2025">AlgoRes2025 (class in gismap.lab_examples.cotel)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.AlgoRes2026">AlgoRes2026 (class in gismap.lab_examples.cotel)</a>
+</li>
+      <li><a href="reference/utils.html#gismap.utils.zlist.ZList.append">append() (gismap.utils.zlist.ZList method)</a>
+</li>
+      <li><a href="reference/utils.html#gismap.utils.text.asciify">asciify() (in module gismap.utils.text)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.models.Author">Author (class in gismap.sources.models)</a>
+</li>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.graph.author_html">author_html() (in module gismap.gisgraphs.graph)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.labmap.LabMap.author_selectors">author_selectors (gismap.lab.labmap.LabMap attribute)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.filters.author_taboo_filter">author_taboo_filter() (in module gismap.lab.filters)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.lab_author.AuthorMetadata">AuthorMetadata (class in gismap.lab.lab_author)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.lab_author.LabAuthor.auto_sources">auto_sources() (gismap.lab.lab_author.LabAuthor method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/lab.html#gismap.lab.egomap.EgoMap.build">build() (gismap.lab.egomap.EgoMap method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/database.html#gismap.sources.ldb.LDB.build_db">build_db() (gismap.sources.ldb.LDB class method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/examples.html#gismap.lab_examples.cedric.CedricFull">CedricFull (class in gismap.lab_examples.cedric)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cedric.CedricMap">CedricMap (class in gismap.lab_examples.cedric)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.ldb.LDB.check_update">check_update() (gismap.sources.ldb.LDB class method)</a>
+</li>
+      <li><a href="reference/utils.html#gismap.utils.text.clean_aliases">clean_aliases() (in module gismap.utils.text)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.widget.GismapWidget.compute_function">compute_function() (gismap.gisgraphs.widget.GismapWidget method)</a>
+</li>
+      <li><a href="reference/utils.html#gismap.utils.text.Corrector">Corrector (class in gismap.utils.text)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.CoTel">CoTel (class in gismap.lab_examples.cotel)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.expansion.count_prospect_entries">count_prospect_entries() (in module gismap.lab.expansion)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/utils.html#gismap.utils.common.Data">Data (class in gismap.utils.common)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.models.DB">DB (class in gismap.sources.models)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.models.db_class_to_auth_class">db_class_to_auth_class() (in module gismap.sources.models)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.ldb.LDB.db_info">db_info() (gismap.sources.ldb.LDB class method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/database.html#gismap.sources.models.DB.db_name">db_name (gismap.sources.models.DB attribute)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.dblp.DBLP">DBLP (class in gismap.sources.dblp)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.dblp.DBLPAuthor">DBLPAuthor (class in gismap.sources.dblp)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.dblp.DBLPPublication">DBLPPublication (class in gismap.sources.dblp)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.ldb.LDB.dump">dump() (gismap.sources.ldb.LDB class method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/lab.html#gismap.lab.egomap.EgoMap">EgoMap (class in gismap.lab.egomap)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/database.html#gismap.sources.dblp.DBLP.from_author">from_author() (gismap.sources.dblp.DBLP class method)</a>
+
+      <ul>
+        <li><a href="reference/database.html#gismap.sources.hal.HAL.from_author">(gismap.sources.hal.HAL class method)</a>
+</li>
+        <li><a href="reference/database.html#gismap.sources.ldb.LDB.from_author">(gismap.sources.ldb.LDB class method)</a>
+</li>
+        <li><a href="reference/database.html#gismap.sources.models.DB.from_author">(gismap.sources.models.DB class method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/database.html#gismap.sources.hal.HALPublication.from_json">from_json() (gismap.sources.hal.HALPublication class method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/utils.html#gismap.utils.requests.get">get() (in module gismap.utils.requests)</a>
+</li>
+      <li><a href="reference/utils.html#gismap.utils.common.get_classes">get_classes() (in module gismap.utils.common)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.expansion.get_member_names">get_member_names() (in module gismap.lab.expansion)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.expansion.get_prospects">get_prospects() (in module gismap.lab.expansion)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.dblp_ttl.get_stream">get_stream() (in module gismap.sources.dblp_ttl)</a>
+</li>
+      <li>
+    gismap.gisgraphs.builder
+
+      <ul>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.builder">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.gisgraphs.graph
+
+      <ul>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.graph">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.gisgraphs.groups
+
+      <ul>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.groups">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.gisgraphs.js
+
+      <ul>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.js">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.gisgraphs.options
+
+      <ul>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.options">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.gisgraphs.style
+
+      <ul>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.style">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.gisgraphs.widget
+
+      <ul>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.widget">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.gismo
+
+      <ul>
+        <li><a href="reference/gismo.html#module-gismap.gismo">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.lab.egomap
+
+      <ul>
+        <li><a href="reference/lab.html#module-gismap.lab.egomap">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.lab.expansion
+
+      <ul>
+        <li><a href="reference/lab.html#module-gismap.lab.expansion">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.lab.filters
+
+      <ul>
+        <li><a href="reference/lab.html#module-gismap.lab.filters">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.lab.lab_author
+
+      <ul>
+        <li><a href="reference/lab.html#module-gismap.lab.lab_author">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.lab.labmap
+
+      <ul>
+        <li><a href="reference/lab.html#module-gismap.lab.labmap">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.lab_examples.cedric
+
+      <ul>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.cedric">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.lab_examples.cotel
+
+      <ul>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.cotel">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    gismap.lab_examples.lamsade
+
+      <ul>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.lamsade">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.lab_examples.lincs
+
+      <ul>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.lincs">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.lab_examples.lip6
+
+      <ul>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.lip6">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.lab_examples.toulouse
+
+      <ul>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.toulouse">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.search
+
+      <ul>
+        <li><a href="reference/gismo.html#module-gismap.search">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.sources.dblp
+
+      <ul>
+        <li><a href="reference/database.html#module-gismap.sources.dblp">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.sources.dblp_ttl
+
+      <ul>
+        <li><a href="reference/database.html#module-gismap.sources.dblp_ttl">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.sources.hal
+
+      <ul>
+        <li><a href="reference/database.html#module-gismap.sources.hal">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.sources.ldb
+
+      <ul>
+        <li><a href="reference/database.html#module-gismap.sources.ldb">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.sources.models
+
+      <ul>
+        <li><a href="reference/database.html#module-gismap.sources.models">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.sources.multi
+
+      <ul>
+        <li><a href="reference/database.html#module-gismap.sources.multi">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.utils.common
+
+      <ul>
+        <li><a href="reference/utils.html#module-gismap.utils.common">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.utils.logger
+
+      <ul>
+        <li><a href="reference/utils.html#module-gismap.utils.logger">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.utils.requests
+
+      <ul>
+        <li><a href="reference/utils.html#module-gismap.utils.requests">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.utils.text
+
+      <ul>
+        <li><a href="reference/utils.html#module-gismap.utils.text">module</a>
+</li>
+      </ul></li>
+      <li>
+    gismap.utils.zlist
+
+      <ul>
+        <li><a href="reference/utils.html#module-gismap.utils.zlist">module</a>
+</li>
+      </ul></li>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.widget.GismapWidget">GismapWidget (class in gismap.gisgraphs.widget)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.lab_author.AuthorMetadata.group">group (gismap.lab.lab_author.AuthorMetadata attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/database.html#gismap.sources.hal.HAL">HAL (class in gismap.sources.hal)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.hal.HALAuthor">HALAuthor (class in gismap.sources.hal)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/database.html#gismap.sources.hal.HALPublication">HALPublication (class in gismap.sources.hal)</a>
+</li>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.widget.GismapWidget.html">html() (gismap.gisgraphs.widget.GismapWidget method)</a>
+
+      <ul>
+        <li><a href="reference/lab.html#gismap.lab.labmap.LabMap.html">(gismap.lab.labmap.LabMap method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/lab.html#gismap.lab.lab_author.AuthorMetadata.img">img (gismap.lab.lab_author.AuthorMetadata attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.graph.initials">initials() (in module gismap.gisgraphs.graph)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/gismo.html#gismap.search.l2t">l2t() (in module gismap.search)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.toulouse.LaasFull">LaasFull (class in gismap.lab_examples.toulouse)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.toulouse.LaasMap">LaasMap (class in gismap.lab_examples.toulouse)</a>
+</li>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.graph.lab_to_graph">lab_to_graph() (in module gismap.gisgraphs.graph)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.lab_author.LabAuthor">LabAuthor (class in gismap.lab.lab_author)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.lab_author.labify_author">labify_author() (in module gismap.lab.lab_author)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.lab_author.labify_publications">labify_publications() (in module gismap.lab.lab_author)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.labmap.LabMap">LabMap (class in gismap.lab.labmap)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.lamsade.Lamsade">Lamsade (class in gismap.lab_examples.lamsade)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.lamsade.lamsade_parse">lamsade_parse() (in module gismap.lab_examples.lamsade)</a>
+</li>
+      <li><a href="reference/utils.html#gismap.utils.common.LazyRepr">LazyRepr (class in gismap.utils.common)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/database.html#gismap.sources.ldb.LDB">LDB (class in gismap.sources.ldb)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.ldb.LDB_PARAMETERS">LDB_PARAMETERS (in module gismap.sources.ldb)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.ldb.LDBAuthor">LDBAuthor (class in gismap.sources.ldb)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.ldb.LDBPublication">LDBPublication (class in gismap.sources.ldb)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.lincs.LINCS">LINCS (class in gismap.lab_examples.lincs)</a>
+</li>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.graph.linkify">linkify() (in module gismap.gisgraphs.graph)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.lip6.Lip6Full">Lip6Full (class in gismap.lab_examples.lip6)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.lip6.Lip6Map">Lip6Map (class in gismap.lab_examples.lip6)</a>
+</li>
+      <li><a href="reference/utils.html#gismap.utils.common.list_of_objects">list_of_objects() (in module gismap.utils.common)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.labmap.ListMap">ListMap (class in gismap.lab.labmap)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.ldb.LDB.load">load() (gismap.sources.ldb.LDB class method)</a>
+</li>
+      <li><a href="reference/utils.html#gismap.utils.logger.logger">logger (in module gismap.utils.logger)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/gismo.html#gismap.gismo.make_gismo">make_gismo() (in module gismap.gismo)</a>
+</li>
+      <li><a href="reference/gismo.html#gismap.gismo.make_post_publi">make_post_publi() (in module gismap.gismo)</a>
+</li>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.builder.make_vis">make_vis() (in module gismap.gisgraphs.builder)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.expansion.Member">Member (class in gismap.lab.expansion)</a>
+</li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.builder">gismap.gisgraphs.builder</a>
+</li>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.graph">gismap.gisgraphs.graph</a>
+</li>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.groups">gismap.gisgraphs.groups</a>
+</li>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.js">gismap.gisgraphs.js</a>
+</li>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.options">gismap.gisgraphs.options</a>
+</li>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.style">gismap.gisgraphs.style</a>
+</li>
+        <li><a href="reference/cographs.html#module-gismap.gisgraphs.widget">gismap.gisgraphs.widget</a>
+</li>
+        <li><a href="reference/gismo.html#module-gismap.gismo">gismap.gismo</a>
+</li>
+        <li><a href="reference/lab.html#module-gismap.lab.egomap">gismap.lab.egomap</a>
+</li>
+        <li><a href="reference/lab.html#module-gismap.lab.expansion">gismap.lab.expansion</a>
+</li>
+        <li><a href="reference/lab.html#module-gismap.lab.filters">gismap.lab.filters</a>
+</li>
+        <li><a href="reference/lab.html#module-gismap.lab.lab_author">gismap.lab.lab_author</a>
+</li>
+        <li><a href="reference/lab.html#module-gismap.lab.labmap">gismap.lab.labmap</a>
+</li>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.cedric">gismap.lab_examples.cedric</a>
+</li>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.cotel">gismap.lab_examples.cotel</a>
+</li>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.lamsade">gismap.lab_examples.lamsade</a>
+</li>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.lincs">gismap.lab_examples.lincs</a>
+</li>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.lip6">gismap.lab_examples.lip6</a>
+</li>
+        <li><a href="reference/examples.html#module-gismap.lab_examples.toulouse">gismap.lab_examples.toulouse</a>
+</li>
+        <li><a href="reference/gismo.html#module-gismap.search">gismap.search</a>
+</li>
+        <li><a href="reference/database.html#module-gismap.sources.dblp">gismap.sources.dblp</a>
+</li>
+        <li><a href="reference/database.html#module-gismap.sources.dblp_ttl">gismap.sources.dblp_ttl</a>
+</li>
+        <li><a href="reference/database.html#module-gismap.sources.hal">gismap.sources.hal</a>
+</li>
+        <li><a href="reference/database.html#module-gismap.sources.ldb">gismap.sources.ldb</a>
+</li>
+        <li><a href="reference/database.html#module-gismap.sources.models">gismap.sources.models</a>
+</li>
+        <li><a href="reference/database.html#module-gismap.sources.multi">gismap.sources.multi</a>
+</li>
+        <li><a href="reference/utils.html#module-gismap.utils.common">gismap.utils.common</a>
+</li>
+        <li><a href="reference/utils.html#module-gismap.utils.logger">gismap.utils.logger</a>
+</li>
+        <li><a href="reference/utils.html#module-gismap.utils.requests">gismap.utils.requests</a>
+</li>
+        <li><a href="reference/utils.html#module-gismap.utils.text">gismap.utils.text</a>
+</li>
+        <li><a href="reference/utils.html#module-gismap.utils.zlist">gismap.utils.zlist</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/utils.html#gismap.utils.text.normalized_name">normalized_name() (in module gismap.utils.text)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/gismo.html#gismap.search.p2t">p2t() (in module gismap.search)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.dblp_ttl.parse_block">parse_block() (in module gismap.sources.dblp_ttl)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.hal.parse_facet_author">parse_facet_author() (in module gismap.sources.hal)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.lab_author.AuthorMetadata.position">position (gismap.lab.lab_author.AuthorMetadata attribute)</a>
+</li>
+      <li><a href="reference/gismo.html#gismap.search.SearchAction.process">process() (gismap.search.SearchAction method)</a>
+
+      <ul>
+        <li><a href="reference/gismo.html#gismap.search.SearchDocuments.process">(gismap.search.SearchDocuments method)</a>
+</li>
+        <li><a href="reference/gismo.html#gismap.search.SearchFeatures.process">(gismap.search.SearchFeatures method)</a>
+</li>
+        <li><a href="reference/gismo.html#gismap.search.SearchLandmarks.process">(gismap.search.SearchLandmarks method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/lab.html#gismap.lab.expansion.proper_prospects">proper_prospects() (in module gismap.lab.expansion)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.expansion.Prospect">Prospect (class in gismap.lab.expansion)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/lab.html#gismap.lab.expansion.ProspectStrength">ProspectStrength (class in gismap.lab.expansion)</a>
+</li>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.graph.pub_html">pub_html() (in module gismap.gisgraphs.graph)</a>
+</li>
+      <li><a href="reference/gismo.html#gismap.search.publi_to_html">publi_to_html() (in module gismap.search)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.models.Publication">Publication (class in gismap.sources.models)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.filters.publication_oneword_filter">publication_oneword_filter() (in module gismap.lab.filters)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.labmap.LabMap.publication_selectors">publication_selectors (gismap.lab.labmap.LabMap attribute)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.filters.publication_size_filter">publication_size_filter() (in module gismap.lab.filters)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.filters.publication_taboo_filter">publication_taboo_filter() (in module gismap.lab.filters)</a>
+</li>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.graph.publications_list">publications_list() (in module gismap.gisgraphs.graph)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.dblp_ttl.publis_streamer">publis_streamer() (in module gismap.sources.dblp_ttl)</a>
+</li>
+      <li><a href="reference/gismo.html#gismap.search.publis_to_html">publis_to_html() (in module gismap.search)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/lab.html#gismap.lab.filters.re_filter">re_filter() (in module gismap.lab.filters)</a>
+</li>
+      <li><a href="reference/utils.html#gismap.utils.text.reduce_keywords">reduce_keywords() (in module gismap.utils.text)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.multi.regroup_authors">regroup_authors() (in module gismap.sources.multi)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/database.html#gismap.sources.multi.regroup_publications">regroup_publications() (in module gismap.sources.multi)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.ldb.LDB.retrieve">retrieve() (gismap.sources.ldb.LDB class method)</a>
+</li>
+      <li><a href="reference/gismo.html#gismap.search.SearchAction.run">run() (gismap.search.SearchAction method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.widget.safe_filename">safe_filename() (in module gismap.gisgraphs.widget)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.labmap.LabMap.save_html">save_html() (gismap.lab.labmap.LabMap method)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.multi.score_author_source">score_author_source() (in module gismap.sources.multi)</a>
+</li>
+      <li><a href="reference/gismo.html#gismap.search.Search">Search (class in gismap.search)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.dblp.DBLP.search_author">search_author() (gismap.sources.dblp.DBLP class method)</a>
+
+      <ul>
+        <li><a href="reference/database.html#gismap.sources.hal.HAL.search_author">(gismap.sources.hal.HAL class method)</a>
+</li>
+        <li><a href="reference/database.html#gismap.sources.ldb.LDB.search_author">(gismap.sources.ldb.LDB class method)</a>
+</li>
+        <li><a href="reference/database.html#gismap.sources.models.DB.search_author">(gismap.sources.models.DB class method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/gismo.html#gismap.search.search_to_html">search_to_html() (in module gismap.search)</a>
+</li>
+      <li><a href="reference/gismo.html#gismap.search.search_to_text">search_to_text() (in module gismap.search)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/gismo.html#gismap.search.SearchAction">SearchAction (class in gismap.search)</a>
+</li>
+      <li><a href="reference/gismo.html#gismap.search.SearchDocuments">SearchDocuments (class in gismap.search)</a>
+</li>
+      <li><a href="reference/gismo.html#gismap.search.SearchFeatures">SearchFeatures (class in gismap.search)</a>
+</li>
+      <li><a href="reference/gismo.html#gismap.search.SearchLandmarks">SearchLandmarks (class in gismap.search)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.labmap.LabMap.show_html">show_html() (gismap.lab.labmap.LabMap method)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.toulouse.SolaceMap">SolaceMap (class in gismap.lab_examples.toulouse)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.multi.sort_author_sources">sort_author_sources() (in module gismap.sources.multi)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.multi.SourcedAuthor">SourcedAuthor (class in gismap.sources.multi)</a>
+</li>
+      <li><a href="reference/database.html#gismap.sources.multi.SourcedPublication">SourcedPublication (class in gismap.sources.multi)</a>
+</li>
+      <li><a href="reference/examples.html#gismap.lab_examples.cotel.strip_li">strip_li() (in module gismap.lab_examples.cotel)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.graph.to_edge">to_edge() (in module gismap.gisgraphs.graph)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/cographs.html#gismap.gisgraphs.graph.to_node">to_node() (in module gismap.gisgraphs.graph)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.expansion.trim_sources">trim_sources() (in module gismap.lab.expansion)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/utils.html#gismap.utils.common.unlist">unlist() (in module gismap.utils.common)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.labmap.LabMap.update_authors">update_authors() (gismap.lab.labmap.LabMap method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/lab.html#gismap.lab.labmap.LabMap.update_publis">update_publis() (gismap.lab.labmap.LabMap method)</a>
+</li>
+      <li><a href="reference/lab.html#gismap.lab.lab_author.AuthorMetadata.url">url (gismap.lab.lab_author.AuthorMetadata attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Z">Z</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/utils.html#gismap.utils.zlist.ZList">ZList (class in gismap.utils.zlist)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
