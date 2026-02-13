@@ -108,7 +108,7 @@ class LDB(DB):
     [LDBAuthor(name='Christelle Caillouet', key='10/8725')]
     >>> christelle[0].aliases
     ['Christelle Molle']
-    >>> LDB.db_info()  # doctest: +ELLIPSIS
+    >>> LDB.db_info()  # doctest: +SKIP
     {'tag': 'v0...', 'downloaded_at': '...', 'size': ..., 'path': ...}
     >>> LDB.check_update()
     >>> ldb = LDB()

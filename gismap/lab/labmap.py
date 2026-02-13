@@ -74,13 +74,13 @@ class LabMap(MixInIO):
         """
         Yields
         ------
-        :class:`~gismap.lab.lab.LabAuthor`
+        :class:`~gismap.lab.lab_author.LabAuthor`
         """
         raise NotImplementedError
 
     def update_authors(self, desc="Author information"):
         """
-        Populate the authors attribute (:class:`dict` [:class:`str`, :class:`~gismap.lab.lab.LabAuthor`]).
+        Populate the authors attribute (:class:`dict` [:class:`str`, :class:`~gismap.lab.lab_author.LabAuthor`]).
 
         Returns
         -------
@@ -215,9 +215,9 @@ class ListMap(LabMap):
     author_list: :class:`list` of :class:`str`
         List of authors names.
     args: :class:`list`
-        Arguments to pass to the :class:`~gismap.lab.lab.Lab` constructor.
+        Arguments to pass to the :class:`~gismap.lab.labmap.LabMap` constructor.
     kwargs: :class:`dict`
-        Keyword arguments to pass to the :class:`~gismap.lab.lab.Lab` constructor.
+        Keyword arguments to pass to the :class:`~gismap.lab.labmap.LabMap` constructor.
     """
 
     def __init__(self, author_list, *args, **kwargs):

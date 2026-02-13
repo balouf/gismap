@@ -6,4 +6,6 @@
 
 ## Contributors
 
-None yet. Why not be the first?
+- Céline Comte (feedback)
+- François Durand (feedback)
+- Sébastien Tixeuil (feedback)

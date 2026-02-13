@@ -97,5 +97,5 @@ Before you submit a pull request, check that it meets these guidelines:
 
 To run a subset of tests:
 ```bash
-$ uv run pytest tests.test_gismap
+$ uv run pytest tests/test_gismap.py
 ```

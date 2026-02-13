@@ -13,7 +13,7 @@ class Corrector:
     score_cutoff: :class:`int`, default=20
         Threshold for correction.
     min_length: :class:`int`, default=3
-        Minimal number of caracters for correction to kick in.
+        Minimal number of characters for correction to kick in.
 
     Examples
     --------

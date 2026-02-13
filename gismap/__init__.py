@@ -1,4 +1,4 @@
-"""Top-level package for Analytical Lab Cartography In Computer Science."""
+"""Top-level package for GisMap."""
 
 from importlib.metadata import metadata
 
@@ -21,4 +21,4 @@ from gismap.gisgraphs.widget import GismapWidget as GismapWidget
 infos = metadata(__name__)
 __version__ = infos["Version"]
 __author__ = """Fabien Mathieu"""
-__email__ = "loufab@gmail.com"
+__email__ = "fabien.mathieu@normalesup.org"

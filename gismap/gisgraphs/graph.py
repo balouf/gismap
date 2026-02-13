@@ -47,7 +47,7 @@ def author_html(author):
     Parameters
     ----------
     author: :class:`~gismap.sources.models.Author`
-        Searcher.
+        Author.
 
     Returns
     -------
@@ -134,14 +134,14 @@ def to_node(s, node_pubs):
     Parameters
     ----------
     s: :class:`~gismap.lab.lab_author.LabAuthor`
-        Searcher.
+        Author.
     node_pubs: :class:`dict`
         Lab publications.
 
     Returns
     -------
     :class:`dict`
-        A display-ready representation of the searcher.
+        A display-ready representation of the author.
     """
     overlay = tags.div()
     overlay.appendChild(tags.div(f"Publications of {author_html(s)}"))
@@ -168,11 +168,11 @@ def to_edge(k, v, searchers):
     Parameters
     ----------
     k: :class:`tuple`
-        Keys of the searchers involved.
+        Keys of the authors involved.
     v: :class:`list`
         List of joint publications.
-    searchers: :class:`dict`
-        Searchers.
+    authors: :class:`dict`
+        Authors.
 
     Returns
     -------
@@ -206,7 +206,7 @@ def lab_to_graph(lab):
     Parameters
     ----------
     lab: :class:`~gismap.lab.labmap.LabMap`
-        A lab populated with searchers and publications.
+        A lab populated with authors and publications.
 
     Returns
     -------

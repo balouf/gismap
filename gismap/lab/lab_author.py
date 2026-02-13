@@ -39,7 +39,7 @@ class AuthorMetadata(LazyRepr):
 class LabAuthor(SourcedAuthor):
     """
     Examples
-    ---------
+    --------
     The metadata and DB key(s) of an author can be entered in parentheses using key/values.
 
     Improper key/values are ignored (with a warning).
