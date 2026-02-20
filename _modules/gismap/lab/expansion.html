@@ -1,0 +1,759 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gismap.lab.expansion &#8212; GisMap 0.5.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/vis-network/styles/vis-network.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=1dd76d02"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gismap/lab/expansion';</script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt="GisMap 0.5.0 documentation - Home"/>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="GisMap 0.5.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gismap.lab.expansion</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gismap.lab.expansion</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span><span class="p">,</span> <span class="n">defaultdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bof.fuzz</span><span class="w"> </span><span class="kn">import</span> <span class="n">Process</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.utils.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">normalized_name</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.sources.multi</span><span class="w"> </span><span class="kn">import</span> <span class="n">sort_author_sources</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.lab.lab_author</span><span class="w"> </span><span class="kn">import</span> <span class="n">LabAuthor</span>
+
+
+<div class="viewcode-block" id="ProspectStrength">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.expansion.ProspectStrength">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ProspectStrength</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measures the interaction between an external author and a lab by counting co-authors and publications.</span>
+
+<span class="sd">    A (max,+) addition is handled to deal with multiple keys.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; a1 = ProspectStrength(3, 5)</span>
+<span class="sd">    &gt;&gt;&gt; a2 = ProspectStrength(2, 10)</span>
+<span class="sd">    &gt;&gt;&gt; a1 &gt; a2</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; a1 + a2</span>
+<span class="sd">    ProspectStrength(coauthors=3, publications=15)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">coauthors</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">publications</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coauthors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">publications</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="n">ProspectStrength</span><span class="p">(</span>
+            <span class="n">coauthors</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coauthors</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">coauthors</span><span class="p">),</span>
+            <span class="n">publications</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">publications</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">publications</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">other</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="count_prospect_entries">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.expansion.count_prospect_entries">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">count_prospect_entries</span><span class="p">(</span><span class="n">lab</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Associate to external coauthors (prospects) their lab strength.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lab: :class:`~gismap.lab.labmap.LabMap`</span>
+<span class="sd">        Reference lab.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`dict` of :class:`str` to :class:`~gismap.lab.expansion.ProspectStrength`</span>
+<span class="sd">        Lab strengths.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">count_coauthors</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span>
+    <span class="n">count_publications</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">lab</span><span class="o">.</span><span class="n">publications</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">sources</span><span class="p">:</span>
+            <span class="n">new_authors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="n">lab_authors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">authors</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">&quot;db_name&quot;</span><span class="p">):</span>
+                    <span class="n">new_authors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+                    <span class="n">count_publications</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">lab_authors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">lab_authors</span><span class="p">:</span>
+                <span class="n">count_coauthors</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_authors</span><span class="p">)</span>
+
+    <span class="n">count_coauthors</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span>
+        <span class="n">k</span> <span class="k">for</span> <span class="n">new_authors</span> <span class="ow">in</span> <span class="n">count_coauthors</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">new_authors</span>
+    <span class="p">)</span>
+    <span class="n">count_publications</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">count_publications</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">k</span><span class="p">:</span> <span class="n">ProspectStrength</span><span class="p">(</span>
+            <span class="n">coauthors</span><span class="o">=</span><span class="n">count_coauthors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">publications</span><span class="o">=</span><span class="n">count_publications</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">count_publications</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="Prospect">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.expansion.Prospect">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Prospect</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Candidate for integration to lab.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    author: :class:`~gismap.sources.models.Author`</span>
+<span class="sd">        Reference author. Must have a key.</span>
+<span class="sd">    strengths: :class:`dict`</span>
+<span class="sd">        Dictionary of ProspectStrength.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">author</span><span class="p">,</span> <span class="n">strengths</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">normalized_name</span><span class="p">(</span><span class="n">author</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="n">author</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="n">strengths</span><span class="p">[</span><span class="n">author</span><span class="o">.</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">score</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Prospect(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">, key=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2">, s=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="get_prospects">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.expansion.get_prospects">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_prospects</span><span class="p">(</span><span class="n">lab</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lab: :class:`~gismap.lab.labmap.LabMap`</span>
+<span class="sd">        Reference lab.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`list` of :class:`~gismap.lab.expansion.Prospect`</span>
+<span class="sd">        List of prospects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">strengths</span> <span class="o">=</span> <span class="n">count_prospect_entries</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+    <span class="n">prospect_dico</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">key</span><span class="p">:</span> <span class="n">a</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">lab</span><span class="o">.</span><span class="n">publications</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">sources</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">authors</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">&quot;db_name&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">lab</span><span class="o">.</span><span class="n">author_selectors</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">Prospect</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">strengths</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">prospect_dico</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span></div>
+
+
+
+<div class="viewcode-block" id="Member">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.expansion.Member">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Member</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Basic information about a lab member for name matching.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : :class:`str`</span>
+<span class="sd">        Normalized name.</span>
+<span class="sd">    key : :class:`str`</span>
+<span class="sd">        Author key.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+
+<div class="viewcode-block" id="get_member_names">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.expansion.get_member_names">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_member_names</span><span class="p">(</span><span class="n">lab</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lab: :class:`~gismap.lab.labmap.LabMap`</span>
+<span class="sd">        Reference lab.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`list`</span>
+<span class="sd">        Tuples simplified-name -&gt; key</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">lab</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">{</span><span class="n">normalized_name</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">aliases</span><span class="p">]}</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="trim_sources">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.expansion.trim_sources">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">trim_sources</span><span class="p">(</span><span class="n">author</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Inplace reduction of sources, keeping one unique source per db.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    author: :class:`~gismap.sources.multi.SourcedAuthor`</span>
+<span class="sd">        An author.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sources</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">author</span><span class="o">.</span><span class="n">sources</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">db_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">db_name</span><span class="p">)</span>
+            <span class="n">sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">author</span><span class="o">.</span><span class="n">sources</span> <span class="o">=</span> <span class="n">sources</span></div>
+
+
+
+<div class="viewcode-block" id="proper_prospects">
+<a class="viewcode-back" href="../../../reference/lab.html#gismap.lab.expansion.proper_prospects">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">proper_prospects</span><span class="p">(</span>
+    <span class="n">lab</span><span class="p">,</span> <span class="n">length_impact</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">n_range</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_new</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trim</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find and rank external collaborators for potential lab expansion.</span>
+
+<span class="sd">    Identifies authors from publications who are not already lab members,</span>
+<span class="sd">    groups them by name similarity, and ranks by collaboration strength.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lab : :class:`~gismap.lab.labmap.LabMap`</span>
+<span class="sd">        Reference lab.</span>
+<span class="sd">    length_impact : :class:`float`, default=0.05</span>
+<span class="sd">        Length impact for name similarity matching.</span>
+<span class="sd">    threshold : :class:`int`, default=80</span>
+<span class="sd">        Similarity threshold for grouping authors.</span>
+<span class="sd">    n_range : :class:`int`, default=4</span>
+<span class="sd">        N-gram range for name comparison.</span>
+<span class="sd">    max_new : :class:`int`, optional</span>
+<span class="sd">        Maximum number of new authors to return.</span>
+<span class="sd">    trim : :class:`bool`, default=True</span>
+<span class="sd">        If True, keep only one source per database for each author.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    :class:`tuple`</span>
+<span class="sd">        (existing, new_rosetta) where existing maps external keys to lab member keys,</span>
+<span class="sd">        and new_rosetta maps source keys to new LabAuthor objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">member_names</span> <span class="o">=</span> <span class="n">get_member_names</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+    <span class="n">prospects</span> <span class="o">=</span> <span class="n">get_prospects</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">member_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">prospects</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(),</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="n">done</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prospects</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+    <span class="c1"># Compare current and prospects names to re-attach ghosts</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">length_impact</span><span class="o">=</span><span class="n">length_impact</span><span class="p">,</span> <span class="n">n_range</span><span class="o">=</span><span class="n">n_range</span><span class="p">)</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">allow_updates</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">fit</span><span class="p">([</span><span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">member_names</span><span class="p">])</span>
+    <span class="n">jc</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">transform</span><span class="p">([</span><span class="n">prospect</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">prospect</span> <span class="ow">in</span> <span class="n">prospects</span><span class="p">])</span>
+    <span class="n">best_choice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">jc</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">existing</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">best_choice</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">jc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
+            <span class="n">existing</span><span class="p">[</span><span class="n">prospects</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">member_names</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">done</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># Regroup remaining prospects</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">prospect</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">prospect</span> <span class="ow">in</span> <span class="n">prospects</span><span class="p">]</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+    <span class="n">jc</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+    <span class="n">new_lab</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">prospect</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">prospects</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">done</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="k">continue</span>
+        <span class="n">locs</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">jc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">done</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+        <span class="n">done</span><span class="p">[</span><span class="n">locs</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="n">sort_author_sources</span><span class="p">([</span><span class="n">prospects</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">author</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">locs</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">sources</span><span class="p">:</span>
+            <span class="n">strength</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">prospects</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">score</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">locs</span><span class="p">)</span>
+            <span class="n">new_author</span> <span class="o">=</span> <span class="n">LabAuthor</span><span class="o">.</span><span class="n">from_sources</span><span class="p">(</span><span class="n">sources</span><span class="p">)</span>
+            <span class="n">new_lab</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">strength</span><span class="p">,</span> <span class="n">new_author</span><span class="p">))</span>
+
+    <span class="c1"># Extract top prospects</span>
+    <span class="n">new_lab</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">new_lab</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)][</span>
+        <span class="p">:</span><span class="n">max_new</span>
+    <span class="p">]</span>
+    <span class="n">new_rosetta</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="n">key</span><span class="p">:</span> <span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">new_lab</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">sources</span><span class="p">}</span>
+
+    <span class="c1"># Remove extra sources</span>
+    <span class="k">if</span> <span class="n">trim</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">new_lab</span><span class="p">:</span>
+            <span class="n">trim_sources</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">existing</span><span class="p">,</span> <span class="n">new_rosetta</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

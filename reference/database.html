@@ -1,0 +1,1425 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Database &#8212; GisMap 0.5.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/vis-network/styles/vis-network.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=1dd76d02"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/database';</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Utils" href="utils.html" />
+    <link rel="prev" title="Gismo" href="gismo.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="GisMap 0.5.0 documentation - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="GisMap 0.5.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials/examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="lab.html">Laboratory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Lab library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cographs.html">VisJS network interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gismo.html">Gismo</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Database</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="database">
+<h1>Database<a class="headerlink" href="#database" title="Link to this heading">#</a></h1>
+<p>Classes and functions to interact with databases of publications.</p>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Link to this heading">#</a></h2>
+<p>Abstract description of GisMap DB interface.</p>
+<dl class="py class" id="module-gismap.sources.models">
+<dt class="sig sig-object py" id="gismap.sources.models.Author">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.models.</span></span><span class="sig-name descname"><span class="pre">Author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/models.html#Author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.models.Author" title="Link to this definition">#</a></dt>
+<dd><p>Base class for authors in the database system.</p>
+<p>Authors are identified primarily by their name and may have
+database-specific subclasses with additional attributes like keys and aliases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The author’s name.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gismap.sources.models.DB">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.models.</span></span><span class="sig-name descname"><span class="pre">DB</span></span><a class="reference internal" href="../_modules/gismap/sources/models.html#DB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.models.DB" title="Link to this definition">#</a></dt>
+<dd><p>Abstract base class for database backends.</p>
+<p>Provides the interface for searching authors and retrieving publications.
+Subclasses must implement <a class="reference internal" href="#gismap.sources.models.DB.search_author" title="gismap.sources.models.DB.search_author"><code class="xref py py-meth docutils literal notranslate"><span class="pre">search_author()</span></code></a> and <a class="reference internal" href="#gismap.sources.models.DB.from_author" title="gismap.sources.models.DB.from_author"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_author()</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gismap.sources.models.DB.db_name">
+<span class="sig-name descname"><span class="pre">db_name</span></span><a class="headerlink" href="#gismap.sources.models.DB.db_name" title="Link to this definition">#</a></dt>
+<dd><p>Identifier for the database backend (e.g., ‘hal’, ‘dblp’, ‘ldb’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.models.DB.from_author">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/models.html#DB.from_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.models.DB.from_author" title="Link to this definition">#</a></dt>
+<dd><p>Retrieve publications for a given author.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>a</strong> (<a class="reference internal" href="#gismap.sources.models.Author" title="gismap.sources.models.Author"><code class="xref py py-class docutils literal notranslate"><span class="pre">Author</span></code></a>) – The author whose publications to retrieve.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of <a class="reference internal" href="#gismap.sources.models.Publication" title="gismap.sources.models.Publication"><code class="xref py py-class docutils literal notranslate"><span class="pre">Publication</span></code></a> objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.models.DB.search_author">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">search_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/models.html#DB.search_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.models.DB.search_author" title="Link to this definition">#</a></dt>
+<dd><p>Search for authors matching the given name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name to search for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of matching <a class="reference internal" href="#gismap.sources.models.Author" title="gismap.sources.models.Author"><code class="xref py py-class docutils literal notranslate"><span class="pre">Author</span></code></a> objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gismap.sources.models.Publication">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.models.</span></span><span class="sig-name descname"><span class="pre">Publication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">authors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">venue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/models.html#Publication"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.models.Publication" title="Link to this definition">#</a></dt>
+<dd><p>Base class for publications in the database system.</p>
+<p>Publications contain metadata about academic papers including title,
+authors, venue, type, and publication year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The publication title.</p></li>
+<li><p><strong>authors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of <a class="reference internal" href="#gismap.sources.models.Author" title="gismap.sources.models.Author"><code class="xref py py-class docutils literal notranslate"><span class="pre">Author</span></code></a> objects.</p></li>
+<li><p><strong>venue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication venue (journal, conference, etc.).</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication type (e.g., ‘journal’, ‘conference’, ‘book’).</p></li>
+<li><p><strong>year</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Year of publication.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismap.sources.models.db_class_to_auth_class">
+<span class="sig-prename descclassname"><span class="pre">gismap.sources.models.</span></span><span class="sig-name descname"><span class="pre">db_class_to_auth_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_class</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/models.html#db_class_to_auth_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.models.db_class_to_auth_class" title="Link to this definition">#</a></dt>
+<dd><p>Find the Author subclass associated with a given DB class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>db_class</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a>) – A DB subclass (e.g., HAL, DBLP, LDB).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The corresponding Author subclass, or None if not found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="ldb-local-dblp">
+<h2>LDB (Local DBLP)<a class="headerlink" href="#ldb-local-dblp" title="Link to this heading">#</a></h2>
+<p>Interface for <em>dblp computer science bibliography</em> (<a class="reference external" href="https://dblp.org/" rel="noreferer noopener" target="_blank">https://dblp.org/</a>) using a local copy of the database.</p>
+<dl class="py class" id="module-gismap.sources.ldb">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDB">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.ldb.</span></span><span class="sig-name descname"><span class="pre">LDB</span></span><a class="reference internal" href="../_modules/gismap/sources/ldb.html#LDB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.ldb.LDB" title="Link to this definition">#</a></dt>
+<dd><p>Browse DBLP from a local copy of the database.</p>
+<p>LDB is a class-only database - it should not be instantiated.
+All methods are classmethods and state is stored in class variables.</p>
+<p class="rubric">Examples</p>
+<p>Public DB methods ensure that the DB is loaded but if you need to use a specific LDB method, prepare the DB first.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">_ensure_loaded</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">author_by_key</span><span class="p">(</span><span class="s2">&quot;66/2077&quot;</span><span class="p">)</span>
+<span class="go">LDBAuthor(name=&#39;Fabien Mathieu&#39;, key=&#39;66/2077&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pubs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">LDB</span><span class="o">.</span><span class="n">author_publications</span><span class="p">(</span><span class="s1">&#39;66/2077&#39;</span><span class="p">),</span> <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pub</span> <span class="o">=</span> <span class="n">pubs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pub</span><span class="o">.</span><span class="n">metadata</span>
+<span class="go">{&#39;url&#39;: &#39;http://www2003.org/cdrom/papers/poster/p102/p102-mathieu.htm&#39;, &#39;streams&#39;: [&#39;conf/www&#39;]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">christelle</span> <span class="o">=</span> <span class="n">LDB</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s2">&quot;Christelle Caillouet&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">christelle</span>
+<span class="go">[LDBAuthor(name=&#39;Christelle Caillouet&#39;, key=&#39;10/8725&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">christelle</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">aliases</span>
+<span class="go">[&#39;Christelle Molle&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">db_info</span><span class="p">()</span>  
+<span class="go">{&#39;tag&#39;: &#39;v0...&#39;, &#39;downloaded_at&#39;: &#39;...&#39;, &#39;size&#39;: ..., &#39;path&#39;: ...}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">check_update</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ldb</span> <span class="o">=</span> <span class="n">LDB</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">TypeError</span>: <span class="n">LDB should not be instantiated. Use class methods directly, e.g., LDB.search_author(name)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDB.build_db">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/ldb.html#LDB.build_db"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.ldb.LDB.build_db" title="Link to this definition">#</a></dt>
+<dd><p>Build the LDB database from a DBLP TTL dump.</p>
+<p>Parses the DBLP RDF/TTL file to extract publications and authors,
+stores them in compressed ZList structures, and builds a fuzzy
+search engine for author name lookups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Maximum number of publications to process. If None, processes
+the entire database. Useful for testing with a subset.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This method populates the class-level attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">authors</span></code>: ZList of (key, name, publication_indices) tuples</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">publis</span></code>: ZList of publication records</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">keys</span></code>: dict mapping author keys to indices</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">search_engine</span></code>: fuzzy search Process for author lookups</p></li>
+</ul>
+<p>After building, call <code class="xref py py-meth docutils literal notranslate"><span class="pre">dump_db()</span></code> to persist the database.</p>
+<p class="rubric">Examples</p>
+<p>Build from the default DBLP source:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">build_db</span><span class="p">()</span>  
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">dump_db</span><span class="p">()</span>   
+</pre></div>
+</div>
+<p>Build a small test database:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">build_db</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">authors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">(&#39;78/459-1&#39;, [&#39;Manish Singh&#39;], [0])</span>
+</pre></div>
+</div>
+<p>Save your build in a non-default file:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">tempfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemporaryDirectory</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdirname</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">LDB</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">&quot;test.zst&quot;</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">tmpdirname</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="n">file</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmpdirname</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)]</span>
+<span class="go">[&#39;test.zst&#39;]</span>
+</pre></div>
+</div>
+<p>In case you don’t like your build and want to reload your local database from disk:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">load_db</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDB.check_update">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/gismap/sources/ldb.html#LDB.check_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.ldb.LDB.check_update" title="Link to this definition">#</a></dt>
+<dd><p>Check if a newer version is available on GitHub.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary with update info if available, None if up to date.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDB.db_info">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">db_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/gismap/sources/ldb.html#LDB.db_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.ldb.LDB.db_info" title="Link to this definition">#</a></dt>
+<dd><p>Return installed version info.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary with tag, date, size, path; or None if not installed.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDB.dump">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/ldb.html#LDB.dump"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.ldb.LDB.dump" title="Link to this definition">#</a></dt>
+<dd><p>Save class state to file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDB.from_author">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/ldb.html#LDB.from_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.ldb.LDB.from_author" title="Link to this definition">#</a></dt>
+<dd><p>Retrieve publications for a given author.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>a</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Author</span></code>) – The author whose publications to retrieve.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of <code class="xref py py-class docutils literal notranslate"><span class="pre">Publication</span></code> objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDB.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restore_search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/ldb.html#LDB.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.ldb.LDB.load" title="Link to this definition">#</a></dt>
+<dd><p>Load class state from file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDB.retrieve">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/ldb.html#LDB.retrieve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.ldb.LDB.retrieve" title="Link to this definition">#</a></dt>
+<dd><p>Download LDB database from GitHub releases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>version</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Specific release version (e.g., “v0.4.0” or “0.4.0”).
+If None, downloads from latest release.</p></li>
+<li><p><strong>force</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, default=False) – Download even if same version is installed.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>The following will get you a LDB if you do not have one.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">retrieve</span><span class="p">()</span>           <span class="c1"># Latest compatible release  </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="s2">&quot;v0.5.0&quot;</span><span class="p">)</span>   <span class="c1"># Specific version  </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="s2">&quot;0.5.0&quot;</span><span class="p">)</span>    <span class="c1"># Also works without &#39;v&#39; prefix  </span>
+</pre></div>
+</div>
+<p>Of course, the tag/version must be LDB-ready.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LDB</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="s2">&quot;v0.3.0&quot;</span><span class="p">)</span>   <span class="c1"># Too old for LDB</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">RuntimeError</span>: <span class="n">Asset &#39;ldb.pkl.zst&#39; not found in release v0.3.0. Available assets: []</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If release or asset not found, download fails, or version is incompatible.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDB.search_author">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">search_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/ldb.html#LDB.search_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.ldb.LDB.search_author" title="Link to this definition">#</a></dt>
+<dd><p>Search for authors matching the given name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name to search for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of matching <code class="xref py py-class docutils literal notranslate"><span class="pre">Author</span></code> objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDBAuthor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.ldb.</span></span><span class="sig-name descname"><span class="pre">LDBAuthor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/ldb.html#LDBAuthor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.ldb.LDBAuthor" title="Link to this definition">#</a></dt>
+<dd><p>Author from the LDB (Local DBLP) database.</p>
+<p>LDB provides local access to DBLP data without rate limiting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The author’s name.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – DBLP person identifier (pid).</p></li>
+<li><p><strong>aliases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – Alternative names for the author.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDBPublication">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.ldb.</span></span><span class="sig-name descname"><span class="pre">LDBPublication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">authors:</span> <span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">venue:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/ldb.html#LDBPublication"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.ldb.LDBPublication" title="Link to this definition">#</a></dt>
+<dd><p>Publication from the LDB (Local DBLP) database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication title.</p></li>
+<li><p><strong>authors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of <a class="reference internal" href="#gismap.sources.ldb.LDBAuthor" title="gismap.sources.ldb.LDBAuthor"><code class="xref py py-class docutils literal notranslate"><span class="pre">LDBAuthor</span></code></a> objects.</p></li>
+<li><p><strong>venue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication venue.</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication type.</p></li>
+<li><p><strong>year</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Publication year.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – DBLP record key.</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – Additional metadata (URL, streams, pages).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="gismap.sources.ldb.LDB_PARAMETERS">
+<span class="sig-prename descclassname"><span class="pre">gismap.sources.ldb.</span></span><span class="sig-name descname"><span class="pre">LDB_PARAMETERS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Data(search=Data(limit=3,</span> <span class="pre">cutoff=87.0,</span> <span class="pre">slack=1.0),</span> <span class="pre">bof=Data(n_range=2,</span> <span class="pre">length_impact=0.1),</span> <span class="pre">frame_size=Data(authors=512,</span> <span class="pre">publis=256),</span> <span class="pre">io=Data(source='https://dblp.org/rdf/dblp.ttl.gz',</span> <span class="pre">destination=PosixPath('/home/runner/.local/share/gismap/ldb.pkl.zst'),</span> <span class="pre">gh_api='https://api.github.com/repos/balouf/gismap/releases'))</span></em><a class="headerlink" href="#gismap.sources.ldb.LDB_PARAMETERS" title="Link to this definition">#</a></dt>
+<dd><p>Global configuration parameters for the Local DBLP (LDB) pipeline.</p>
+<p>Structure:
+- search:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>limit: maximum number of candidates retrieved per query.</p></li>
+<li><p>cutoff: minimal similarity score required to keep a candidate.</p></li>
+<li><p>slack: tolerance around the cutoff for borderline matches.</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>bof (Bag-of-Factors):</dt><dd><ul>
+<li><p>n_range: max factor size (higher is better but more expensive).</p></li>
+<li><p>length_impact: how to compare two inputs of different size.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>frame_size:</dt><dd><ul>
+<li><p>authors: maximum number of authors kept in a single frame/batch.</p></li>
+<li><p>publis: maximum number of publications kept in a single frame/batch.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>io:</dt><dd><ul>
+<li><p>source: URL/file location of the DBLP RDF dump used as raw input.</p></li>
+<li><p>destination: local path where the compressed preprocessed dataset is / will be stored.</p></li>
+<li><p>gh_api: GitHub API endpoint used to fetch release information for the project.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>LDB_PARAMETERS is a Data (RecursiveDict) instance, so nested fields can be
+accessed with attribute notation, e.g.:</p>
+<blockquote>
+<div><p>LDB_PARAMETERS.search.limit
+LDB_PARAMETERS.io.destination</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function" id="module-gismap.sources.dblp_ttl">
+<dt class="sig sig-object py" id="gismap.sources.dblp_ttl.get_stream">
+<span class="sig-prename descclassname"><span class="pre">gismap.sources.dblp_ttl.</span></span><span class="sig-name descname"><span class="pre">get_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">65536</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/dblp_ttl.html#get_stream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.dblp_ttl.get_stream" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) – Where the content. Can be on a local file or on the Internet.</p></li>
+<li><p><strong>chunk_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Desired chunk size. For streaming gz content, must be a multiple of 32kB.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><em>iterable</em> – Chunk iterator that streams the content.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> – Source size (used later to compute ETA).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismap.sources.dblp_ttl.parse_block">
+<span class="sig-prename descclassname"><span class="pre">gismap.sources.dblp_ttl.</span></span><span class="sig-name descname"><span class="pre">parse_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dblp_block</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/dblp_ttl.html#parse_block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.dblp_ttl.parse_block" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dblp_block</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – A DBLP publication, turtle format.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – DBLP key.</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication title.</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Type of publication.</p></li>
+<li><p><strong>authors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – Publication authors (key -&gt; name)</p></li>
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">NoneType</span></code>) – Publication URL.</p></li>
+<li><p><strong>stream</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">NoneType</span></code>) – Publication streams (normalized journal/conf).</p></li>
+<li><p><strong>pages</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">NoneType</span></code>) – Publication pages.</p></li>
+<li><p><strong>venue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">NoneType</span></code>) – Publication venue (conf/journal).</p></li>
+<li><p><strong>year</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Year of publication.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismap.sources.dblp_ttl.publis_streamer">
+<span class="sig-prename descclassname"><span class="pre">gismap.sources.dblp_ttl.</span></span><span class="sig-name descname"><span class="pre">publis_streamer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">65536</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'unicode_escape'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/dblp_ttl.html#publis_streamer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.dblp_ttl.publis_streamer" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>) – Where the DBLP turtle content is. Can be on a local file or on the Internet.</p></li>
+<li><p><strong>chunk_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Desired chunk size. Must be a multiple of 32kB.</p></li>
+<li><p><strong>encoding</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, default=unicode_escape) – Encoding of stream.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – DBLP key.</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication title.</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Type of publication.</p></li>
+<li><p><strong>authors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – Publication authors (key -&gt; name).</p></li>
+<li><p><strong>venue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication venue (conf/journal).</p></li>
+<li><p><strong>year</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Year of publication.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="dblp-online">
+<h2>DBLP (online)<a class="headerlink" href="#dblp-online" title="Link to this heading">#</a></h2>
+<p>Interface for <em>dblp computer science bibliography</em> (<a class="reference external" href="https://dblp.org/" rel="noreferer noopener" target="_blank">https://dblp.org/</a>).</p>
+<dl class="py class" id="module-gismap.sources.dblp">
+<dt class="sig sig-object py" id="gismap.sources.dblp.DBLP">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.dblp.</span></span><span class="sig-name descname"><span class="pre">DBLP</span></span><a class="reference internal" href="../_modules/gismap/sources/dblp.html#DBLP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.dblp.DBLP" title="Link to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.dblp.DBLP.from_author">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/dblp.html#DBLP.from_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.dblp.DBLP.from_author" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> – Papers available in DBLP.</p></li>
+<li><p><strong>wait</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Wait a bit to avoid 429.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.dblp.DBLP.search_author">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">search_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/dblp.html#DBLP.search_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.dblp.DBLP.search_author" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – People to find.</p></li>
+<li><p><strong>wait</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, default=True) – Wait a bit to avoid 429.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Potential matches.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span> <span class="o">=</span> <span class="n">DBLP</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s2">&quot;Fabien Mathieu&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span>
+<span class="go">[DBLPAuthor(name=&#39;Fabien Mathieu&#39;, key=&#39;66/2077&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">url</span>
+<span class="go">&#39;https://dblp.org/pid/66/2077.html&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manu</span> <span class="o">=</span> <span class="n">DBLP</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s2">&quot;Manuel Barragan&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manu</span> 
+<span class="go">[DBLPAuthor(name=&#39;Manuel Barragan&#39;, key=&#39;07/10587&#39;),</span>
+<span class="go">DBLPAuthor(name=&#39;Manuel Barragan&#39;, key=&#39;83/3865&#39;),</span>
+<span class="go">DBLPAuthor(name=&#39;Manuel Barragan&#39;, key=&#39;188/0198&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DBLP</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s2">&quot;NotaSearcherName&quot;</span><span class="p">,</span> <span class="n">wait</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">[]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gismap.sources.dblp.DBLPAuthor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.dblp.</span></span><span class="sig-name descname"><span class="pre">DBLPAuthor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/dblp.html#DBLPAuthor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.dblp.DBLPAuthor" title="Link to this definition">#</a></dt>
+<dd><p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span> <span class="o">=</span> <span class="n">DBLPAuthor</span><span class="p">(</span><span class="s1">&#39;Fabien Mathieu&#39;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;66/2077&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">publications</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">fabien</span><span class="o">.</span><span class="n">get_publications</span><span class="p">(),</span>
+<span class="gp">... </span>                <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">publications</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">url</span> 
+<span class="go"> &#39;https://dblp.org/rec/conf/iptps/BoufkhadMMPV08.html&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">publications</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
+<span class="go">DBLPPublication(title=&#39;Upper Bounds for Stabilization in Acyclic Preference-Based Systems.&#39;,</span>
+<span class="go">authors=[DBLPAuthor(name=&#39;Fabien Mathieu&#39;, key=&#39;66/2077&#39;)], venue=&#39;SSS&#39;, type=&#39;conference&#39;, year=2007,</span>
+<span class="go">key=&#39;conf/sss/Mathieu07&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gismap.sources.dblp.DBLPPublication">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.dblp.</span></span><span class="sig-name descname"><span class="pre">DBLPPublication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authors:</span> <span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">venue:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/dblp.html#DBLPPublication"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.dblp.DBLPPublication" title="Link to this definition">#</a></dt>
+<dd><p>Publication from the DBLP database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication title.</p></li>
+<li><p><strong>authors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of <a class="reference internal" href="#gismap.sources.dblp.DBLPAuthor" title="gismap.sources.dblp.DBLPAuthor"><code class="xref py py-class docutils literal notranslate"><span class="pre">DBLPAuthor</span></code></a> objects.</p></li>
+<li><p><strong>venue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication venue.</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication type.</p></li>
+<li><p><strong>year</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Publication year.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – DBLP record key.</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – Additional metadata (pages, volume, etc.).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="hal">
+<h2>HAL<a class="headerlink" href="#hal" title="Link to this heading">#</a></h2>
+<p>Interface for <em>HyperArticles en Ligne</em> (<a class="reference external" href="https://hal.science/" rel="noreferer noopener" target="_blank">https://hal.science/</a>).</p>
+<dl class="py class" id="module-gismap.sources.hal">
+<dt class="sig sig-object py" id="gismap.sources.hal.HAL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.hal.</span></span><span class="sig-name descname"><span class="pre">HAL</span></span><a class="reference internal" href="../_modules/gismap/sources/hal.html#HAL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.hal.HAL" title="Link to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.hal.HAL.from_author">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/hal.html#HAL.from_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.hal.HAL.from_author" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<a class="reference internal" href="#gismap.sources.hal.HALAuthor" title="gismap.sources.hal.HALAuthor"><code class="xref py py-class docutils literal notranslate"><span class="pre">HALAuthor</span></code></a>) – Hal researcher.</p></li>
+<li><p><strong>wait</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, default=True) – Wait a bit to avoid 429.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Papers available in HAL.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span> <span class="o">=</span> <span class="n">HAL</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s2">&quot;Fabien Mathieu&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">publications</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">fabien</span><span class="o">.</span><span class="n">get_publications</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">publications</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> 
+<span class="go">HALPublication(title=&#39;Achievable Catalog Size in Peer-to-Peer Video-on-Demand Systems&#39;,</span>
+<span class="go">authors=[HALAuthor(name=&#39;Yacine Boufkhad&#39;, key=&#39;yacine-boufkhad&#39;),</span>
+<span class="go">HALAuthor(name=&#39;Fabien Mathieu&#39;, key=&#39;fabien-mathieu&#39;),</span>
+<span class="go">HALAuthor(name=&#39;Fabien de Montgolfier&#39;, key=&#39;949013&#39;, key_type=&#39;pid&#39;),</span>
+<span class="go">HALAuthor(name=&#39;Diego Perino&#39;, key=&#39;Diego Perino&#39;, key_type=&#39;fullname&#39;),</span>
+<span class="go">HALAuthor(name=&#39;Laurent Viennot&#39;, key=&#39;laurentviennot&#39;)],</span>
+<span class="go">venue=&#39;Proceedings of the 7th Internnational Workshop on Peer-to-Peer Systems (IPTPS)&#39;, type=&#39;conference&#39;,</span>
+<span class="go">year=2008, key=&#39;471724&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diego</span> <span class="o">=</span> <span class="n">publications</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">authors</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diego</span>
+<span class="go">HALAuthor(name=&#39;Diego Perino&#39;, key=&#39;Diego Perino&#39;, key_type=&#39;fullname&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">diego</span><span class="o">.</span><span class="n">get_publications</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">28</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">publications</span><span class="p">[</span><span class="o">-</span><span class="mi">7</span><span class="p">]</span> 
+<span class="go">HALPublication(title=&#39;Upper bounds for stabilization in acyclic preference-based systems&#39;,</span>
+<span class="go">authors=[HALAuthor(name=&#39;Fabien Mathieu&#39;, key=&#39;fabien-mathieu&#39;)],</span>
+<span class="go">venue=&quot;SSS&#39;07 - 9th international conference on Stabilization, Safety, and Security of Distributed Systems&quot;,</span>
+<span class="go">type=&#39;conference&#39;, year=2007, key=&#39;668356&#39;)</span>
+</pre></div>
+</div>
+<p>Case of someone with multiple ids one want to cumulate:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">maria</span> <span class="o">=</span> <span class="n">HAL</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s1">&#39;Maria Potop-Butucaru&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">maria</span>  
+<span class="go">[HALAuthor(name=&#39;Maria Potop-Butucaru&#39;, key=&#39;841868&#39;, key_type=&#39;pid&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_pubs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">HAL</span><span class="o">.</span><span class="n">from_author</span><span class="p">(</span><span class="n">maria</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_pubs</span> <span class="o">&gt;</span> <span class="mi">200</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_pubs</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">maria</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_publications</span><span class="p">())</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Note: an error is raised if not enough data is provided</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">HAL</span><span class="o">.</span><span class="n">from_author</span><span class="p">(</span><span class="n">HALAuthor</span><span class="p">(</span><span class="s1">&#39;Fabien Mathieu&#39;</span><span class="p">))</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">HALAuthor(name=&#39;Fabien Mathieu&#39;) must have a key for publications to be fetched.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.hal.HAL.search_author">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">search_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/hal.html#HAL.search_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.hal.HAL.search_author" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – People to find.</p></li>
+<li><p><strong>wait</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, default=True) – Wait a bit to avoid 429.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Potential matches.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span> <span class="o">=</span> <span class="n">HAL</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s2">&quot;Fabien Mathieu&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span>
+<span class="go">[HALAuthor(name=&#39;Fabien Mathieu&#39;, key=&#39;fabien-mathieu&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span> <span class="o">=</span> <span class="n">fabien</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fabien</span><span class="o">.</span><span class="n">url</span>
+<span class="go">&#39;https://hal.science/search/index/?q=*&amp;authIdHal_s=fabien-mathieu&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HAL</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s2">&quot;Laurent Viennot&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">HALAuthor(name=&#39;Laurent Viennot&#39;, key=&#39;laurentviennot&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HAL</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s2">&quot;NotaSearcherName&quot;</span><span class="p">)</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HAL</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s2">&quot;Ana Busic&quot;</span><span class="p">)</span>
+<span class="go">[HALAuthor(name=&#39;Ana Busic&#39;, key=&#39;anabusic&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HAL</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s2">&quot;Potop-Butucaru Maria&quot;</span><span class="p">)</span>  
+<span class="go">[HALAuthor(name=&#39;Potop-Butucaru Maria&#39;, key=&#39;841868&#39;, key_type=&#39;pid&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diego</span> <span class="o">=</span> <span class="n">HAL</span><span class="o">.</span><span class="n">search_author</span><span class="p">(</span><span class="s2">&quot;Diego Perino&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diego</span>  
+<span class="go">[HALAuthor(name=&#39;Diego Perino&#39;, key=&#39;847558&#39;, key_type=&#39;pid&#39;),</span>
+<span class="go">HALAuthor(name=&#39;Diego Perino&#39;, key=&#39;978810&#39;, key_type=&#39;pid&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diego</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">url</span>
+<span class="go">&#39;https://hal.science/search/index/?q=*&amp;authIdPerson_i=978810&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gismap.sources.hal.HALAuthor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.hal.</span></span><span class="sig-name descname"><span class="pre">HALAuthor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_type:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_url:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_img:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_cv:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/hal.html#HALAuthor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.hal.HALAuthor" title="Link to this definition">#</a></dt>
+<dd><p>Author from the HAL (Hyper Articles en Ligne) database.</p>
+<p>HAL is a French open archive for scholarly publications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The author’s name.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – HAL identifier for the author.</p></li>
+<li><p><strong>key_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, optional) – Type of key (‘pid’, ‘fullname’, or None for idHal).</p></li>
+<li><p><strong>aliases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – Alternative names for the author.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gismap.sources.hal.HALPublication">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.hal.</span></span><span class="sig-name descname"><span class="pre">HALPublication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authors:</span> <span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">venue:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/hal.html#HALPublication"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.hal.HALPublication" title="Link to this definition">#</a></dt>
+<dd><p>Publication from the HAL database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication title.</p></li>
+<li><p><strong>authors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of <a class="reference internal" href="#gismap.sources.hal.HALAuthor" title="gismap.sources.hal.HALAuthor"><code class="xref py py-class docutils literal notranslate"><span class="pre">HALAuthor</span></code></a> objects.</p></li>
+<li><p><strong>venue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication venue.</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication type.</p></li>
+<li><p><strong>year</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Publication year.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – HAL document identifier.</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – Additional metadata (abstract, URL, etc.).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gismap.sources.hal.HALPublication.from_json">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/hal.html#HALPublication.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.hal.HALPublication.from_json" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>r</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – De-serialized JSON.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#gismap.sources.hal.HALPublication" title="gismap.sources.hal.HALPublication"><code class="xref py py-class docutils literal notranslate"><span class="pre">HALPublication</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismap.sources.hal.parse_facet_author">
+<span class="sig-prename descclassname"><span class="pre">gismap.sources.hal.</span></span><span class="sig-name descname"><span class="pre">parse_facet_author</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/hal.html#parse_facet_author"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.hal.parse_facet_author" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>a</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Hal facet of author</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#gismap.sources.hal.HALAuthor" title="gismap.sources.hal.HALAuthor"><code class="xref py py-class docutils literal notranslate"><span class="pre">HALAuthor</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="multi-source">
+<h2>Multi-source<a class="headerlink" href="#multi-source" title="Link to this heading">#</a></h2>
+<p>Interface for handling multiple sources at once.</p>
+<dl class="py class" id="module-gismap.sources.multi">
+<dt class="sig sig-object py" id="gismap.sources.multi.SourcedAuthor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.multi.</span></span><span class="sig-name descname"><span class="pre">SourcedAuthor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/multi.html#SourcedAuthor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.multi.SourcedAuthor" title="Link to this definition">#</a></dt>
+<dd><p>An author aggregated from multiple database sources.</p>
+<p>Combines author information from HAL, DBLP, and/or LDB into a single entity.
+The primary source (first in the sorted list) determines the author’s key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The author’s name.</p></li>
+<li><p><strong>sources</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of database-specific author objects (HALAuthor, DBLPAuthor, LDBAuthor).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gismap.sources.multi.SourcedPublication">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gismap.sources.multi.</span></span><span class="sig-name descname"><span class="pre">SourcedPublication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">authors:</span> <span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">venue:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/multi.html#SourcedPublication"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.multi.SourcedPublication" title="Link to this definition">#</a></dt>
+<dd><p>A publication aggregated from multiple database sources.</p>
+<p>Combines publication entries from HAL, DBLP, and/or LDB that refer
+to the same paper. The primary source determines the publication’s metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication title.</p></li>
+<li><p><strong>authors</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of author objects.</p></li>
+<li><p><strong>venue</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication venue.</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Publication type.</p></li>
+<li><p><strong>year</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Publication year.</p></li>
+<li><p><strong>sources</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of database-specific publication objects.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismap.sources.multi.regroup_authors">
+<span class="sig-prename descclassname"><span class="pre">gismap.sources.multi.</span></span><span class="sig-name descname"><span class="pre">regroup_authors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auth_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pub_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/multi.html#regroup_authors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.multi.regroup_authors" title="Link to this definition">#</a></dt>
+<dd><p>Replace authors of publications with matching authors.
+Typical use: upgrade DB-specific authors to multisource authors.</p>
+<p>Replacement is in place.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>auth_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – Authors to unify.</p></li>
+<li><p><strong>pub_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – Publications to unify.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismap.sources.multi.regroup_publications">
+<span class="sig-prename descclassname"><span class="pre">gismap.sources.multi.</span></span><span class="sig-name descname"><span class="pre">regroup_publications</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pub_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length_impact</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/multi.html#regroup_publications"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.multi.regroup_publications" title="Link to this definition">#</a></dt>
+<dd><p>Puts together copies of the same publication.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pub_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – Publications to unify.</p></li>
+<li><p><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Similarity parameter.</p></li>
+<li><p><strong>length_impact</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – Length impact parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Unified publications.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismap.sources.multi.score_author_source">
+<span class="sig-prename descclassname"><span class="pre">gismap.sources.multi.</span></span><span class="sig-name descname"><span class="pre">score_author_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbauthor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/multi.html#score_author_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.multi.score_author_source" title="Link to this definition">#</a></dt>
+<dd><p>Compute a quality score for an author source.</p>
+<p>Higher scores indicate more reliable author identification.
+HAL idHal keys are preferred, followed by HAL pid, then DBLP/LDB.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dbauthor</strong> (<a class="reference internal" href="#gismap.sources.models.Author" title="gismap.sources.models.Author"><code class="xref py py-class docutils literal notranslate"><span class="pre">Author</span></code></a>) – A database-specific author object.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Score value (higher is better).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gismap.sources.multi.sort_author_sources">
+<span class="sig-prename descclassname"><span class="pre">gismap.sources.multi.</span></span><span class="sig-name descname"><span class="pre">sort_author_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sources</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/gismap/sources/multi.html#sort_author_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gismap.sources.multi.sort_author_sources" title="Link to this definition">#</a></dt>
+<dd><p>Sort author sources by quality score in descending order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sources</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of database-specific author objects.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sorted list with highest-quality sources first.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="gismo.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Gismo</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="utils.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Utils</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.models.Author"><code class="docutils literal notranslate"><span class="pre">Author</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.models.DB"><code class="docutils literal notranslate"><span class="pre">DB</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.models.DB.db_name"><code class="docutils literal notranslate"><span class="pre">DB.db_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.models.DB.from_author"><code class="docutils literal notranslate"><span class="pre">DB.from_author()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.models.DB.search_author"><code class="docutils literal notranslate"><span class="pre">DB.search_author()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.models.Publication"><code class="docutils literal notranslate"><span class="pre">Publication</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.models.db_class_to_auth_class"><code class="docutils literal notranslate"><span class="pre">db_class_to_auth_class()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ldb-local-dblp">LDB (Local DBLP)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDB"><code class="docutils literal notranslate"><span class="pre">LDB</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDB.build_db"><code class="docutils literal notranslate"><span class="pre">LDB.build_db()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDB.check_update"><code class="docutils literal notranslate"><span class="pre">LDB.check_update()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDB.db_info"><code class="docutils literal notranslate"><span class="pre">LDB.db_info()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDB.dump"><code class="docutils literal notranslate"><span class="pre">LDB.dump()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDB.from_author"><code class="docutils literal notranslate"><span class="pre">LDB.from_author()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDB.load"><code class="docutils literal notranslate"><span class="pre">LDB.load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDB.retrieve"><code class="docutils literal notranslate"><span class="pre">LDB.retrieve()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDB.search_author"><code class="docutils literal notranslate"><span class="pre">LDB.search_author()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDBAuthor"><code class="docutils literal notranslate"><span class="pre">LDBAuthor</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDBPublication"><code class="docutils literal notranslate"><span class="pre">LDBPublication</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.ldb.LDB_PARAMETERS"><code class="docutils literal notranslate"><span class="pre">LDB_PARAMETERS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.dblp_ttl.get_stream"><code class="docutils literal notranslate"><span class="pre">get_stream()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.dblp_ttl.parse_block"><code class="docutils literal notranslate"><span class="pre">parse_block()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.dblp_ttl.publis_streamer"><code class="docutils literal notranslate"><span class="pre">publis_streamer()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dblp-online">DBLP (online)</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.dblp.DBLP"><code class="docutils literal notranslate"><span class="pre">DBLP</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.dblp.DBLP.from_author"><code class="docutils literal notranslate"><span class="pre">DBLP.from_author()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.dblp.DBLP.search_author"><code class="docutils literal notranslate"><span class="pre">DBLP.search_author()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.dblp.DBLPAuthor"><code class="docutils literal notranslate"><span class="pre">DBLPAuthor</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.dblp.DBLPPublication"><code class="docutils literal notranslate"><span class="pre">DBLPPublication</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hal">HAL</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.hal.HAL"><code class="docutils literal notranslate"><span class="pre">HAL</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.hal.HAL.from_author"><code class="docutils literal notranslate"><span class="pre">HAL.from_author()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.hal.HAL.search_author"><code class="docutils literal notranslate"><span class="pre">HAL.search_author()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.hal.HALAuthor"><code class="docutils literal notranslate"><span class="pre">HALAuthor</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.hal.HALPublication"><code class="docutils literal notranslate"><span class="pre">HALPublication</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.hal.HALPublication.from_json"><code class="docutils literal notranslate"><span class="pre">HALPublication.from_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.hal.parse_facet_author"><code class="docutils literal notranslate"><span class="pre">parse_facet_author()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-source">Multi-source</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.multi.SourcedAuthor"><code class="docutils literal notranslate"><span class="pre">SourcedAuthor</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.multi.SourcedPublication"><code class="docutils literal notranslate"><span class="pre">SourcedPublication</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.multi.regroup_authors"><code class="docutils literal notranslate"><span class="pre">regroup_authors()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.multi.regroup_publications"><code class="docutils literal notranslate"><span class="pre">regroup_publications()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.multi.score_author_source"><code class="docutils literal notranslate"><span class="pre">score_author_source()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gismap.sources.multi.sort_author_sources"><code class="docutils literal notranslate"><span class="pre">sort_author_sources()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/database.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

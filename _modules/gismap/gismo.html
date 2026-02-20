@@ -1,0 +1,845 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gismap.gismo &#8212; GisMap 0.5.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/vis-network/styles/vis-network.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=1dd76d02"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gismap/gismo';</script>
+    <link rel="icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="GisMap 0.5.0 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="GisMap 0.5.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials/examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gismap.gismo</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gismap.gismo</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.feature_extraction.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">CountVectorizer</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">Corpus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.embedding</span><span class="w"> </span><span class="kn">import</span> <span class="n">Embedding</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.gismo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gismo</span>
+
+
+<div class="viewcode-block" id="make_post_publi">
+<a class="viewcode-back" href="../../reference/gismo.html#gismap.gismo.make_post_publi">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_post_publi</span><span class="p">(</span><span class="n">lab</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Hook to turn publication key stored in a corpus into actual publication.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lab: :class:`~gismap.lab.labmap.LabMap`</span>
+<span class="sd">        Lab that contains the corpus publications.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    callable</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_bib</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">corpus</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">lab</span><span class="o">.</span><span class="n">publications</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">to_bib</span></div>
+
+
+
+<div class="viewcode-block" id="make_gismo">
+<a class="viewcode-back" href="../../reference/gismo.html#gismap.gismo.make_gismo">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_gismo</span><span class="p">(</span><span class="n">lab</span><span class="p">,</span> <span class="n">vectorizer_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Makes a gismo out of a lab.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lab: :class:`~gismap.lab.labmap.LabMap`</span>
+<span class="sd">        Lab that contains publications.</span>
+<span class="sd">    vectorizer_parameters: :class:`dict`</span>
+<span class="sd">        Overriding parameters for the Countvectorizer of the gismo.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gismo: :class:`~gismo.gismo.Gismo`</span>
+<span class="sd">        Gismo of the lab.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ngram_range&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="s2">&quot;stop_words&quot;</span><span class="p">:</span> <span class="n">sw</span><span class="p">,</span> <span class="s2">&quot;min_df&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">vectorizer_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">vectorizer_parameters</span><span class="p">)</span>
+    <span class="n">corpus</span> <span class="o">=</span> <span class="n">Corpus</span><span class="p">([</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">lab</span><span class="o">.</span><span class="n">publications</span><span class="p">],</span> <span class="n">to_text</span><span class="o">=</span><span class="n">lab</span><span class="o">.</span><span class="n">publi_to_text</span><span class="p">)</span>
+    <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="o">**</span><span class="n">parameters</span><span class="p">)</span>
+    <span class="n">embedding</span> <span class="o">=</span> <span class="n">Embedding</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">=</span><span class="n">vectorizer</span><span class="p">)</span>
+    <span class="n">embedding</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+    <span class="n">gismo</span> <span class="o">=</span> <span class="n">Gismo</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">embedding</span><span class="p">)</span>
+    <span class="n">gismo</span><span class="o">.</span><span class="n">post_documents_item</span> <span class="o">=</span> <span class="n">make_post_publi</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">gismo</span></div>
+
+
+
+<span class="n">stop_words</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;20plus&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;academia&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;academic&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;academy&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;académie&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;acm&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;activities&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;actualités&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adresse&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;advances&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;affichertoutesdepuis&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ajouter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;an&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ancitations&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;and&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;annual&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;annéetrier&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;antipolis&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;are&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;article&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;articledisponiblesnon&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;articles&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;articles0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;arxiv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;as&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;astérisque&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;at&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;attended&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;au&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;auteuradresse&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;auteurnouveaux&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;auteurnouvelles&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;aux&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;award&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;awarded&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;awards&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;base&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;based&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;be&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;been&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;bibliography&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;bibliothèquemétriquesalertesparamètresconnexionconnexionobtenir&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;board&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;book&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;born&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;by&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;california&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;called&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;can&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;celles&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;centrale&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;centre&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ces&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cet&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cette&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;chair&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;chaussées&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ciarlet&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;citations&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;citationstrier&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cited&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;citée&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cnrs&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cnrsadresse&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;coauteurscoauteurssuivre&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;collaboration&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;colloquium&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;collège&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;columbia&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;committee&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;comptabilisées&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;conference&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;contact&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;contributions&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;council&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cours&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;course&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;courses&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dans&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;de&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;des&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;diegoadresse&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;différentes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;director&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;disponiblessur&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;doi&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;données&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;doubleles&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;du&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;décompte&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;early&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;earned&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ecole&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ed&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;edinburgh&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;elected&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;en&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;english&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ens&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;envoi&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;et&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;europaea&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;european&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;events&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;exigences&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fellow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;financementcoauteurstout&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;for&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;formerly&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;forum&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fr&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;france&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;franceadresse&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;français&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;françois&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;french&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;from&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fusionnéesle&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fusionnés&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;google&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;grenoble&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gérard&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;habilitation&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;had&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;he&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;her&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;here&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;highly&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;his&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;home&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;hong&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;honorary&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ici&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ieee&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;imag&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;in&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;inclut&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;informatique&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;innovation&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;inria&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;insa&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;institut&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;international&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;invited&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;is&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;isbn&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;it&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;je&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;jean&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;jour&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;journal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;july&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;known&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;kong&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;la&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lab&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;le&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lecture&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;les&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lille&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;liées&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;liés&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lncs&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lyon&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mail&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;maintenant&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;medal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;media&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;member&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mises&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mon&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;monde&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;my&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mécanique&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;national&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ne&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nombre&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;normale&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;notes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;notificationsokmon&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;novel&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;of&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;olivier&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;on&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;opération&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ordre&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;page&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pages&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;par&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;paraccès&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;parcitée&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;paris&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;paristech&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;partout&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pas&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pdf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;peut&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;peuvent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;peux&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ph&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;phd&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pierre&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;plus&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;polytechnique&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ponts&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pour&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;premier&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;preprint&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;president&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;prix&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;prize&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;proceedings&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;professor&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;profil&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;profilcitée&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;profilma&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;programme&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;programmes&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;propre&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;présentation&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;publications&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;publiccoauteurstitretriertrier&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;published&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;que&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;qui&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;received&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;recherche&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;record&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;report&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;research&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;researcher&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;réaliser&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;réessayer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;résultatsaideconfidentialitéconditions&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;saclayadresse&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;san&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;scholar&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;scholarchargement&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;school&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sciences&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;scientifique&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;scientist&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;selected&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;senior&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;she&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sigmod&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;silver&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;site&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;slides&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sont&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sophia&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sorbonne&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;southern&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;speaker&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;springer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;stanford&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sud&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;suivants&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;suivies&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;summer&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;supervision&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;supérieure&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;supérieureadresse&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sur&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;symposium&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;système&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;tard&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;temps&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;texas&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;that&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;the&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;then&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;theses&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;titrecitée&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;to&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;transactions&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;travaux&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;télécom&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;un&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;under&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;une&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;univ&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;university&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;universityadresse&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;université&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;upmc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;usa&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;using&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;validée&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;verimag&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;verlag&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;veuillez&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;via&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;vol&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;was&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;with&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;won&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;worked&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;www&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;year&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;école&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;être&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;towards&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;paradigm&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;we&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;this&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;which&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;our&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;proposed&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;their&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;approach&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;each&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;such&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;show&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;what&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nous&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">sw</span> <span class="o">=</span> <span class="n">stop_words</span> <span class="o">+</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2100</span><span class="p">)]</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1249 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gismap.sources.ldb &#8212; GisMap 0.5.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/vis-network/styles/vis-network.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=1dd76d02"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/gismap/sources/ldb';</script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt="GisMap 0.5.0 documentation - Home"/>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="GisMap 0.5.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials/examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">gismap.sources.ldb</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for gismap.sources.ldb</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">pkg_version</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClassVar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">platformdirs</span><span class="w"> </span><span class="kn">import</span> <span class="n">user_data_dir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">errno</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">zstandard</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">zstd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dill</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bof.fuzz</span><span class="w"> </span><span class="kn">import</span> <span class="n">Process</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismo.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">safe_write</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm.auto</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.sources.dblp_ttl</span><span class="w"> </span><span class="kn">import</span> <span class="n">publis_streamer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.sources.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">DB</span><span class="p">,</span> <span class="n">Author</span><span class="p">,</span> <span class="n">Publication</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.utils.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">Data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.utils.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.utils.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">normalized_name</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.utils.zlist</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZList</span>
+
+
+<span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span>
+    <span class="n">user_data_dir</span><span class="p">(</span>
+        <span class="n">appname</span><span class="o">=</span><span class="s2">&quot;gismap&quot;</span><span class="p">,</span>
+        <span class="n">appauthor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="n">LDB_STEM</span> <span class="o">=</span> <span class="s2">&quot;ldb&quot;</span>
+<span class="n">GITHUB_REPO</span> <span class="o">=</span> <span class="s2">&quot;balouf/gismap&quot;</span>
+
+<span class="n">LDB_PARAMETERS</span> <span class="o">=</span> <span class="n">Data</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;search&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;cutoff&quot;</span><span class="p">:</span> <span class="mf">87.0</span><span class="p">,</span> <span class="s2">&quot;slack&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+        <span class="s2">&quot;bof&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;n_range&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;length_impact&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span>
+        <span class="s2">&quot;frame_size&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;authors&quot;</span><span class="p">:</span> <span class="mi">512</span><span class="p">,</span> <span class="s2">&quot;publis&quot;</span><span class="p">:</span> <span class="mi">256</span><span class="p">},</span>
+        <span class="s2">&quot;io&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;https://dblp.org/rdf/dblp.ttl.gz&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">LDB_STEM</span><span class="si">}</span><span class="s2">.pkl.zst&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;metadata&quot;</span><span class="p">:</span> <span class="n">DATA_DIR</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">LDB_STEM</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;gh_api&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;https://api.github.com/repos/</span><span class="si">{</span><span class="n">GITHUB_REPO</span><span class="si">}</span><span class="s2">/releases&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Global configuration parameters for the Local DBLP (LDB) pipeline.</span>
+
+<span class="sd">Structure:</span>
+<span class="sd">- search:</span>
+<span class="sd">    - limit: maximum number of candidates retrieved per query.</span>
+<span class="sd">    - cutoff: minimal similarity score required to keep a candidate.</span>
+<span class="sd">    - slack: tolerance around the cutoff for borderline matches.</span>
+<span class="sd">- bof (Bag-of-Factors):</span>
+<span class="sd">    - n_range: max factor size (higher is better but more expensive).</span>
+<span class="sd">    - length_impact: how to compare two inputs of different size.</span>
+<span class="sd">- frame_size:</span>
+<span class="sd">    - authors: maximum number of authors kept in a single frame/batch.</span>
+<span class="sd">    - publis: maximum number of publications kept in a single frame/batch.</span>
+<span class="sd">- io:</span>
+<span class="sd">    - source: URL/file location of the DBLP RDF dump used as raw input.</span>
+<span class="sd">    - destination: local path where the compressed preprocessed dataset is / will be stored.</span>
+<span class="sd">    - gh_api: GitHub API endpoint used to fetch release information for the project.</span>
+
+<span class="sd">LDB_PARAMETERS is a Data (RecursiveDict) instance, so nested fields can be</span>
+<span class="sd">accessed with attribute notation, e.g.:</span>
+<span class="sd">    LDB_PARAMETERS.search.limit</span>
+<span class="sd">    LDB_PARAMETERS.io.destination</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_compatible_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that release tag is compatible with the installed package (same major.minor).&quot;&quot;&quot;</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">pkg_version</span><span class="p">(</span><span class="s2">&quot;gismap&quot;</span><span class="p">)</span>
+    <span class="n">pkg_minor</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">tag_clean</span> <span class="o">=</span> <span class="n">tag</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+    <span class="n">tag_minor</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tag_clean</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[:</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">pkg_minor</span> <span class="o">==</span> <span class="n">tag_minor</span>
+
+
+<div class="viewcode-block" id="LDB">
+<a class="viewcode-back" href="../../../reference/database.html#gismap.sources.ldb.LDB">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LDB</span><span class="p">(</span><span class="n">DB</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Browse DBLP from a local copy of the database.</span>
+
+<span class="sd">    LDB is a class-only database - it should not be instantiated.</span>
+<span class="sd">    All methods are classmethods and state is stored in class variables.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Public DB methods ensure that the DB is loaded but if you need to use a specific LDB method, prepare the DB first.</span>
+
+<span class="sd">    &gt;&gt;&gt; LDB._ensure_loaded()</span>
+<span class="sd">    &gt;&gt;&gt; LDB.author_by_key(&quot;66/2077&quot;)</span>
+<span class="sd">    LDBAuthor(name=&#39;Fabien Mathieu&#39;, key=&#39;66/2077&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pubs = sorted(LDB.author_publications(&#39;66/2077&#39;), key = lambda p: p.year)</span>
+<span class="sd">    &gt;&gt;&gt; pub = pubs[0]</span>
+<span class="sd">    &gt;&gt;&gt; pub.metadata</span>
+<span class="sd">    {&#39;url&#39;: &#39;http://www2003.org/cdrom/papers/poster/p102/p102-mathieu.htm&#39;, &#39;streams&#39;: [&#39;conf/www&#39;]}</span>
+<span class="sd">    &gt;&gt;&gt; christelle = LDB.search_author(&quot;Christelle Caillouet&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; christelle</span>
+<span class="sd">    [LDBAuthor(name=&#39;Christelle Caillouet&#39;, key=&#39;10/8725&#39;)]</span>
+<span class="sd">    &gt;&gt;&gt; christelle[0].aliases</span>
+<span class="sd">    [&#39;Christelle Molle&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; LDB.db_info()  # doctest: +SKIP</span>
+<span class="sd">    {&#39;tag&#39;: &#39;v0...&#39;, &#39;downloaded_at&#39;: &#39;...&#39;, &#39;size&#39;: ..., &#39;path&#39;: ...}</span>
+<span class="sd">    &gt;&gt;&gt; LDB.check_update()</span>
+<span class="sd">    &gt;&gt;&gt; ldb = LDB()</span>
+<span class="sd">    Traceback (most recent call last):</span>
+<span class="sd">    ...</span>
+<span class="sd">    TypeError: LDB should not be instantiated. Use class methods directly, e.g., LDB.search_author(name)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">db_name</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">LDB_STEM</span>
+    <span class="n">parameters</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Data</span><span class="p">]</span> <span class="o">=</span> <span class="n">LDB_PARAMETERS</span>
+
+    <span class="c1"># Class-level state (replaces instance attributes)</span>
+    <span class="n">authors</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">ZList</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">publis</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">ZList</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">keys</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">search_engine</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Process</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_initialized</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="fm">__hash__</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__hash__</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;LDB should not be instantiated. Use class methods directly, e.g., LDB.search_author(name)&quot;</span>
+        <span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_loaded</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Lazy-load the database if not already loaded.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_initialized</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;LDB not found locally. Attempting to retrieve from GitHub...&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">retrieve</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not auto-retrieve LDB: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">load_db</span><span class="p">()</span>
+
+<div class="viewcode-block" id="LDB.build_db">
+<a class="viewcode-back" href="../../../reference/database.html#gismap.sources.ldb.LDB.build_db">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_db</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the LDB database from a DBLP TTL dump.</span>
+
+<span class="sd">        Parses the DBLP RDF/TTL file to extract publications and authors,</span>
+<span class="sd">        stores them in compressed ZList structures, and builds a fuzzy</span>
+<span class="sd">        search engine for author name lookups.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        limit: :class:`int`, optional</span>
+<span class="sd">            Maximum number of publications to process. If None, processes</span>
+<span class="sd">            the entire database. Useful for testing with a subset.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This method populates the class-level attributes:</span>
+
+<span class="sd">        - ``authors``: ZList of (key, name, publication_indices) tuples</span>
+<span class="sd">        - ``publis``: ZList of publication records</span>
+<span class="sd">        - ``keys``: dict mapping author keys to indices</span>
+<span class="sd">        - ``search_engine``: fuzzy search Process for author lookups</span>
+
+<span class="sd">        After building, call :meth:`dump_db` to persist the database.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Build from the default DBLP source:</span>
+
+<span class="sd">        &gt;&gt;&gt; LDB.build_db()  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; LDB.dump_db()   # doctest: +SKIP</span>
+
+<span class="sd">        Build a small test database:</span>
+
+<span class="sd">        &gt;&gt;&gt; LDB.build_db(limit=1000)</span>
+<span class="sd">        &gt;&gt;&gt; LDB.authors[0]</span>
+<span class="sd">        (&#39;78/459-1&#39;, [&#39;Manish Singh&#39;], [0])</span>
+
+<span class="sd">        Save your build in a non-default file:</span>
+
+<span class="sd">        &gt;&gt;&gt; from tempfile import TemporaryDirectory</span>
+<span class="sd">        &gt;&gt;&gt; from pathlib import Path</span>
+<span class="sd">        &gt;&gt;&gt; with TemporaryDirectory() as tmpdirname:</span>
+<span class="sd">        ...     LDB.dump(filename=&quot;test.zst&quot;, path=tmpdirname)</span>
+<span class="sd">        ...     [file.name for file in Path(tmpdirname).glob(&quot;*&quot;)]</span>
+<span class="sd">        [&#39;test.zst&#39;]</span>
+
+<span class="sd">        In case you don&#39;t like your build and want to reload your local database from disk:</span>
+
+<span class="sd">        &gt;&gt;&gt; LDB.load_db()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">source</span>
+        <span class="n">authors_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Retrieve publications&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">ZList</span><span class="p">(</span><span class="n">frame_size</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">frame_size</span><span class="o">.</span><span class="n">publis</span><span class="p">)</span> <span class="k">as</span> <span class="n">publis</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span>
+                <span class="n">key</span><span class="p">,</span>
+                <span class="n">title</span><span class="p">,</span>
+                <span class="n">typ</span><span class="p">,</span>
+                <span class="n">authors</span><span class="p">,</span>
+                <span class="n">url</span><span class="p">,</span>
+                <span class="n">streams</span><span class="p">,</span>
+                <span class="n">pages</span><span class="p">,</span>
+                <span class="n">venue</span><span class="p">,</span>
+                <span class="n">year</span><span class="p">,</span>
+            <span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">publis_streamer</span><span class="p">(</span><span class="n">source</span><span class="p">)):</span>
+                <span class="n">auth_indices</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">auth_key</span><span class="p">,</span> <span class="n">auth_name</span> <span class="ow">in</span> <span class="n">authors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">auth_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">authors_dict</span><span class="p">:</span>
+                        <span class="n">authors_dict</span><span class="p">[</span><span class="n">auth_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">authors_dict</span><span class="p">),</span> <span class="p">{</span><span class="n">auth_name</span><span class="p">},</span> <span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">authors_dict</span><span class="p">[</span><span class="n">auth_key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">auth_name</span><span class="p">)</span>
+                        <span class="n">authors_dict</span><span class="p">[</span><span class="n">auth_key</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="n">auth_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">authors_dict</span><span class="p">[</span><span class="n">auth_key</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">publis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">auth_indices</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">streams</span><span class="p">,</span> <span class="n">pages</span><span class="p">,</span> <span class="n">venue</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">limit</span><span class="p">:</span>
+                    <span class="k">break</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">publis</span> <span class="o">=</span> <span class="n">publis</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">publis</span><span class="p">)</span><span class="si">}</span><span class="s2"> publications retrieved.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Compact authors&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">ZList</span><span class="p">(</span><span class="n">frame_size</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">frame_size</span><span class="o">.</span><span class="n">authors</span><span class="p">)</span> <span class="k">as</span> <span class="n">authors</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">pubs</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">authors_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                <span class="n">authors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">names</span><span class="p">),</span> <span class="n">pubs</span><span class="p">))</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">authors</span> <span class="o">=</span> <span class="n">authors</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">keys</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">authors_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">del</span> <span class="n">authors_dict</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_build_search_engine</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_invalidate_cache</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_initialized</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_search_engine</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span>
+            <span class="n">n_range</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">bof</span><span class="o">.</span><span class="n">n_range</span><span class="p">,</span>
+            <span class="n">length_impact</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">bof</span><span class="o">.</span><span class="n">length_impact</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">main_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">aliases</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">aliases_indices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">authors</span><span class="p">):</span>
+            <span class="n">main_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">normalized_name</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">aliases_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">normalized_name</span><span class="p">(</span><span class="n">alias</span><span class="p">))</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">main_names</span><span class="o">+</span><span class="n">aliases</span><span class="p">)</span>
+        <span class="n">aliases_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">aliases_indices</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">authors</span><span class="p">)),</span> <span class="n">aliases_indices</span><span class="p">))</span>
+        <span class="c1"># cls.search_engine.fit([normalized_name(a[1]) for a in cls.authors])</span>
+        <span class="c1"># cls.search_engine.choices = np.arange(len(cls.authors))</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">features_</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">numbify_dict</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">features_</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">authors</span><span class="p">)</span><span class="si">}</span><span class="s2"> authors indexed.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">50000</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">author_by_index</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="n">key</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">authors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">LDBAuthor</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">aliases</span><span class="o">=</span><span class="n">names</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">author_by_key</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">author_by_index</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">50000</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">publication_by_index</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="n">key</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">authors</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">streams</span><span class="p">,</span> <span class="n">pages</span><span class="p">,</span> <span class="n">venue</span><span class="p">,</span> <span class="n">year</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">publis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">venue</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">venue</span> <span class="o">=</span> <span class="s2">&quot;unpublished&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">typ</span><span class="p">,</span>
+            <span class="s2">&quot;authors&quot;</span><span class="p">:</span> <span class="n">authors</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+            <span class="s2">&quot;streams&quot;</span><span class="p">:</span> <span class="n">streams</span><span class="p">,</span>
+            <span class="s2">&quot;pages&quot;</span><span class="p">:</span> <span class="n">pages</span><span class="p">,</span>
+            <span class="s2">&quot;venue&quot;</span><span class="p">:</span> <span class="n">venue</span><span class="p">,</span>
+            <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="n">year</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">author_publications</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_ensure_loaded</span><span class="p">()</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">pubs</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">authors</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">keys</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span>
+        <span class="n">pubs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">publication_by_index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">pubs</span><span class="p">]</span>
+        <span class="n">auth_ids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">({</span><span class="n">k</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pubs</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">p</span><span class="p">[</span><span class="s2">&quot;authors&quot;</span><span class="p">]})</span>
+        <span class="n">auths</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">author_by_index</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">auth_ids</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">pub</span> <span class="ow">in</span> <span class="n">pubs</span><span class="p">:</span>
+            <span class="n">pub</span><span class="p">[</span><span class="s2">&quot;authors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">auths</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">pub</span><span class="p">[</span><span class="s2">&quot;authors&quot;</span><span class="p">]]</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="s2">&quot;streams&quot;</span><span class="p">,</span> <span class="s2">&quot;pages&quot;</span><span class="p">]:</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">pub</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="n">pub</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">LDBPublication</span><span class="p">(</span><span class="o">**</span><span class="n">pub</span><span class="p">)</span> <span class="k">for</span> <span class="n">pub</span> <span class="ow">in</span> <span class="n">pubs</span><span class="p">]</span>
+
+<div class="viewcode-block" id="LDB.search_author">
+<a class="viewcode-back" href="../../../reference/database.html#gismap.sources.ldb.LDB.search_author">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search_author</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_ensure_loaded</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span>
+            <span class="n">normalized_name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+            <span class="n">limit</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">search</span><span class="o">.</span><span class="n">limit</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">search</span><span class="o">.</span><span class="n">cutoff</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">search</span><span class="o">.</span><span class="n">slack</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">res</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">]</span>
+        <span class="n">sorted_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">author_by_index</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">res</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">sorted_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">res</span><span class="p">]</span></div>
+
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_invalidate_cache</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">search_author</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">publication_by_index</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">author_by_index</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span>
+
+<div class="viewcode-block" id="LDB.from_author">
+<a class="viewcode-back" href="../../../reference/database.html#gismap.sources.ldb.LDB.from_author">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_author</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">author_publications</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">key</span><span class="p">)</span></div>
+
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_release_info</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fetch release metadata from GitHub API.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tag: :class:`str`, optional</span>
+<span class="sd">            Specific release tag (e.g., &quot;v0.4.0&quot;). If None, fetches latest.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`dict`</span>
+<span class="sd">            Release metadata including tag_name and assets.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        :class:`RuntimeError`</span>
+<span class="sd">            If release not found or API request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">api_url</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">gh_api</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">api_url</span><span class="si">}</span><span class="s2">/latest&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">api_url</span><span class="si">}</span><span class="s2">/tags/</span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Release not found: </span><span class="si">{</span><span class="n">tag</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;latest&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GitHub API error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Network error fetching release info: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_download_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">desc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Downloading&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download file with progress bar.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url : str</span>
+<span class="sd">            URL to download from.</span>
+<span class="sd">        dest : Path</span>
+<span class="sd">            Destination file path.</span>
+<span class="sd">        desc : str</span>
+<span class="sd">            Description for progress bar.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dest</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+        <span class="n">total_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content-length&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="k">with</span> <span class="p">(</span>
+            <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">,</span>
+            <span class="n">tqdm</span><span class="p">(</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span>
+                <span class="n">total</span><span class="o">=</span><span class="n">total_size</span><span class="p">,</span>
+                <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">,</span>
+                <span class="n">unit_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">unit_divisor</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">pbar</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">8192</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                    <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">))</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_save_meta</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save version metadata to JSON file.&quot;&quot;&quot;</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="n">tag</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
+            <span class="s2">&quot;downloaded_at&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+        <span class="p">}</span>
+        <span class="n">meta_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">metadata</span>
+        <span class="n">meta_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">meta_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_meta</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load version metadata from JSON file.&quot;&quot;&quot;</span>
+        <span class="n">meta_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">metadata</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">meta_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">meta_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">,</span> <span class="ne">IOError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="LDB.retrieve">
+<a class="viewcode-back" href="../../../reference/database.html#gismap.sources.ldb.LDB.retrieve">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download LDB database from GitHub releases.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        version: :class:`str`, optional</span>
+<span class="sd">            Specific release version (e.g., &quot;v0.4.0&quot; or &quot;0.4.0&quot;).</span>
+<span class="sd">            If None, downloads from latest release.</span>
+<span class="sd">        force: :class:`bool`, default=False</span>
+<span class="sd">            Download even if same version is installed.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        The following will get you a LDB if you do not have one.</span>
+
+<span class="sd">        &gt;&gt;&gt; LDB.retrieve()           # Latest compatible release  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; LDB.retrieve(&quot;v0.5.0&quot;)   # Specific version  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; LDB.retrieve(&quot;0.5.0&quot;)    # Also works without &#39;v&#39; prefix  # doctest: +SKIP</span>
+
+<span class="sd">        Of course, the tag/version must be LDB-ready.</span>
+
+<span class="sd">        &gt;&gt;&gt; LDB.retrieve(&quot;v0.3.0&quot;)   # Too old for LDB</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">        ...</span>
+<span class="sd">        RuntimeError: Asset &#39;ldb.pkl.zst&#39; not found in release v0.3.0. Available assets: []</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If release or asset not found, download fails, or version is incompatible.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Normalize version string (add &quot;v&quot; prefix if missing)</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="n">version</span> <span class="k">if</span> <span class="n">version</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;v</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Fetch release info</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fetching release info for: </span><span class="si">{</span><span class="n">tag</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;latest&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">release_info</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_release_info</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="n">release_tag</span> <span class="o">=</span> <span class="n">release_info</span><span class="p">[</span><span class="s2">&quot;tag_name&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Check version compatibility (only when no explicit version requested)</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_compatible_tag</span><span class="p">(</span><span class="n">release_tag</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Latest release </span><span class="si">{</span><span class="n">release_tag</span><span class="si">}</span><span class="s2"> is not compatible with installed gismap </span><span class="si">{</span><span class="n">pkg_version</span><span class="p">(</span><span class="s1">&#39;gismap&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Use retrieve(version=&#39;v...&#39;) to force a specific version.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">destination</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">destination</span>
+
+        <span class="c1"># Check if already installed (unless force=True)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_load_meta</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">meta</span> <span class="ow">and</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tag&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">release_tag</span> <span class="ow">and</span> <span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;LDB version </span><span class="si">{</span><span class="n">release_tag</span><span class="si">}</span><span class="s2"> already installed. Use force=True to re-download.&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="c1"># Find ldb.pkl.zst asset in release</span>
+        <span class="n">assets</span> <span class="o">=</span> <span class="n">release_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;assets&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">ldb_asset</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="n">assets</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">asset</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">destination</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">ldb_asset</span> <span class="o">=</span> <span class="n">asset</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">ldb_asset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Asset &#39;</span><span class="si">{</span><span class="n">destination</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; not found in release </span><span class="si">{</span><span class="n">release_tag</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Available assets: </span><span class="si">{</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">assets</span><span class="p">[:</span><span class="mi">3</span><span class="p">]]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">download_url</span> <span class="o">=</span> <span class="n">ldb_asset</span><span class="p">[</span><span class="s2">&quot;browser_download_url&quot;</span><span class="p">]</span>
+        <span class="n">asset_size</span> <span class="o">=</span> <span class="n">ldb_asset</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">]</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Downloading LDB from release </span><span class="si">{</span><span class="n">release_tag</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">asset_size</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Download with progress bar</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="n">download_url</span><span class="p">,</span> <span class="n">destination</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;LDB </span><span class="si">{</span><span class="n">release_tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Save version metadata</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_save_meta</span><span class="p">(</span><span class="n">release_tag</span><span class="p">,</span> <span class="n">download_url</span><span class="p">,</span> <span class="n">asset_size</span><span class="p">)</span>
+
+        <span class="c1"># Load database and rebuild search engine locally</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">load_db</span><span class="p">(</span><span class="n">restore_search</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LDB </span><span class="si">{</span><span class="n">release_tag</span><span class="si">}</span><span class="s2"> successfully installed to </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LDB.db_info">
+<a class="viewcode-back" href="../../../reference/database.html#gismap.sources.ldb.LDB.db_info">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">db_info</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return installed version info.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`dict` or :class:`None`</span>
+<span class="sd">            Dictionary with tag, date, size, path; or None if not installed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_load_meta</span><span class="p">()</span>
+        <span class="n">destination</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">destination</span>
+        <span class="k">if</span> <span class="n">meta</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;tag&quot;</span><span class="p">:</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tag&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;downloaded_at&quot;</span><span class="p">:</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;downloaded_at&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="p">),</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="LDB.check_update">
+<a class="viewcode-back" href="../../../reference/database.html#gismap.sources.ldb.LDB.check_update">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_update</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if a newer version is available on GitHub.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        :class:`dict` or None</span>
+<span class="sd">            Dictionary with update info if available, None if up to date.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">release_info</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_release_info</span><span class="p">()</span>
+            <span class="n">latest_tag</span> <span class="o">=</span> <span class="n">release_info</span><span class="p">[</span><span class="s2">&quot;tag_name&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_compatible_tag</span><span class="p">(</span><span class="n">latest_tag</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Latest release </span><span class="si">{</span><span class="n">latest_tag</span><span class="si">}</span><span class="s2"> is not compatible with gismap </span><span class="si">{</span><span class="n">pkg_version</span><span class="p">(</span><span class="s1">&#39;gismap&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+            <span class="n">meta</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_load_meta</span><span class="p">()</span>
+            <span class="n">current_tag</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tag&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">meta</span> <span class="k">else</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">current_tag</span> <span class="o">==</span> <span class="n">latest_tag</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;LDB is up to date: </span><span class="si">{</span><span class="n">current_tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s2">&quot;current&quot;</span><span class="p">:</span> <span class="n">current_tag</span><span class="p">,</span>
+                <span class="s2">&quot;latest&quot;</span><span class="p">:</span> <span class="n">latest_tag</span><span class="p">,</span>
+                <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Update available: </span><span class="si">{</span><span class="n">current_tag</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;not installed&#39;</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">latest_tag</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not check for updates: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="LDB.dump">
+<a class="viewcode-back" href="../../../reference/database.html#gismap.sources.ldb.LDB.dump">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dump</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_search</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save class state to file.&quot;&quot;&quot;</span>
+        <span class="c1"># Convert numba dict to regular dict for pickling</span>
+        <span class="n">nb_dict</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">include_search</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nb_dict</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">features_</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">features_</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">nb_dict</span><span class="p">)</span>
+
+        <span class="n">state</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;authors&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">authors</span><span class="p">,</span>
+            <span class="s2">&quot;publis&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">publis</span><span class="p">,</span>
+            <span class="s2">&quot;keys&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">keys</span><span class="p">,</span>
+            <span class="s2">&quot;search_engine&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span> <span class="k">if</span> <span class="n">include_search</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Use safe_write pattern from gismo.common</span>
+        <span class="n">destination</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">/</span> <span class="n">filename</span>
+        <span class="k">if</span> <span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">overwrite</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;File </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s2"> already exists! Use overwrite option to overwrite.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">safe_write</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">cctx</span> <span class="o">=</span> <span class="n">zstd</span><span class="o">.</span><span class="n">ZstdCompressor</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+                <span class="k">with</span> <span class="n">cctx</span><span class="o">.</span><span class="n">stream_writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
+                    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+        <span class="c1"># Restore numba dict</span>
+        <span class="k">if</span> <span class="n">include_search</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">features_</span> <span class="o">=</span> <span class="n">nb_dict</span></div>
+
+
+<div class="viewcode-block" id="LDB.load">
+<a class="viewcode-back" href="../../../reference/database.html#gismap.sources.ldb.LDB.load">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">restore_search</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load class state from file.&quot;&quot;&quot;</span>
+        <span class="n">dest</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">/</span> <span class="n">filename</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">dest</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="o">.</span><span class="n">ENOENT</span><span class="p">),</span> <span class="n">dest</span><span class="p">)</span>
+
+        <span class="n">dctx</span> <span class="o">=</span> <span class="n">zstd</span><span class="o">.</span><span class="n">ZstdDecompressor</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">,</span> <span class="n">dctx</span><span class="o">.</span><span class="n">stream_reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">authors</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;authors&quot;</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">publis</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;publis&quot;</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">keys</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;keys&quot;</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;search_engine&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">restore_search</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_build_search_engine</span><span class="p">()</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_search</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">features_</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">numbify_dict</span><span class="p">(</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">search_engine</span><span class="o">.</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">features_</span>
+            <span class="p">)</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_invalidate_cache</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_initialized</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dump_db</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">include_search</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">destination</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">destination</span>
+        <span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span>
+            <span class="n">destination</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">path</span><span class="o">=</span><span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">include_search</span><span class="o">=</span><span class="n">include_search</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_db</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">restore_search</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">destination</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">destination</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+                <span class="n">destination</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">restore_search</span><span class="o">=</span><span class="n">restore_search</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No LDB found. Building from source...&quot;</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">build_db</span><span class="p">()</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">dump_db</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;code expected at most&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;LDB file incompatible with this Python version. Rebuilding from source...&quot;</span>
+                <span class="p">)</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">build_db</span><span class="p">()</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">dump_db</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete_db</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">destination</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">destination</span>
+        <span class="k">if</span> <span class="n">destination</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">destination</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">numbify_dict</span><span class="p">(</span><span class="n">input_dict</span><span class="p">):</span>
+        <span class="n">nb_dict</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">typed</span><span class="o">.</span><span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span>
+            <span class="n">key_type</span><span class="o">=</span><span class="n">nb</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">unicode_type</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">nb</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">int64</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">input_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">nb_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">nb_dict</span></div>
+
+
+
+<div class="viewcode-block" id="LDBAuthor">
+<a class="viewcode-back" href="../../../reference/database.html#gismap.sources.ldb.LDBAuthor">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LDBAuthor</span><span class="p">(</span><span class="n">Author</span><span class="p">,</span> <span class="n">LDB</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Author from the LDB (Local DBLP) database.</span>
+
+<span class="sd">    LDB provides local access to DBLP data without rate limiting.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: :class:`str`</span>
+<span class="sd">        The author&#39;s name.</span>
+<span class="sd">    key: :class:`str`</span>
+<span class="sd">        DBLP person identifier (pid).</span>
+<span class="sd">    aliases: :class:`list`</span>
+<span class="sd">        Alternative names for the author.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">aliases</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;https://dblp.org/pid/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2">.html&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_publications</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">LDB</span><span class="o">.</span><span class="n">from_author</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LDBPublication">
+<a class="viewcode-back" href="../../../reference/database.html#gismap.sources.ldb.LDBPublication">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LDBPublication</span><span class="p">(</span><span class="n">Publication</span><span class="p">,</span> <span class="n">LDB</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Publication from the LDB (Local DBLP) database.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    title: :class:`str`</span>
+<span class="sd">        Publication title.</span>
+<span class="sd">    authors: :class:`list`</span>
+<span class="sd">        List of :class:`LDBAuthor` objects.</span>
+<span class="sd">    venue: :class:`str`</span>
+<span class="sd">        Publication venue.</span>
+<span class="sd">    type: :class:`str`</span>
+<span class="sd">        Publication type.</span>
+<span class="sd">    year: :class:`int`</span>
+<span class="sd">        Publication year.</span>
+<span class="sd">    key: :class:`str`</span>
+<span class="sd">        DBLP record key.</span>
+<span class="sd">    metadata: :class:`dict`</span>
+<span class="sd">        Additional metadata (URL, streams, pages).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;url&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;https://dblp.org/rec/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2">.html&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stream</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;streams&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;https://dblp.org/streams/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;streams&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

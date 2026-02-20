@@ -1,0 +1,872 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>LAMSADE &#8212; GisMap 0.5.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/vis-network/styles/vis-network.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=1dd76d02"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=6dbb43f8"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/lamsade';</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="LINCS" href="lincs.html" />
+    <link rel="prev" title="Cédric" href="cedric.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.0" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="GisMap 0.5.0 documentation - Home"/>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="GisMap 0.5.0 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../presentation/index.html">
+    Presentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="index.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="examples.html">
+    Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../faq.html">
+    FAQ
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference/index.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/balouf/gismap" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="toulouse.html">Some Labs in Toulouse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lip6.html">Lip6</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cedric.html">Cédric</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">LAMSADE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lincs.html">LINCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cotels.html">Algotel / Cores</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="examples.html" class="nav-link">Gallery</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">LAMSADE</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="LAMSADE">
+<h1>LAMSADE<a class="headerlink" href="#LAMSADE" title="Link to this heading">#</a></h1>
+<p>The <em>Laboratoire d’Analyse et de Modélisation de Systèmes pour l’Aide à la Décision</em> (LAMSADE) is the Computer Science lab of Paris Dauphine.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">gismap.lab_examples.lamsade</span><span class="w"> </span><span class="kn">import</span> <span class="n">Lamsade</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gismap.utils.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+
+<span class="n">lamsade</span> <span class="o">=</span> <span class="n">Lamsade</span><span class="p">()</span>
+<span class="n">lamsade</span><span class="o">.</span><span class="n">update_authors</span><span class="p">()</span>
+<span class="n">lamsade</span><span class="o">.</span><span class="n">update_publis</span><span class="p">()</span>
+<span class="n">lamsade</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span>
+<span class="n">lamsade</span><span class="o">.</span><span class="n">show_html</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "112accc313594f9badc4974d915e24a5"}</script></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "4b816981bb9042fd9a5ab9b3d3f87569"}</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div class="gisgraph" id="box-f2a49df6">
+    <div id="vis-f2a49df6">
+    </div>
+    <a href="https://balouf.github.io/gismap/" target="_blank" class="watermark gislink">&copy; GisMap 2025</a>
+    <button id="redraw-f2a49df6" class="watermark button redraw">Redraw()</button>
+    <button id="fullscreen-f2a49df6" class="watermark button fullscreen">Full Screen</button>
+    <div class="modal" id="modal-f2a49df6">
+            <div class="modal-content">
+                    <span class="close" id="modal-close-f2a49df6">&times;</span>
+                    <div id="modal-body-f2a49df6">
+                    </div>
+            </div>
+    </div>
+</div>
+
+<style>
+
+                         #box-f2a49df6 {
+                             position: relative;
+                             width: 100% !important;
+                             height: 80vh !important;
+                             max-width: 100vw !important;
+                             max-height: 80vh !important;
+                             min-height: 80vh;
+                             color: #111;
+                             background-color: var(--pst-color-background, var(--jp-layout-color0, white));
+                         }
+
+                         #box-f2a49df6:fullscreen {
+                             height: 100vh !important;
+                             max-height: 100vh !important;
+                             min-height: 100vh;
+                         }
+
+                         #vis-f2a49df6 {
+                             height: 100%; /* Make the inner div fill the parent */
+                             width: 100%; /* Make the inner div fill the parent */
+                             box-sizing: border-box;
+                             border: 1px solid #444;
+                         }
+
+                         html[data-theme="dark"] #vis-f2a49df6 {
+                             background-color: var(--pst-color-background, #14181e);
+                         }
+
+                         .modal {
+                             display: none;
+                             position: fixed;
+                             z-index: 1000;
+                             left: 0;
+                             top: 0;
+                             width: 100%;
+                             height: 100%;
+                             overflow: auto;
+                             background-color: rgba(10, 10, 10, 0.85);
+                         }
+
+                         .modal-content {
+                             background-color: #f4f4f7;
+                             color: #222235;
+                             margin: 10% auto;
+                             padding: 24px;
+                             border: 1px solid #888;
+                             width: 50%;
+                             border-radius: 8px;
+                             box-shadow: 0 5px 15px rgba(0, 0, 0, .6);
+                         }
+                         .modal a {color: #2958d7;}
+                         .modal a:visited {color: #8435a8;}
+
+                         .close {
+                             color: #777;
+                             float: right;
+                             font-size: 28px;
+                             font-weight: bold;
+                             cursor: pointer;
+                         }
+
+                         .close:hover, .close:focus {
+                             color: #aaa;
+                             text-decoration: none;
+                             cursor: pointer;
+                         }
+
+                         .watermark {
+                             position: absolute;
+                             text-decoration: none;
+                             color: #888;
+                             font-size: min(2vw, 10px);
+                             z-index: 10;
+                         }
+
+                         .gislink {
+                             left: 10px;
+                             bottom: 10px;
+                             pointer-events: auto;
+                         }
+
+                         .button {
+                             background: none;
+                             border: none;
+                             padding: 0;
+                             margin: 0;
+                             cursor: pointer;
+                         }
+
+                         .redraw {
+                             left: 10px;
+                             top: 10px;
+                         }
+
+                         .fullscreen {
+                             bottom: 10px;
+                             right: 10px;
+                         }
+
+                         .legend {
+                             display: inline-block;
+                             padding: 10px 16px;
+                             border-radius: 8px;
+                             box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.10);
+                             border: 1px solid var(--legend-border, #bbb);
+                             background: var(--jp-layout-color1, #f5f5fa);
+                             background-color: var(--legend-bg, rgba(240, 240, 245, 0.95));
+                             position: absolute;
+                             top: 12px;
+                             right: 12px;
+                             z-index: 20;
+                         }
+
+                         .legend-entry {
+                             display: flex;
+                             margin-right: 10px;
+                             align-items: center;
+                             cursor: pointer;
+                         }
+
+</style>
+
+<script type="module">
+import { DataSet, Network } from "https://unpkg.com/vis-network/standalone/esm/vis-network.min.js";
+
+const nodes = new DataSet([]);
+const edges = new DataSet([]);
+const options = {"physics": {"solver": "forceAtlas2Based", "forceAtlas2Based": {"gravitationalConstant": -50, "centralGravity": 0.01, "springLength": 200, "springConstant": 0.08, "damping": 0.98, "avoidOverlap": 1}, "maxVelocity": 10, "minVelocity": 0.9, "stabilization": {"enabled": true, "iterations": 500, "updateInterval": 50, "onlyDynamicEdges": false, "fit": true}, "timestep": 0.25}, "groups": {}, "nodes": {"shape": "circle", "size": 20, "font": {"size": 16, "color": "#111"}, "color": "rgb(59, 101, 178)", "borderWidth": 5}, "edges": {"width": 2, "smooth": false}, "interaction": {"hover": true}};
+const container = document.getElementById('vis-f2a49df6');
+let hoveredEdgeId = null;
+let hoveredNodeId = null;
+
+// Get the group color and position of a node. Useful for gradient edges
+function getNodeInfos(network, node) {
+    if (node && !options.groups?.[node.group]?.hidden) {
+        return [options.groups[node.group]?.color, network.getPositions([node.id])[node.id]]
+    }
+    return [false, false];
+}
+
+
+// main course
+function draw_graph() {
+    // No clean redraw so far, so we re-create everything :(
+    // Set hidden groups according to legend, if any
+    document.querySelectorAll('#legend-f2a49df6 .legend-checkbox').forEach(cb => {
+    const group = cb.getAttribute('data-group');
+    options.groups[group].hidden = !cb.checked;
+        });
+
+
+    // First compute the nodes to display.
+    var visibleNodes = new DataSet(nodes.get({
+      filter: node => !options.groups?.[node.group]?.hidden}));
+    var visibleNodeIds = new Set(visibleNodes.map(node => node.id));
+    // Reduce edges
+    const visibleEdges = new DataSet(edges.get({
+        filter: edge => visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)}));
+    //  Optiional: remove comets
+    if (!document.getElementById("comet-f2a49df6")?.checked) {
+        visibleNodeIds = new Set();
+        visibleEdges.forEach(edge => {
+            visibleNodeIds.add(edge.from);
+            visibleNodeIds.add(edge.to);
+        });
+        visibleNodes = new DataSet(nodes.get({filter: node => visibleNodeIds.has(node.id)}));
+    }
+
+
+    // Set graph, nodes, and edges
+    const network = new Network(container, {nodes: visibleNodes, edges: visibleEdges}, options);
+    network.once("afterDrawing", function () {
+      network.fit({ maxZoomLevel: 3 });
+    });
+    const netNodes = network.body.data.nodes;
+    const netEdges = network.body.data.edges;
+
+    // Gradient edges
+    network.on("beforeDrawing", function(ctx) {
+        const selectedEdgeIds = network.getSelectedEdges();
+        netEdges.forEach(edge => {
+            const [fromColor, fromPos] = getNodeInfos(network, netNodes.get(edge.from))
+            const [toColor, toPos] = getNodeInfos(network, netNodes.get(edge.to))
+
+        if (fromColor && toColor && (fromColor !== toColor) && fromPos && toPos ) {
+            let width = edge.width || 2;
+            if (selectedEdgeIds.includes(edge.id) || hoveredEdgeId === edge.id || hoveredNodeId === edge.from || hoveredNodeId === edge.to) width *= 1.8;
+
+            // Gradient
+            const grad = ctx.createLinearGradient(fromPos.x, fromPos.y, toPos.x, toPos.y);
+            grad.addColorStop(0, fromColor);
+            grad.addColorStop(1, toColor);
+
+            // Draw line
+            ctx.save();
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = width;
+            ctx.beginPath();
+            ctx.moveTo(fromPos.x, fromPos.y);
+            ctx.lineTo(toPos.x, toPos.y);
+            ctx.stroke();
+            ctx.restore();
+        }
+    });
+});
+
+    // Hover tooltip & record
+    network.on("hoverEdge", params => {
+        const edge = netEdges.get(params.edge);
+        network.body.container.title = edge.hover || '';
+        hoveredEdgeId = params.edge;
+    });
+
+    network.on("blurEdge", params => {
+        network.body.container.title = '';
+        hoveredEdgeId = null;
+    });
+
+    network.on("hoverNode", params => {
+        const node = netNodes.get(params.node);
+        netNodes.update({id: node.id, borderWidth: 10})
+        network.body.container.title = node.hover || '';
+        hoveredNodeId = params.node;
+    });
+    network.on("blurNode", params => {
+        const node = netNodes.get(params.node);
+        netNodes.update({id: node.id, borderWidth: 5})
+        network.body.container.title = '';
+        hoveredNodeId = null;
+    });
+
+
+    // Modal overlay
+    const modal = document.getElementById('modal-f2a49df6');
+    const modalBody = document.getElementById('modal-body-f2a49df6');
+    const modalClose = document.getElementById('modal-close-f2a49df6');
+    network.on("click", function(params) {
+      if (params.nodes.length === 1) {
+        const node = netNodes.get(params.nodes[0]);
+        modalBody.innerHTML = node.overlay || '';
+        modal.style.display = "block";
+      } else if (params.edges.length === 1) {
+        const edge = netEdges.get(params.edges[0]);
+        modalBody.innerHTML = edge.overlay || '';
+        modal.style.display = "block";
+      } else {
+        modal.style.display = "none";
+      }
+    });
+    modalClose.onclick = function() { modal.style.display = "none"; };
+    window.onclick = function(event) {
+      if (event.target == modal) { modal.style.display = "none"; }
+    };
+}
+
+draw_graph();
+
+
+document.getElementById('redraw-f2a49df6').addEventListener('click', function(event) {
+    event.preventDefault();  // Prevent page jump
+    draw_graph();
+});
+
+
+document.getElementById('fullscreen-f2a49df6').addEventListener('click', function(event) {
+    event.preventDefault();
+    let elem = document.getElementById('box-f2a49df6');
+    if (!document.fullscreenElement) {
+        // Request fullscreen mode
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+    } else {
+        // Exit fullscreen mode
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
+    }
+});
+
+
+// Refresh when boxes are changed
+document.querySelectorAll("#legend-f2a49df6 input").forEach(cb => {
+  cb.addEventListener('change', draw_graph);
+});
+
+
+
+</script></div>
+</div>
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"ac4c87a06e8b4c348ec62a6b40ff25b9": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "20px"}}, "dacc7e873f2443c9b38b35a4bf1be2c2": {"model_name": "ProgressStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "d268d85ab73f42c094d04d097e9e6efa": {"model_name": "FloatProgressModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_ac4c87a06e8b4c348ec62a6b40ff25b9", "max": 1.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_dacc7e873f2443c9b38b35a4bf1be2c2", "tabbable": null, "tooltip": null, "value": 0.0}}, "aaae9c81817a4bedbafc22f0ecfde798": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "ba5e6784ae57426ab82de818f46f9bdc": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "751798eed04449f3994fc77a0e7e9e3b": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_aaae9c81817a4bedbafc22f0ecfde798", "placeholder": "\u200b", "style": "IPY_MODEL_ba5e6784ae57426ab82de818f46f9bdc", "tabbable": null, "tooltip": null, "value": "Author\u2007information:\u2007"}}, "0277b80c0caa4f28aa44503ccd604933": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "a153839a281743248193a5ef3f9a7831": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "f5b33df98e8542c3b461c5d8a2c31e01": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_0277b80c0caa4f28aa44503ccd604933", "placeholder": "\u200b", "style": "IPY_MODEL_a153839a281743248193a5ef3f9a7831", "tabbable": null, "tooltip": null, "value": "\u20070/?\u2007[00:00&lt;?,\u2007?it/s]"}}, "8b8368fe6e324b7a989b95b093baa5a8": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "112accc313594f9badc4974d915e24a5": {"model_name": "HBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_751798eed04449f3994fc77a0e7e9e3b", "IPY_MODEL_d268d85ab73f42c094d04d097e9e6efa", "IPY_MODEL_f5b33df98e8542c3b461c5d8a2c31e01"], "layout": "IPY_MODEL_8b8368fe6e324b7a989b95b093baa5a8", "tabbable": null, "tooltip": null}}, "115bb4c538834a91ba6a591f8525b9d9": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "20px"}}, "f1a37b59a3074dbbbf9717c6ff1fd800": {"model_name": "ProgressStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}, "d1daeeaf26fa4a01985edd8b494ffdbc": {"model_name": "FloatProgressModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "success", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_115bb4c538834a91ba6a591f8525b9d9", "max": 1.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_f1a37b59a3074dbbbf9717c6ff1fd800", "tabbable": null, "tooltip": null, "value": 0.0}}, "797eab40236b437f97d872f3e7d915aa": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "b7924d66c2bb4547bdc3bd95b3f5231c": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "be25be8f3121468597ee3d7b82c0ecec": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_797eab40236b437f97d872f3e7d915aa", "placeholder": "\u200b", "style": "IPY_MODEL_b7924d66c2bb4547bdc3bd95b3f5231c", "tabbable": null, "tooltip": null, "value": "Publications\u2007information:\u2007"}}, "5e7d7582bc664320ac6b13c4bff5ecf6": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "8683dd168ac74a51866c39aae095b39d": {"model_name": "HTMLStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "background": null, "description_width": "", "font_size": null, "text_color": null}}, "2603250285bb4aef9dfa3f37fe7dc0ce": {"model_name": "HTMLModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HTMLView", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_5e7d7582bc664320ac6b13c4bff5ecf6", "placeholder": "\u200b", "style": "IPY_MODEL_8683dd168ac74a51866c39aae095b39d", "tabbable": null, "tooltip": null, "value": "\u20070/0\u2007[00:00&lt;?,\u2007?it/s]"}}, "04e8106f2f024e6b803bef9d4d9d6056": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "4b816981bb9042fd9a5ab9b3d3f87569": {"model_name": "HBoxModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_be25be8f3121468597ee3d7b82c0ecec", "IPY_MODEL_d1daeeaf26fa4a01985edd8b494ffdbc", "IPY_MODEL_2603250285bb4aef9dfa3f37fe7dc0ce"], "layout": "IPY_MODEL_04e8106f2f024e6b803bef9d4d9d6056", "tabbable": null, "tooltip": null}}}, "version_major": 2, "version_minor": 0}
+</script></section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="cedric.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Cédric</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="lincs.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">LINCS</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/lamsade.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Fabien Mathieu.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
