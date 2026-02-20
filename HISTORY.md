@@ -9,6 +9,10 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
+## 0.5.1
+
+- Enable Light-themed full screen (previously, full screen was always dark)
+
 ## 0.5.0 (2026-02-14)
 
 - **BREAKING CHANGE** LDB now supports aliases (old assets not compatible)

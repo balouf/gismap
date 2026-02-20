@@ -12,6 +12,13 @@ default_style = Template("""
                              max-height: 80vh !important;
                              min-height: 80vh;
                              color: #111;
+                             background-color: var(--pst-color-background, var(--jp-layout-color0, white));
+                         }
+
+                         #box-$uid:fullscreen {
+                             height: 100vh !important;
+                             max-height: 100vh !important;
+                             min-height: 100vh;
                          }
 
                          #vis-$uid {
