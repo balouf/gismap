@@ -12,6 +12,8 @@
 ## 0.5.1
 
 - Enable Light-themed full screen (previously, full screen was always dark)
+- Slight adjustment in legend alignment
+- IRIF added to the gallery
 
 ## 0.5.0 (2026-02-14)
 

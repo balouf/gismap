@@ -33,37 +33,49 @@ class CoTel(LabMap):
         return f"algotel_cores_{self.year}"
 
 
-_algotel_2026 = [
-    "Achour Mostéfaoui", "Anaïs Durand", "Anne-Cécile Orgerie", "Antonella Del Pozzo",
-    "Arnaud Casteigts", "Arnaud Labourel", "Cédric Bentz", "Colette Johnen",
-    "Cristel Pelsser", "Emmanuelle Anceaume", "Fabien Mathieu", "Gewu Bu",
-    "Hervé Rivano", "Hicham Khalifé", "Isabelle Guérin Lassous", "Jérémie Chalopin",
-    "Jérémie Decouchant", "Jérémie Leguay", "Joanna Moulierac", "Josiane Kouam",
-    "Lélia Blin", "Marc-Olivier Buob", "Nancy Perrot", "Pascal Berthou",
-    "Pascal Felber", "Sara Tucci Piergiovanni", "Sébastien Tixeuil", "Stéphane Rovedakis",
-    "Swan Dubois", "Vania Conan", "Xavier Défago",
-]
-
-_cores_2026 = [
-    "André-Luc Beylot", "Anne Fladenmuller", "Bertrand Ducourthial", "Emmanuel Lavinal",
-    "Francesco Bronzino", "Francois Lemercier", "Gérard Chalhoub", "Ghada Jaber",
-    "Hind Castel", "Juan Fraire", "Julien Montavont", "Laurent Chasserat",
-    "Lynda Zitoune", "Nathalie Mitton", "Oana Iova", "Pedro Velloso",
-    "Rahim Kacimi", "Razvan Stanica", "Réjane Dalce", "Sahar Hoteit",
-    "Sara Berri", "Tara Yahia", "Thai-Mai-Trang Nguyen", "Thibault Cholez",
-    "Véronique Vèque", "Yassine Hadjadj-Aoul",
-]
-
-
 class AlgoRes2026(CoTel):
     """
-    2026 edition. Website not yet public; PC hardcoded from internal source.
+    https://algotel-cores26.sciencesconf.org/
     """
     year = 2026
     def _author_iterator(self):
-        for names, group in [(_algotel_2026, "algotel"), (_cores_2026, "cores")]:
-            for searcher in names:
+        for i, group in [(8, "cores"), (3, "algotel")]:
+            soup = Soup(get(f"https://algotel-cores26.sciencesconf.org/resource/page/id/{i}"), features="lxml")
+            for searcher in [strip_li(li).replace('\xa0', ' ') for li in soup.find("div", {"id": "page"})('p')]:
                 yield LabAuthor(name=searcher, metadata=AuthorMetadata(group=group.title()))
+
+
+# _algotel_2026 = [
+#     "Achour Mostéfaoui", "Anaïs Durand", "Anne-Cécile Orgerie", "Antonella Del Pozzo",
+#     "Arnaud Casteigts", "Arnaud Labourel", "Cédric Bentz", "Colette Johnen",
+#     "Cristel Pelsser", "Emmanuelle Anceaume", "Fabien Mathieu", "Gewu Bu",
+#     "Hervé Rivano", "Hicham Khalifé", "Isabelle Guérin Lassous", "Jérémie Chalopin",
+#     "Jérémie Decouchant", "Jérémie Leguay", "Joanna Moulierac", "Josiane Kouam",
+#     "Lélia Blin", "Marc-Olivier Buob", "Nancy Perrot", "Pascal Berthou",
+#     "Pascal Felber", "Sara Tucci Piergiovanni", "Sébastien Tixeuil", "Stéphane Rovedakis",
+#     "Swan Dubois", "Vania Conan", "Xavier Défago",
+# ]
+#
+# _cores_2026 = [
+#     "André-Luc Beylot", "Anne Fladenmuller", "Bertrand Ducourthial", "Emmanuel Lavinal",
+#     "Francesco Bronzino", "Francois Lemercier", "Gérard Chalhoub", "Ghada Jaber",
+#     "Hind Castel", "Juan Fraire", "Julien Montavont", "Laurent Chasserat",
+#     "Lynda Zitoune", "Nathalie Mitton", "Oana Iova", "Pedro Velloso",
+#     "Rahim Kacimi", "Razvan Stanica", "Réjane Dalce", "Sahar Hoteit",
+#     "Sara Berri", "Tara Yahia", "Thai-Mai-Trang Nguyen", "Thibault Cholez",
+#     "Véronique Vèque", "Yassine Hadjadj-Aoul",
+# ]
+#
+#
+# class AlgoRes2026(CoTel):
+#     """
+#     2026 edition. Website not yet public; PC hardcoded from internal source.
+#     """
+#     year = 2026
+#     def _author_iterator(self):
+#         for names, group in [(_algotel_2026, "algotel"), (_cores_2026, "cores")]:
+#             for searcher in names:
+#                 yield LabAuthor(name=searcher, metadata=AuthorMetadata(group=group.title()))
 
 
 class AlgoRes2025(CoTel):

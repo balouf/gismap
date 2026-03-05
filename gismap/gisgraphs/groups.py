@@ -47,9 +47,10 @@ def make_legend(groups, uid):
         for group_name, props in groups.items():
             color = props.get("color", "#cccccc")
             display_name = props.get("display", group_name)
-            entry = tags.label(display_name, _class="legend-entry")
-            entry.appendChild(
-                tags.input(
+            color_box = tags.span(
+                    _style=f"background-color: {color}; width: 14px; height: 14px; display: inline-block; margin-right: 5px; vertical-align: middle;"
+            )
+            check_box = tags.input(
                     **{
                         "type": "checkbox",
                         "class": "legend-checkbox",
@@ -57,12 +58,25 @@ def make_legend(groups, uid):
                     },
                     checked=True,
                 )
-            )
-            entry.appendChild(
-                tags.span(
-                    _style=f"background-color: {color}; width: 14px; height: 14px; display: inline-block; margin-right: 5px; vertical-align: middle;"
-                )
-            )
+            entry = tags.label(color_box, _class="legend-entry")
+            entry.appendChild(display_name)
+            entry.appendChild(check_box)
+            # entry = tags.label(display_name, _class="legend-entry")
+            # entry.appendChild(
+            #     tags.input(
+            #         **{
+            #             "type": "checkbox",
+            #             "class": "legend-checkbox",
+            #             "data-group": group_name,
+            #         },
+            #         checked=True,
+            #     )
+            # )
+            # entry.appendChild(
+            #     tags.span(
+            #         _style=f"background-color: {color}; width: 14px; height: 14px; display: inline-block; margin-right: 5px; vertical-align: middle;"
+            #     )
+            # )
             legend.appendChild(entry)
     entry = tags.label("Show Comets", _class="comet-entry")
     entry.appendChild(tags.input(**{"type": "checkbox", "id": f"comet-{uid}"}))
