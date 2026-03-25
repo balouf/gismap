@@ -1,5 +1,5 @@
-from gismap.lab.labmap import LabMap
 from gismap.lab.lab_author import LabAuthor
+from gismap.lab.labmap import LabMap
 
 
 class EgoMap(LabMap):
@@ -23,7 +23,9 @@ class EgoMap(LabMap):
 
     >>> dang = EgoMap("The-Dang Huynh")
     >>> dang.build(target=20)
-    >>> sorted(a.name for a in dang.authors.values() if len(a.name.split())<3)  # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+    >>> sorted(  # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+    ...     a.name for a in dang.authors.values() if len(a.name.split()) < 3
+    ... )
     ['Bruno Kauffmann', 'Diego Perino', 'Dohy Hong', 'Fabien Mathieu', 'François Baccelli',...]
     """
 

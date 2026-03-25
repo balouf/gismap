@@ -1,19 +1,16 @@
 import json
 import uuid
+
 from domonic import tags
 
 from gismap.gisgraphs.graph import lab_to_graph
-from gismap.gisgraphs.groups import auto_groups
-from gismap.gisgraphs.options import (
-    physics as def_physics,
-    nodes as def_nodes,
-    edges as def_edges,
-    interaction as def_interaction,
-)
-from gismap.gisgraphs.style import default_style
+from gismap.gisgraphs.groups import auto_groups, make_legend
 from gismap.gisgraphs.js import default_script
-from gismap.gisgraphs.groups import make_legend
-
+from gismap.gisgraphs.options import edges as def_edges
+from gismap.gisgraphs.options import interaction as def_interaction
+from gismap.gisgraphs.options import nodes as def_nodes
+from gismap.gisgraphs.options import physics as def_physics
+from gismap.gisgraphs.style import default_style
 
 default_vis_url = '"https://unpkg.com/vis-network/standalone/esm/vis-network.min.js"'
 
@@ -94,22 +91,14 @@ def make_vis(lab, **kwargs):
     div = tags.div(_class="gisgraph", _id=f"box-{uid}")
     div.appendChild(tags.div(_id=f"vis-{uid}"))
     div.appendChild(gislink)
-    div.appendChild(
-        tags.button("Redraw()", _id=f"redraw-{uid}", _class="watermark button redraw")
-    )
-    div.appendChild(
-        tags.button(
-            "Full Screen", _id=f"fullscreen-{uid}", _class="watermark button fullscreen"
-        )
-    )
+    div.appendChild(tags.button("Redraw()", _id=f"redraw-{uid}", _class="watermark button redraw"))
+    div.appendChild(tags.button("Full Screen", _id=f"fullscreen-{uid}", _class="watermark button fullscreen"))
     comets = not all(n.get("connected") for n in nodes)
     if draw_legend or comets:
         div.appendChild(make_legend(groups, uid))
     modal = tags.div(_class="modal", _id=f"modal-{uid}")
     modal_content = tags.div(_class="modal-content")
-    modal_content.appendChild(
-        tags.span("&times;", _class="close", _id=f"modal-close-{uid}")
-    )
+    modal_content.appendChild(tags.span("&times;", _class="close", _id=f"modal-close-{uid}"))
     modal_content.appendChild(tags.div(_id=f"modal-body-{uid}"))
     modal.appendChild(modal_content)
     div.appendChild(modal)

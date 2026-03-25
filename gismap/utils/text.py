@@ -1,5 +1,6 @@
-from bof.fuzz import Process
 import unicodedata
+
+from bof.fuzz import Process
 
 
 class Corrector:
@@ -144,9 +145,7 @@ def normalized_name(txt):
     """
     return " ".join(
         sorted(
-            asciify(a)
-            for a in txt.lower().replace("-", " ").split()
-            if not (a.isdigit() or (len(a) < 3 and "." in a))
+            asciify(a) for a in txt.lower().replace("-", " ").split() if not (a.isdigit() or (len(a) < 3 and "." in a))
         )
     )
 

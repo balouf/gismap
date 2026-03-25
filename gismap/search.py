@@ -1,7 +1,7 @@
 from collections import defaultdict
 from string import Template
 
-from gismap.utils.text import reduce_keywords, Corrector
+from gismap.utils.text import Corrector, reduce_keywords
 
 
 class SearchAction:

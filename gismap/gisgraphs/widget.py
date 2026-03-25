@@ -1,9 +1,10 @@
+import base64
 import re
 import unicodedata
-import base64
-from IPython.display import display, HTML
-import ipywidgets as widgets
 from contextlib import contextmanager
+
+import ipywidgets as widgets
+from IPython.display import HTML, display
 
 from gismap.lab.egomap import EgoMap
 from gismap.lab.labmap import ListMap
@@ -33,7 +34,10 @@ def safe_filename(name):
     return f"gismap-{safe_str[:60]}.html"
 
 
-place_holder = "Diego Perino, The-Dang Huynh, François Durand (hal: fradurand, dblp: 38/11269), Rim Kaddah, Leonardo Linguaglossa, Céline Comte"
+place_holder = (
+    "Diego Perino, The-Dang Huynh, François Durand (hal: fradurand, dblp: 38/11269),"
+    " Rim Kaddah, Leonardo Linguaglossa, Céline Comte"
+)
 
 
 class GismapWidget:
@@ -78,21 +82,15 @@ class GismapWidget:
             description="Size",
             layout=widgets.Layout(width="250px"),
         )
-        self.compute = widgets.Button(
-            description="Map!", layout=widgets.Layout(width="120px", max_width="140px")
-        )
+        self.compute = widgets.Button(description="Map!", layout=widgets.Layout(width="120px", max_width="140px"))
         self._col = widgets.VBox(
             [self.size, self.compute],
-            layout=widgets.Layout(
-                align_items="center", max_width="27%", overflow="hidden"
-            ),
+            layout=widgets.Layout(align_items="center", max_width="27%", overflow="hidden"),
         )
         self.save_link = widgets.HTML(value="")
         self.compute.on_click(self.compute_function)
         self.out = widgets.Output()
-        self.widget = widgets.VBox(
-            [self.save_link, self.out, widgets.HBox([self.names, self._col, self.dbs])]
-        )
+        self.widget = widgets.VBox([self.save_link, self.out, widgets.HBox([self.names, self._col, self.dbs])])
         display(self.widget)
         self.show = True
 
@@ -105,13 +103,7 @@ class GismapWidget:
         :class:`str`
             HTML content for the collaboration graph.
         """
-        dbs = (
-            "hal"
-            if self.dbs.value == "HAL"
-            else "dblp"
-            if self.dbs.value == "DBLP"
-            else ["hal", "dblp"]
-        )
+        dbs = "hal" if self.dbs.value == "HAL" else "dblp" if self.dbs.value == "DBLP" else ["hal", "dblp"]
         name = self.names.value
         pattern = r",\s*(?![^()]*\))"
         names = [n.strip() for n in re.split(pattern, name)]
@@ -152,9 +144,7 @@ class GismapWidget:
         """
         self.show = show
         full = self.html()
-        b64 = base64.b64encode(
-            f"<html><body>{full}</body></html>".encode("utf8")
-        ).decode("utf8")
+        b64 = base64.b64encode(f"<html><body>{full}</body></html>".encode()).decode("utf8")
         payload = f"data:text/html;base64,{b64}"
         savename = safe_filename(self.names.value)
         link_html = f"<a href='{payload}' download='{savename}'>Download the Map!</a>"

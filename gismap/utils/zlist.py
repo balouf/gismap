@@ -1,7 +1,8 @@
-from gismo.common import MixInIO
-import zstandard as zstd
-import numpy as np
 import pickle
+
+import numpy as np
+import zstandard as zstd
+from gismo.common import MixInIO
 
 dctx = zstd.ZstdDecompressor()
 cctx = zstd.ZstdCompressor()
@@ -73,9 +74,7 @@ class ZList(MixInIO):
         self._off = np.array(self._off, dtype=int)
 
     def load_frame(self, f):
-        self.frame = pickle.loads(
-            dctx.decompress(self._blob[self._off[f] : self._off[f + 1]])
-        )
+        self.frame = pickle.loads(dctx.decompress(self._blob[self._off[f] : self._off[f + 1]]))
 
     def __getitem__(self, i):
         g, f = i // self.frame_size, i % self.frame_size

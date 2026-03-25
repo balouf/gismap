@@ -1,7 +1,9 @@
 import re
+
 from bs4 import BeautifulSoup as Soup
-from gismap.lab.labmap import LabMap
+
 from gismap.lab.lab_author import AuthorMetadata, LabAuthor
+from gismap.lab.labmap import LabMap
 from gismap.utils.requests import get
 
 
@@ -24,11 +26,7 @@ class LaasMap(LabMap):
         for a in soup("div", {"class": "membre"})[0]("a"):
             url = self.base_url + a["href"]
             name = name_changer(a.img["alt"], self.rosetta)
-            img = (
-                self.base_url + a.img["src"]
-                if "public_avatar" in a.img["class"]
-                else None
-            )
+            img = self.base_url + a.img["src"] if "public_avatar" in a.img["class"] else None
             yield LabAuthor(
                 name=name,
                 metadata=AuthorMetadata(url=url, img=img, group=self.name.upper()),
@@ -46,8 +44,7 @@ class LaasFull(LabMap):
         soup = Soup(get("https://www.laas.fr/fr/equipes/"), features="lxml")
         teams = [a["href"].split("/")[-2] for a in soup("a", {"class": "badge"})]
         for team in teams:
-            for author in LaasMap(name=team)._author_iterator():
-                yield author
+            yield from LaasMap(name=team)._author_iterator()
 
 
 class SolaceMap(LabMap):

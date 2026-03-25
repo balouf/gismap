@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup as Soup
-from gismap.lab.labmap import LabMap
+
 from gismap.lab.lab_author import AuthorMetadata, LabAuthor
+from gismap.lab.labmap import LabMap
 from gismap.utils.requests import get
 
 
@@ -16,11 +17,7 @@ class CedricMap(LabMap):
 
     def _author_iterator(self):
         soup = Soup(get(f"{self.base_url}/equipes/{self.name}/"), features="lxml")
-        searchers = [
-            li.a
-            for ul in soup.find("div", {"id": "annuaire"})("ul")[:3]
-            for li in ul("li")
-        ]
+        searchers = [li.a for ul in soup.find("div", {"id": "annuaire"})("ul")[:3] for li in ul("li")]
         done = set()
         for searcher in searchers:
             name = searcher.text.split("(")[0].strip()
@@ -50,10 +47,7 @@ class CedricFull(LabMap):
         base = "https://cedric.cnam.fr/equipes/"
         soup = Soup(get(base), features="lxml")
         teams = {
-            a["href"].split("/")[-2]
-            for a in soup("a")
-            if base in a.get("href", "") and len(a["href"]) > len(base)
+            a["href"].split("/")[-2] for a in soup("a") if base in a.get("href", "") and len(a["href"]) > len(base)
         }
         for team in teams:
-            for author in CedricMap(name=team)._author_iterator():
-                yield author
+            yield from CedricMap(name=team)._author_iterator()

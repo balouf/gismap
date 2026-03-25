@@ -61,9 +61,7 @@ def get_classes(root, key="name", recurse=False):
     'hal': <class 'gismap.sources.hal.HAL'>,
     'ldb': <class 'gismap.sources.ldb.LDB'>}
     """
-    result = {
-        getattr(c, key): c for c in root.__subclasses__() if getattr(c, key, None)
-    }
+    result = {getattr(c, key): c for c in root.__subclasses__() if getattr(c, key, None)}
     if recurse:
         for c in root.__subclasses__():
             result.update(get_classes(c, key=key, recurse=True))

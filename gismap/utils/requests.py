@@ -1,14 +1,18 @@
-from time import sleep
-import requests
 from importlib.metadata import metadata
-from gismap.utils.logger import logger
+from time import sleep
 
+import requests
+
+from gismap.utils.logger import logger
 
 infos = metadata("gismap")
 session = requests.Session()
 session.headers.update(
     {
-        "User-Agent": f"{infos['name']}/{infos['Version']} ({'; '.join(infos.get_all('Project-URL'))}; Contact, {infos['author-email']}"
+        "User-Agent": (
+            f"{infos['name']}/{infos['Version']}"
+            f" ({'; '.join(infos.get_all('Project-URL'))}; Contact, {infos['author-email']}"
+        )
     }
 )
 

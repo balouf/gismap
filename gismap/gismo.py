@@ -1,8 +1,7 @@
-from sklearn.feature_extraction.text import CountVectorizer
-
 from gismo.corpus import Corpus
 from gismo.embedding import Embedding
 from gismo.gismo import Gismo
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 def make_post_publi(lab):

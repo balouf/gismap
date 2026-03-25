@@ -1,6 +1,5 @@
 from string import Template
 
-
 # language=javascript
 draw_script = """
 import { DataSet, Network } from $vis_url;
@@ -66,7 +65,8 @@ function draw_graph() {
 
         if (fromColor && toColor && (fromColor !== toColor) && fromPos && toPos ) {
             let width = edge.width || 2;
-            if (selectedEdgeIds.includes(edge.id) || hoveredEdgeId === edge.id || hoveredNodeId === edge.from || hoveredNodeId === edge.to) width *= 1.8;
+            if (selectedEdgeIds.includes(edge.id) || hoveredEdgeId === edge.id
+                || hoveredNodeId === edge.from || hoveredNodeId === edge.to) width *= 1.8;
 
             // Gradient
             const grad = ctx.createLinearGradient(fromPos.x, fromPos.y, toPos.x, toPos.y);

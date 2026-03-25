@@ -1,6 +1,5 @@
 from string import Template
 
-
 # language=css
 default_style = Template("""
 

@@ -1,8 +1,9 @@
 from bs4 import BeautifulSoup as Soup
-from gismap.utils.requests import get
-from gismap.lab.filters import re_filter
-from gismap.lab import LabAuthor, Map
 
+from gismap.lab import LabAuthor
+from gismap.lab.filters import re_filter
+from gismap.lab.labmap import LabMap as Map
+from gismap.utils.requests import get
 
 ghosts = [
     "Altman",

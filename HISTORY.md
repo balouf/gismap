@@ -14,6 +14,12 @@
 - Enable Light-themed full screen (previously, full screen was always dark)
 - Slight adjustment in legend alignment
 - IRIF added to the gallery
+- Add ruff linter configuration and pre-commit hooks
+- Fix all existing ruff findings (import sorting, pyupgrade, line length)
+- Consolidate coverage configuration into `pyproject.toml`
+- Bump ipykernel minimum to 7.x
+- Upgrade CI tooling: uv 0.11.0, Codecov v5, Pandoc 3.9
+- Fix potential circular import in `lab_author.py` (lazy `db_dict` lookup)
 
 ## 0.5.0 (2026-02-14)
 

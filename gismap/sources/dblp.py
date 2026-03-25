@@ -1,12 +1,13 @@
-from typing import ClassVar
 from dataclasses import dataclass, field
-from urllib.parse import quote_plus
-from bs4 import BeautifulSoup as Soup
 from time import sleep
+from typing import ClassVar
+from urllib.parse import quote_plus
+
+from bs4 import BeautifulSoup as Soup
 
 from gismap.sources.models import DB, Author, Publication
-from gismap.utils.text import clean_aliases, auto_int
 from gismap.utils.requests import get
+from gismap.utils.text import auto_int, clean_aliases
 
 
 @dataclass(repr=False)
@@ -56,9 +57,7 @@ class DBLP(DB):
             DBLPAuthor(
                 name=name,
                 key=hit.url.text.split("pid/")[1],
-                aliases=clean_aliases(
-                    name, [hit.author.text] + [alia.text for alia in hit("alias")]
-                ),
+                aliases=clean_aliases(name, [hit.author.text] + [alia.text for alia in hit("alias")]),
             )
             for hit in soup("hit")
         ]

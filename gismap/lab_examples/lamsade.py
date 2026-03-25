@@ -40,6 +40,4 @@ class Lamsade(LabMap):
             name, img, url = lamsade_parse(a)
             img = self.base_url + img if img else None
             url = self.base_url + url if url else None
-            yield LabAuthor(
-                name=name, metadata=AuthorMetadata(url=url, img=img, group=self.name)
-            )
+            yield LabAuthor(name=name, metadata=AuthorMetadata(url=url, img=img, group=self.name))

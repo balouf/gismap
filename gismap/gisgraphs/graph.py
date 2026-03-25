@@ -1,7 +1,8 @@
-from domonic import tags
-from itertools import combinations
 from collections import defaultdict
+from itertools import combinations
+
 import numpy as np
+from domonic import tags
 
 
 def initials(name):
@@ -84,9 +85,7 @@ def pub_html(pub):
     title_html = linkify(pub.title, url)
 
     # Authors: render in order, separated by comma
-    authors_html = ", ".join(
-        [author_html(author) for author in getattr(pub, "authors", [])]
-    )
+    authors_html = ", ".join([author_html(author) for author in getattr(pub, "authors", [])])
 
     # Venue, Year
     venue = getattr(pub, "venue", "")
@@ -110,7 +109,8 @@ def publications_list(publications, n=10):
     publications: :class:`list` of :class:`~gismap.sources.models.Publication`
         Publications to display.
     n: :class:`int`, default=10
-        Number of publications to display. If there are more publications, a *Show more* option is available to unravel them.
+        Number of publications to display. If there are more publications,
+        a *Show more* option is available to unravel them.
 
     Returns
     -------
@@ -121,9 +121,7 @@ def publications_list(publications, n=10):
         if i < n:
             lis.append(f"<li>{pub_html(pub)}</li>")
         else:
-            lis.append(
-                f'<li class="extra-publication" style="display:none;">{pub_html(pub)}</li>'
-            )
+            lis.append(f'<li class="extra-publication" style="display:none;">{pub_html(pub)}</li>')
     if len(publications) > n:
         lis.append(f'<li><a href="#" onclick="{expand_script}">Show more…</a></li>')
     return "<ul>\n" + "\n".join(lis) + "</ul>\n"
@@ -182,9 +180,7 @@ def to_edge(k, v, searchers):
     strength = 1 + np.log2(len(v))
     overlay = tags.div()
     overlay.appendChild(
-        tags.div(
-            f"Joint publications from {author_html(searchers[k[0]])} and {author_html(searchers[k[1]])}:"
-        )
+        tags.div(f"Joint publications from {author_html(searchers[k[0]])} and {author_html(searchers[k[1]])}:")
     )
     overlay.appendChild(tags.div(f"{publications_list(v)}"))
     res = {
@@ -235,12 +231,7 @@ def lab_to_graph(lab):
     edges_dict = defaultdict(list)
     for p in lab.publications.values():
         # Strange things can happen with multiple sources. This should take care of it.
-        lauths = {
-            a.key: a
-            for source in p.sources
-            for a in source.authors
-            if a.__class__.__name__ == "LabAuthor"
-        }
+        lauths = {a.key: a for source in p.sources for a in source.authors if a.__class__.__name__ == "LabAuthor"}
         lauths = sorted([a for a in lauths.values()], key=lambda a: str(a.key))
         for a in lauths:
             node_pubs[a.key].append(p)

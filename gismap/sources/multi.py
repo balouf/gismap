@@ -1,10 +1,11 @@
-from dataclasses import dataclass, field
-from bof.fuzz import jit_square_factors
-from bof.feature_extraction import CountVectorizer
-import numpy as np
 import unicodedata
+from dataclasses import dataclass, field
 
-from gismap.sources.models import Publication, Author
+import numpy as np
+from bof.feature_extraction import CountVectorizer
+from bof.fuzz import jit_square_factors
+
+from gismap.sources.models import Author, Publication
 from gismap.utils.text import clean_aliases
 
 
@@ -83,9 +84,7 @@ class SourcedAuthor(Author):
     @property
     def aliases(self):
         if self.sources:
-            return clean_aliases(
-                self.name, [n for a in self.sources for n in [a.name] + a.aliases]
-            )
+            return clean_aliases(self.name, [n for a in self.sources for n in [a.name] + a.aliases])
         else:
             return []
 
@@ -99,12 +98,7 @@ class SourcedAuthor(Author):
             selector = []
         if not isinstance(selector, list):
             selector = [selector]
-        res = {
-            p.key: p
-            for a in self.sources
-            for p in a.get_publications()
-            if all(f(p) for f in selector)
-        }
+        res = {p.key: p for a in self.sources for p in a.get_publications() if all(f(p) for f in selector)}
         if clean:
             regroup_authors({self.key: self}, res)
             return regroup_publications(res)
@@ -120,9 +114,7 @@ publication_score_rosetta = {
 
 
 def score_publication_source(source):
-    scores = [
-        v.get(getattr(source, k, None), 0) for k, v in publication_score_rosetta.items()
-    ]
+    scores = [v.get(getattr(source, k, None), 0) for k, v in publication_score_rosetta.items()]
     scores.append(source.year)
     return tuple(scores)
 
@@ -169,10 +161,7 @@ class SourcedPublication(Publication):
         sources = sort_publication_sources(sources)
         main = sources[0]
         res = cls(
-            **{
-                k: getattr(main, k)
-                for k in ["title", "authors", "venue", "type", "year"]
-            },
+            **{k: getattr(main, k) for k in ["title", "authors", "venue", "type", "year"]},
             sources=sources,
         )
         return res
@@ -196,17 +185,10 @@ def regroup_authors(auth_dict, pub_dict):
     -------
     None
     """
-    redirection = {
-        k: a
-        for a in auth_dict.values()
-        for s in a.sources
-        for k in [s.key, s.name, *s.aliases]
-    }
+    redirection = {k: a for a in auth_dict.values() for s in a.sources for k in [s.key, s.name, *s.aliases]}
 
     for pub in pub_dict.values():
-        pub.authors = [
-            redirection.get(a.key, redirection.get(a.name, a)) for a in pub.authors
-        ]
+        pub.authors = [redirection.get(a.key, redirection.get(a.name, a)) for a in pub.authors]
 
 
 def regroup_publications(pub_dict, threshold=85, length_impact=0.05, n_range=5):
@@ -234,9 +216,7 @@ def regroup_publications(pub_dict, threshold=85, length_impact=0.05, n_range=5):
     vectorizer = CountVectorizer(n_range=n_range)
     x = vectorizer.fit_transform([unicodedata.normalize("NFKC", p.title) for p in pub_list])
     y = x.T.tocsr()
-    jc_matrix = jit_square_factors(
-        x.indices, x.indptr, y.indices, y.indptr, len(pub_list), length_impact
-    )
+    jc_matrix = jit_square_factors(x.indices, x.indptr, y.indices, y.indptr, len(pub_list), length_impact)
     done = np.zeros(len(pub_list), dtype=bool)
     for i, paper in enumerate(pub_list):
         if done[i]:

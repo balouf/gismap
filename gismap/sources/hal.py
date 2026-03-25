@@ -1,22 +1,23 @@
+import json
+from collections import defaultdict
+from dataclasses import dataclass, field
 from time import sleep
 from typing import ClassVar
-from dataclasses import dataclass, field
-from collections import defaultdict
 from urllib.parse import quote_plus
-from bs4 import BeautifulSoup as Soup
-import json
 
-from gismap.sources.models import DB, Publication, Author  #  DBAuthor, DBPublication
-from gismap.utils.text import clean_aliases
-from gismap.utils.requests import get
+from bs4 import BeautifulSoup as Soup
+
+from gismap.sources.models import DB, Author, Publication  #  DBAuthor, DBPublication
 from gismap.utils.common import unlist
+from gismap.utils.requests import get
+from gismap.utils.text import clean_aliases
 
 
 @dataclass(repr=False)
 class HAL(DB):
     db_name: ClassVar[str] = "hal"
-    author_backoff: ClassVar[float] = .5
-    publi_backoff: ClassVar[float] = .5
+    author_backoff: ClassVar[float] = 0.5
+    publi_backoff: ClassVar[float] = 0.5
 
     @classmethod
     def search_author(cls, name, wait=True):
@@ -73,14 +74,8 @@ class HAL(DB):
                     pids[a["person_i"]].add(a.get("label_s"))
             elif "fullName_s" in a:
                 names.add(a["fullName_s"])
-        res = [
-            HALAuthor(name=name, key=k, aliases=clean_aliases(name, v))
-            for k, v in hids.items()
-        ] + [
-            HALAuthor(
-                name=name, key=str(k), aliases=clean_aliases(name, v), key_type="pid"
-            )
-            for k, v in pids.items()
+        res = [HALAuthor(name=name, key=k, aliases=clean_aliases(name, v)) for k, v in hids.items()] + [
+            HALAuthor(name=name, key=str(k), aliases=clean_aliases(name, v), key_type="pid") for k, v in pids.items()
         ]
         if wait:
             sleep(cls.author_backoff)
@@ -350,9 +345,7 @@ class HALPublication(Publication, HAL):
         keys = {v: unlist(r[k]) for k, v in HAL_KEYS.items() if k in r}
         res = {k: keys[k] for k in ["key", "title", "year"]}
         # res = {v: unlist(r[k]) for k, v in HAL_KEYS.items() if k in r}
-        res["authors"] = [
-            parse_facet_author(a) for a in r.get("authFullNamePersonIDIDHal_fs", [])
-        ]
+        res["authors"] = [parse_facet_author(a) for a in r.get("authFullNamePersonIDIDHal_fs", [])]
         for tag in ["booktitle", "journal", "conference"]:
             if tag in keys:
                 res["venue"] = keys[tag]
@@ -360,7 +353,5 @@ class HALPublication(Publication, HAL):
         else:
             res["venue"] = "unpublished"
         res["type"] = HAL_TYPES.get(keys["type"], keys["type"].lower())
-        res["metadata"] = {
-            k: keys[k] for k in {"abstract", "url"} if k in keys and keys[k]
-        }
+        res["metadata"] = {k: keys[k] for k in {"abstract", "url"} if k in keys and keys[k]}
         return cls(**res)

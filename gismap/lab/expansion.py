@@ -1,11 +1,12 @@
 from collections import Counter, defaultdict
 from dataclasses import dataclass
-from bof.fuzz import Process
-import numpy as np
 
-from gismap.utils.text import normalized_name
-from gismap.sources.multi import sort_author_sources
+import numpy as np
+from bof.fuzz import Process
+
 from gismap.lab.lab_author import LabAuthor
+from gismap.sources.multi import sort_author_sources
+from gismap.utils.text import normalized_name
 
 
 @dataclass
@@ -76,15 +77,11 @@ def count_prospect_entries(lab):
             for a in lab_authors:
                 count_coauthors[a].update(new_authors)
 
-    count_coauthors = Counter(
-        k for new_authors in count_coauthors.values() for k in new_authors
-    )
+    count_coauthors = Counter(k for new_authors in count_coauthors.values() for k in new_authors)
     count_publications = Counter(count_publications)
 
     return {
-        k: ProspectStrength(
-            coauthors=count_coauthors.get(k, 0), publications=count_publications[k]
-        )
+        k: ProspectStrength(coauthors=count_coauthors.get(k, 0), publications=count_publications[k])
         for k in count_publications
     }
 
@@ -165,11 +162,7 @@ def get_member_names(lab):
     :class:`list`
         Tuples simplified-name -> key
     """
-    return [
-        (name, k)
-        for k, a in lab.authors.items()
-        for name in {normalized_name(n) for n in [a.name, *a.aliases]}
-    ]
+    return [(name, k) for k, a in lab.authors.items() for name in {normalized_name(n) for n in [a.name, *a.aliases]}]
 
 
 def trim_sources(author):
@@ -194,9 +187,7 @@ def trim_sources(author):
     author.sources = sources
 
 
-def proper_prospects(
-    lab, length_impact=0.05, threshold=80, n_range=4, max_new=None, trim=True
-):
+def proper_prospects(lab, length_impact=0.05, threshold=80, n_range=4, max_new=None, trim=True):
     """
     Find and rank external collaborators for potential lab expansion.
 
@@ -262,9 +253,7 @@ def proper_prospects(
             new_lab.append((strength, new_author))
 
     # Extract top prospects
-    new_lab = [a[1] for a in sorted(new_lab, key=lambda a: a[0], reverse=True)][
-        :max_new
-    ]
+    new_lab = [a[1] for a in sorted(new_lab, key=lambda a: a[0], reverse=True)][:max_new]
     new_rosetta = {s.key: a for a in new_lab for s in a.sources}
 
     # Remove extra sources

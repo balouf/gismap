@@ -10,11 +10,10 @@ This will fetch the DBLP RDF dump from the website and create a compressed local
 
 if __name__ == "__main__":
     import argparse
+
     from gismap.sources.ldb import LDB
 
-    parser = argparse.ArgumentParser(
-        description="Build LDB database from DBLP TTL dump."
-    )
+    parser = argparse.ArgumentParser(description="Build LDB database from DBLP TTL dump.")
     parser.add_argument(
         "--no-search",
         action="store_true",

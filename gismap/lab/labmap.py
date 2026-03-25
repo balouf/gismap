@@ -1,29 +1,30 @@
-from gismo import MixInIO
-from tqdm.auto import tqdm
-from IPython.display import display, HTML
 from pathlib import Path
 
-from gismap.utils.common import list_of_objects
-from gismap.utils.logger import logger
+from gismo import MixInIO
+from IPython.display import HTML, display
+from tqdm.auto import tqdm
+
+from gismap.gisgraphs.builder import make_vis
+from gismap.lab.expansion import proper_prospects
+from gismap.lab.filters import (
+    author_taboo_filter,
+    publication_oneword_filter,
+    publication_size_filter,
+    publication_taboo_filter,
+)
 from gismap.lab.lab_author import (
-    db_dict,
-    default_dbs,
     AuthorMetadata,
     LabAuthor,
+    db_dict,
+    default_dbs,
     labify_publications,
 )
 from gismap.sources.multi import (
     regroup_authors,
     regroup_publications,
 )
-from gismap.lab.expansion import proper_prospects
-from gismap.lab.filters import (
-    author_taboo_filter,
-    publication_taboo_filter,
-    publication_size_filter,
-    publication_oneword_filter,
-)
-from gismap.gisgraphs.builder import make_vis
+from gismap.utils.common import list_of_objects
+from gismap.utils.logger import logger
 
 
 class LabMap(MixInIO):
@@ -91,9 +92,7 @@ class LabMap(MixInIO):
             if not all(f(author) for f in self.author_selectors):
                 continue
             if len(author.sources) == 0:
-                author.auto_sources(
-                    dbs=list_of_objects(self.dbs, db_dict, default=default_dbs)
-                )
+                author.auto_sources(dbs=list_of_objects(self.dbs, db_dict(), default=default_dbs))
             if author.sources:
                 self.authors[author.key] = author
             if author.metadata.img is None:
@@ -103,7 +102,8 @@ class LabMap(MixInIO):
 
     def update_publis(self, desc="Publications information"):
         """
-        Populate the publications attribute (:class:`dict` [:class:`str`, :class:`~gismap.sources.multi.SourcedPublication`]).
+        Populate the publications attribute
+        (:class:`dict` [:class:`str`, :class:`~gismap.sources.multi.SourcedPublication`]).
 
         Returns
         -------
@@ -111,11 +111,7 @@ class LabMap(MixInIO):
         """
         pubs = dict()
         for author in tqdm(self.authors.values(), desc=desc):
-            pubs.update(
-                author.get_publications(
-                    clean=False, selector=self.publication_selectors
-                )
-            )
+            pubs.update(author.get_publications(clean=False, selector=self.publication_selectors))
         regroup_authors(self.authors, pubs)
         self.publications = regroup_publications(pubs)
 
@@ -137,11 +133,7 @@ class LabMap(MixInIO):
         for author in tqdm(new.values(), desc=desc):
             author.auto_img()
             author.metadata.group = group
-            pubs.update(
-                author.get_publications(
-                    clean=False, selector=self.publication_selectors
-                )
-            )
+            pubs.update(author.get_publications(clean=False, selector=self.publication_selectors))
 
         for pub in self.publications.values():
             for source in pub.sources:
@@ -187,7 +179,7 @@ class LabMap(MixInIO):
         if name is None:
             name = self.name
         name = Path(name).with_suffix(".html")
-        with open(name, "wt", encoding="utf8") as f:
+        with open(name, "w", encoding="utf8") as f:
             f.write(self.html(**kwargs))
 
     def show_html(self, **kwargs):

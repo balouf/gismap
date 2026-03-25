@@ -1,14 +1,16 @@
-from bs4 import BeautifulSoup as Soup
 import re
 
-from gismap.lab.labmap import LabMap
+from bs4 import BeautifulSoup as Soup
+
 from gismap.lab.lab_author import AuthorMetadata, LabAuthor
+from gismap.lab.labmap import LabMap
 from gismap.utils.requests import get
 
 
 class Lip6Map(LabMap):
     """
-    Class for handling a LIP6 team using `https://www.lip6.fr/recherche/team_membres.php?acronyme=*team_acronym*` as entry point.
+    Class for handling a LIP6 team using
+    `https://www.lip6.fr/recherche/team_membres.php?acronyme=*team_acronym*` as entry point.
     Default to `NPA` team.
     """
 
@@ -41,8 +43,5 @@ class Lip6Full(Lip6Map):
 
     def _author_iterator(self):
         groups = re.compile(r'acronyme=(.*?)[\'"]')
-        for group in groups.findall(
-            get("https://www.lip6.fr/informations/annuaire.php")
-        ):
-            for author in Lip6Map(name=group)._author_iterator():
-                yield author
+        for group in groups.findall(get("https://www.lip6.fr/informations/annuaire.php")):
+            yield from Lip6Map(name=group)._author_iterator()

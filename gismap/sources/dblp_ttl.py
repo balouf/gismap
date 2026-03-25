@@ -5,8 +5,8 @@ from pathlib import Path
 
 from tqdm.auto import tqdm
 
-from gismap.utils.requests import session
 from gismap.sources.dblp import DBLP_TYPES
+from gismap.utils.requests import session
 
 key_re = r"<https://dblp.org/rec/([^>]+)>"
 title_re = r'.*?dblp:title\s+"([^"]+)"'
@@ -153,9 +153,7 @@ def publis_streamer(source, chunk_size=1024 * 64, encoding="unicode_escape"):
         Year of publication.
     """
     with get_stream(source, chunk_size=chunk_size) as (stream, total):
-        with tqdm(
-            total=total, unit="B", unit_scale=True, unit_divisor=1024, desc="Processing"
-        ) as pbar:
+        with tqdm(total=total, unit="B", unit_scale=True, unit_divisor=1024, desc="Processing") as pbar:
             decomp = zlib.decompressobj(16 + zlib.MAX_WBITS)
             text_buffer = ""
             for chunk in stream:

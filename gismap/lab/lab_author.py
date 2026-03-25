@@ -1,14 +1,17 @@
-from dataclasses import dataclass, field
 import re
+from dataclasses import dataclass, field
 
-from gismap import get_classes
 from gismap.sources.models import DB, db_class_to_auth_class
 from gismap.sources.multi import SourcedAuthor, sort_author_sources
-from gismap.utils.common import LazyRepr, list_of_objects
+from gismap.utils.common import LazyRepr, get_classes, list_of_objects
 from gismap.utils.logger import logger
 
-db_dict = get_classes(DB, key="db_name")
 default_dbs = ["hal", "ldb"]
+
+
+def db_dict():
+    """Lazy lookup of DB subclasses (avoids import-order dependency)."""
+    return get_classes(DB, key="db_name")
 
 
 @dataclass(repr=False)
@@ -53,8 +56,10 @@ class LabAuthor(SourcedAuthor):
     You can enter multiple keys for the same DB. HAL key types are automatically detected.
 
     >>> dummy2= LabAuthor("My Name (hal:key1,hal:123456,hal: My Other Name )")
-    >>> dummy2.sources
-    [HALAuthor(name='My Name', key='key1'), HALAuthor(name='My Name', key='123456', key_type='pid'), HALAuthor(name='My Name', key='My Other Name', key_type='fullname')]
+    >>> dummy2.sources  # doctest: +NORMALIZE_WHITESPACE
+    [HALAuthor(name='My Name', key='key1'),
+    HALAuthor(name='My Name', key='123456', key_type='pid'),
+    HALAuthor(name='My Name', key='My Other Name', key_type='fullname')]
     """
 
     metadata: AuthorMetadata = field(default_factory=AuthorMetadata)
@@ -80,8 +85,8 @@ class LabAuthor(SourcedAuthor):
                     k, v = kv.split(":", 1)
                     k = k.strip().lower()
                     v = v.strip()
-                    if k in db_dict:
-                        DBAuthor = db_class_to_auth_class(db_dict[k])
+                    if k in db_dict():
+                        DBAuthor = db_class_to_auth_class(db_dict()[k])
                         self.sources.append(DBAuthor(name=self.name, key=v))
                     elif k in ["url", "img", "group"]:
                         setattr(self.metadata, k, v)
@@ -103,7 +108,7 @@ class LabAuthor(SourcedAuthor):
         -------
         None
         """
-        dbs = list_of_objects(dbs, db_dict, default=default_dbs)
+        dbs = list_of_objects(dbs, db_dict(), default=default_dbs)
         sources = []
         for db in dbs:
             source = db.search_author(self.name)

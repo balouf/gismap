@@ -1,5 +1,6 @@
 import doctest
 import warnings
+
 import pytest
 
 FLAKY = doctest.register_optionflag("FLAKY")

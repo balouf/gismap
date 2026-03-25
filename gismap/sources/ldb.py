@@ -1,22 +1,22 @@
-from dataclasses import dataclass, field
-from functools import lru_cache
-from importlib.metadata import version as pkg_version
-from typing import ClassVar
-from platformdirs import user_data_dir
-from pathlib import Path
-from datetime import datetime, timezone
 import errno
 import json
 import os
+from dataclasses import dataclass, field
+from datetime import UTC, datetime
+from functools import lru_cache
+from importlib.metadata import version as pkg_version
+from pathlib import Path
+from typing import ClassVar
 
-import zstandard as zstd
 import dill as pickle
-import numpy as np
 import numba as nb
+import numpy as np
+import requests
+import zstandard as zstd
 from bof.fuzz import Process
 from gismo.common import safe_write
+from platformdirs import user_data_dir
 from tqdm.auto import tqdm
-import requests
 
 from gismap.sources.dblp_ttl import publis_streamer
 from gismap.sources.models import DB, Author, Publication
@@ -24,7 +24,6 @@ from gismap.utils.common import Data
 from gismap.utils.logger import logger
 from gismap.utils.text import normalized_name
 from gismap.utils.zlist import ZList
-
 
 DATA_DIR = Path(
     user_data_dir(
@@ -130,9 +129,7 @@ class LDB(DB):
     __hash__ = object.__hash__
 
     def __init__(self):
-        raise TypeError(
-            "LDB should not be instantiated. Use class methods directly, e.g., LDB.search_author(name)"
-        )
+        raise TypeError("LDB should not be instantiated. Use class methods directly, e.g., LDB.search_author(name)")
 
     @classmethod
     def _ensure_loaded(cls):
@@ -222,9 +219,7 @@ class LDB(DB):
                         authors_dict[auth_key][1].add(auth_name)
                         authors_dict[auth_key][2].append(i)
                     auth_indices.append(authors_dict[auth_key][0])
-                publis.append(
-                    (key, title, typ, auth_indices, url, streams, pages, venue, year)
-                )
+                publis.append((key, title, typ, auth_indices, url, streams, pages, venue, year))
                 if i == limit:
                     break
         cls.publis = publis
@@ -254,14 +249,12 @@ class LDB(DB):
             for alias in a[1][1:]:
                 aliases_indices.append(i)
                 aliases.append(normalized_name(alias))
-        cls.search_engine.fit(main_names+aliases)
+        cls.search_engine.fit(main_names + aliases)
         aliases_indices = np.array(aliases_indices)
         cls.search_engine.choices = np.concatenate((np.arange(len(cls.authors)), aliases_indices))
         # cls.search_engine.fit([normalized_name(a[1]) for a in cls.authors])
         # cls.search_engine.choices = np.arange(len(cls.authors))
-        cls.search_engine.vectorizer.features_ = cls.numbify_dict(
-            cls.search_engine.vectorizer.features_
-        )
+        cls.search_engine.vectorizer.features_ = cls.numbify_dict(cls.search_engine.vectorizer.features_)
         logger.info(f"{len(cls.authors)} authors indexed.")
 
     @classmethod
@@ -415,7 +408,7 @@ class LDB(DB):
             "tag": tag,
             "url": url,
             "size": size,
-            "downloaded_at": datetime.now(timezone.utc).isoformat(),
+            "downloaded_at": datetime.now(UTC).isoformat(),
         }
         meta_path = cls.parameters.io.metadata
         meta_path.parent.mkdir(parents=True, exist_ok=True)
@@ -429,9 +422,9 @@ class LDB(DB):
         if not meta_path.exists():
             return None
         try:
-            with open(meta_path, "r") as f:
+            with open(meta_path) as f:
                 return json.load(f)
-        except (json.JSONDecodeError, IOError):
+        except (OSError, json.JSONDecodeError):
             return None
 
     @classmethod
@@ -491,9 +484,7 @@ class LDB(DB):
         if not force:
             meta = cls._load_meta()
             if meta and meta.get("tag") == release_tag and destination.exists():
-                logger.info(
-                    f"LDB version {release_tag} already installed. Use force=True to re-download."
-                )
+                logger.info(f"LDB version {release_tag} already installed. Use force=True to re-download.")
                 return
 
         # Find ldb.pkl.zst asset in release
@@ -513,9 +504,7 @@ class LDB(DB):
         download_url = ldb_asset["browser_download_url"]
         asset_size = ldb_asset["size"]
 
-        logger.info(
-            f"Downloading LDB from release {release_tag} ({asset_size / 1e9:.2f} GB)"
-        )
+        logger.info(f"Downloading LDB from release {release_tag} ({asset_size / 1e9:.2f} GB)")
 
         # Download with progress bar
         cls._download_file(download_url, destination, desc=f"LDB {release_tag}")
@@ -603,9 +592,7 @@ class LDB(DB):
         # Use safe_write pattern from gismo.common
         destination = Path(path) / filename
         if destination.exists() and not overwrite:
-            print(
-                f"File {destination} already exists! Use overwrite option to overwrite."
-            )
+            print(f"File {destination} already exists! Use overwrite option to overwrite.")
         else:
             with safe_write(destination) as f:
                 cctx = zstd.ZstdCompressor(level=3)
@@ -636,9 +623,7 @@ class LDB(DB):
             cls._build_search_engine()
             cls.dump(filename=filename, path=path, overwrite=True, include_search=True)
         elif cls.search_engine is not None:
-            cls.search_engine.vectorizer.features_ = cls.numbify_dict(
-                cls.search_engine.vectorizer.features_
-            )
+            cls.search_engine.vectorizer.features_ = cls.numbify_dict(cls.search_engine.vectorizer.features_)
 
         cls._invalidate_cache()
         cls._initialized = True
@@ -658,18 +643,14 @@ class LDB(DB):
     def load_db(cls, restore_search=False):
         destination = cls.parameters.io.destination
         try:
-            cls.load(
-                destination.name, path=destination.parent, restore_search=restore_search
-            )
+            cls.load(destination.name, path=destination.parent, restore_search=restore_search)
         except FileNotFoundError:
             logger.warning("No LDB found. Building from source...")
             cls.build_db()
             cls.dump_db()
         except TypeError as e:
             if "code expected at most" in str(e):
-                logger.warning(
-                    "LDB file incompatible with this Python version. Rebuilding from source..."
-                )
+                logger.warning("LDB file incompatible with this Python version. Rebuilding from source...")
                 cls.build_db()
                 cls.dump_db()
             else:
@@ -683,9 +664,7 @@ class LDB(DB):
 
     @staticmethod
     def numbify_dict(input_dict):
-        nb_dict = nb.typed.Dict.empty(
-            key_type=nb.types.unicode_type, value_type=nb.types.int64
-        )
+        nb_dict = nb.typed.Dict.empty(key_type=nb.types.unicode_type, value_type=nb.types.int64)
         for k, v in input_dict.items():
             nb_dict[k] = v
         return nb_dict
