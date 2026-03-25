@@ -117,7 +117,7 @@ default_style = Template("""
                              z-index: 20;
                          }
 
-                         .legend-entry {
+                         .legend-entry, .comet-entry {
                              display: flex;
                              margin-right: 10px;
                              align-items: center;

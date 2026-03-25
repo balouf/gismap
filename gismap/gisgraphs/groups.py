@@ -59,26 +59,16 @@ def make_legend(groups, uid):
                     checked=True,
                 )
             entry = tags.label(color_box, _class="legend-entry")
-            entry.appendChild(display_name)
             entry.appendChild(check_box)
-            # entry = tags.label(display_name, _class="legend-entry")
-            # entry.appendChild(
-            #     tags.input(
-            #         **{
-            #             "type": "checkbox",
-            #             "class": "legend-checkbox",
-            #             "data-group": group_name,
-            #         },
-            #         checked=True,
-            #     )
-            # )
-            # entry.appendChild(
-            #     tags.span(
-            #         _style=f"background-color: {color}; width: 14px; height: 14px; display: inline-block; margin-right: 5px; vertical-align: middle;"
-            #     )
-            # )
+            entry.appendChild(display_name)
             legend.appendChild(entry)
-    entry = tags.label("Show Comets", _class="comet-entry")
-    entry.appendChild(tags.input(**{"type": "checkbox", "id": f"comet-{uid}"}))
+    # Add comet checkbox
+    empty_box = tags.span(
+            _style="width: 14px; height: 14px; display: inline-block; margin-right: 5px; vertical-align: middle;"
+    )
+    comet_check = tags.input(**{"type": "checkbox", "id": f"comet-{uid}"})
+    entry = tags.label(empty_box, _class="comet-entry")
+    entry.appendChild(comet_check)
+    entry.appendChild("Show Comets")
     legend.appendChild(entry)
     return legend
