@@ -33,17 +33,17 @@ class DBLP(DB):
         Examples
         --------
 
-        >>> fabien = DBLP.search_author("Fabien Mathieu")
+        >>> fabien = DBLP.search_author("Fabien Mathieu")  # doctest: +FLAKY
         >>> fabien
         [DBLPAuthor(name='Fabien Mathieu', key='66/2077')]
         >>> fabien[0].url
         'https://dblp.org/pid/66/2077.html'
-        >>> manu = DBLP.search_author("Manuel Barragan")
+        >>> manu = DBLP.search_author("Manuel Barragan")  # doctest: +FLAKY
         >>> manu # doctest:  +NORMALIZE_WHITESPACE
         [DBLPAuthor(name='Manuel Barragan', key='07/10587'),
         DBLPAuthor(name='Manuel Barragan', key='83/3865'),
         DBLPAuthor(name='Manuel Barragan', key='188/0198')]
-        >>> DBLP.search_author("NotaSearcherName", wait=False)
+        >>> DBLP.search_author("NotaSearcherName", wait=False)  # doctest: +FLAKY
         []
         """
         dblp_api = "https://dblp.org/search/author/api"
@@ -88,7 +88,7 @@ class DBLPAuthor(Author, DBLP):
     --------
 
     >>> fabien = DBLPAuthor('Fabien Mathieu', key='66/2077')
-    >>> publications = sorted(fabien.get_publications(),
+    >>> publications = sorted(fabien.get_publications(),  # doctest: +FLAKY
     ...                 key=lambda p: p.title)
     >>> publications[0].url # doctest:  +NORMALIZE_WHITESPACE
      'https://dblp.org/rec/conf/iptps/BoufkhadMMPV08.html'
