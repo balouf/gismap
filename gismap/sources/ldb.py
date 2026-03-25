@@ -51,23 +51,32 @@ LDB_PARAMETERS = Data(
 Global configuration parameters for the Local DBLP (LDB) pipeline.
 
 Structure:
-- search:
-    - limit: maximum number of candidates retrieved per query.
-    - cutoff: minimal similarity score required to keep a candidate.
-    - slack: tolerance around the cutoff for borderline matches.
-- bof (Bag-of-Factors):
-    - n_range: max factor size (higher is better but more expensive).
-    - length_impact: how to compare two inputs of different size.
-- frame_size:
-    - authors: maximum number of authors kept in a single frame/batch.
-    - publis: maximum number of publications kept in a single frame/batch.
-- io:
-    - source: URL/file location of the DBLP RDF dump used as raw input.
-    - destination: local path where the compressed preprocessed dataset is / will be stored.
-    - gh_api: GitHub API endpoint used to fetch release information for the project.
+
+- **search**:
+
+  - *limit*: maximum number of candidates retrieved per query.
+  - *cutoff*: minimal similarity score required to keep a candidate.
+  - *slack*: tolerance around the cutoff for borderline matches.
+
+- **bof** (Bag-of-Factors):
+
+  - *n_range*: max factor size (higher is better but more expensive).
+  - *length_impact*: how to compare two inputs of different size.
+
+- **frame_size**:
+
+  - *authors*: maximum number of authors kept in a single frame/batch.
+  - *publis*: maximum number of publications kept in a single frame/batch.
+
+- **io**:
+
+  - *source*: URL/file location of the DBLP RDF dump used as raw input.
+  - *destination*: local path where the compressed preprocessed dataset is / will be stored.
+  - *gh_api*: GitHub API endpoint used to fetch release information for the project.
 
 LDB_PARAMETERS is a Data (RecursiveDict) instance, so nested fields can be
-accessed with attribute notation, e.g.:
+accessed with attribute notation, e.g.::
+
     LDB_PARAMETERS.search.limit
     LDB_PARAMETERS.io.destination
 """
