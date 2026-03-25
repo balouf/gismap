@@ -33,13 +33,13 @@ class DBLP(DB):
         Examples
         --------
 
-        >>> fabien = DBLP.search_author("Fabien Mathieu")  # doctest: +FLAKY
-        >>> fabien
+        >>> fabien = DBLP.search_author("Fabien Mathieu")
+        >>> fabien  # doctest: +FLAKY
         [DBLPAuthor(name='Fabien Mathieu', key='66/2077')]
-        >>> fabien[0].url
+        >>> fabien[0].url  # doctest: +FLAKY
         'https://dblp.org/pid/66/2077.html'
-        >>> manu = DBLP.search_author("Manuel Barragan")  # doctest: +FLAKY
-        >>> manu # doctest:  +NORMALIZE_WHITESPACE
+        >>> manu = DBLP.search_author("Manuel Barragan")
+        >>> manu  # doctest: +FLAKY, +NORMALIZE_WHITESPACE
         [DBLPAuthor(name='Manuel Barragan', key='07/10587'),
         DBLPAuthor(name='Manuel Barragan', key='83/3865'),
         DBLPAuthor(name='Manuel Barragan', key='188/0198')]
@@ -88,11 +88,11 @@ class DBLPAuthor(Author, DBLP):
     --------
 
     >>> fabien = DBLPAuthor('Fabien Mathieu', key='66/2077')
-    >>> publications = sorted(fabien.get_publications(),  # doctest: +FLAKY
+    >>> publications = sorted(fabien.get_publications(),
     ...                 key=lambda p: p.title)
-    >>> publications[0].url # doctest:  +NORMALIZE_WHITESPACE
+    >>> publications[0].url  # doctest: +FLAKY, +NORMALIZE_WHITESPACE
      'https://dblp.org/rec/conf/iptps/BoufkhadMMPV08.html'
-    >>> publications[-1] # doctest:  +NORMALIZE_WHITESPACE
+    >>> publications[-1]  # doctest: +FLAKY, +NORMALIZE_WHITESPACE
     DBLPPublication(title='Upper Bounds for Stabilization in Acyclic Preference-Based Systems.',
     authors=[DBLPAuthor(name='Fabien Mathieu', key='66/2077')], venue='SSS', type='conference', year=2007,
     key='conf/sss/Mathieu07')

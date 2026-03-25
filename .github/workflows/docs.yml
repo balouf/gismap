@@ -46,17 +46,17 @@ jobs:
         with:
           version: '3.6.3'
 
-      - name: Cache Sphinx doctrees
+      - name: Cache Sphinx build
         if: inputs.full_rebuild != true
         uses: actions/cache@v4
         with:
-          path: build/.doctrees
-          key: sphinx-${{ hashFiles('docs/**') }}
+          path: build
+          key: sphinx-${{ hashFiles('docs/**', 'gismap/**') }}
           restore-keys: sphinx-
 
       - name: Build Sphinx documentation
         run: |
-          FLAGS="-a -b html"
+          FLAGS="-b html"
           if [ "${{ inputs.full_rebuild }}" = "true" ]; then
             FLAGS="-a -E -b html"
           fi
