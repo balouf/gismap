@@ -46,7 +46,7 @@ extensions = [
 ]
 
 # Remote NB execution
-nbsphinx_execute = "auto"
+nbsphinx_execute = os.environ.get("NBSPHINX_EXECUTE", "auto")
 nbsphinx_execute_arguments = ["--InlineBackend.figure_formats={'svg', 'pdf'}"]
 
 
