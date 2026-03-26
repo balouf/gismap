@@ -14,6 +14,7 @@
 - Enable Light-themed full screen (previously, full screen was always dark)
 - Slight adjustment in legend alignment
 - IRIF added to the gallery
+- Adapt Lamsade authors retrieval to new webpage format
 - Add ruff linter configuration and pre-commit hooks
 - Fix all existing ruff findings (import sorting, pyupgrade, line length)
 - Consolidate coverage configuration into `pyproject.toml`
