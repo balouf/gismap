@@ -11,7 +11,7 @@
 GisMap (Generic Information Search: Mapping and Analysis of Publications) leverages DBLP and HAL databases to provide cartography tools for you and your lab.
 
 - Free software: MIT
-- Documentation: <https://balouf.github.io/gismap/>.
+- Documentation/Gallery: <https://balouf.github.io/gismap/>.
 - Github: <https://github.com/balouf/gismap>
 
 ## Features
