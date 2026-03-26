@@ -21,6 +21,7 @@
 - Bump ipykernel minimum to 7.x
 - Upgrade CI tooling: uv 0.11.0, Codecov v5, Pandoc 3.9
 - Fix potential circular import in `lab_author.py` (lazy `db_dict` lookup)
+- GH actions: cached gallery
 
 ## 0.5.0 (2026-02-14)
 
