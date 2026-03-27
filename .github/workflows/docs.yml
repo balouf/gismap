@@ -61,17 +61,16 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .notebook-cache
-          key: nb-${{ hashFiles('docs/**/*.ipynb', 'gismap/**', 'uv.lock') }}
+          key: nb-${{ hashFiles('docs/**/*.ipynb', 'uv.lock') }}
           restore-keys: nb-
 
       - name: Pre-execute notebooks
         if: inputs.full_rebuild != true
         run: |
           mkdir -p .notebook-cache
-          # Compute a hash of all dependencies (gismap code + lockfile)
-          deps_hash=$(cat $(find gismap -name "*.py" | sort) uv.lock | sha256sum | cut -d' ' -f1)
+          # Hash based on uv.lock (deps) only — gismap code changes use full_rebuild
+          deps_hash=$(sha256sum uv.lock | cut -d' ' -f1)
           find docs -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | while read nb; do
-            # Per-notebook hash includes deps + notebook source
             nb_hash=$(echo "${deps_hash}-$(sha256sum "$nb" | cut -d' ' -f1)" | sha256sum | cut -d' ' -f1)
             cached=".notebook-cache/${nb_hash}.ipynb"
             if [ -f "$cached" ]; then
