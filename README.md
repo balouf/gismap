@@ -7,6 +7,7 @@
 [![Documentation Status](https://github.com/balouf/gismap/actions/workflows/docs.yml/badge.svg?branch=main)](https://github.com/balouf/gismap/actions?query=workflow%3Adocs)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code Coverage](https://codecov.io/gh/balouf/gismap/branch/main/graphs/badge.svg)](https://codecov.io/gh/balouf/gismap/tree/main)
+[![SWH](https://archive.softwareheritage.org/badge/origin/https://github.com/balouf/gismap/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/balouf/gismap)
 
 GisMap (Generic Information Search: Mapping and Analysis of Publications) leverages DBLP and HAL databases to provide cartography tools for you and your lab.
 
