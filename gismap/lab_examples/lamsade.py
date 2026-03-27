@@ -28,6 +28,8 @@ def lamsade_parse(div):
 class Lamsade(LabMap):
     """
     Class for handling the Lamsade team (Dauphine).
+    The data is retrieved from the webpage of the team, and parsed with BeautifulSoup.
+    The name, image url and webpage of each researcher are extracted and stored in a LabAuthor object.
     """
 
     name = "Lamsade"
