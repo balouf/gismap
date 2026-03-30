@@ -9,8 +9,10 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
-## 0.5.1
+## 0.5.1 (2026-03-30)
 
+- Fix publication deduplication: fingerprint now combines title and authors (normalized) instead of title only, preventing incorrect merges of different papers with similar titles
+- Switch vis-network CDN from unpkg to jsDelivr (CORS fix for JupyterLab)
 - Enable Light-themed full screen (previously, full screen was always dark)
 - Slight adjustment in legend alignment
 - IRIF added to the gallery

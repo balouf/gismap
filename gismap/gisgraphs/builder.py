@@ -12,7 +12,7 @@ from gismap.gisgraphs.options import nodes as def_nodes
 from gismap.gisgraphs.options import physics as def_physics
 from gismap.gisgraphs.style import default_style
 
-default_vis_url = '"https://unpkg.com/vis-network/standalone/esm/vis-network.min.js"'
+default_vis_url = '"https://cdn.jsdelivr.net/npm/vis-network/standalone/esm/vis-network.min.js"'
 
 gislink = tags.a(
     "&copy; GisMap 2025",

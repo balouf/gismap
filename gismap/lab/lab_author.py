@@ -64,6 +64,10 @@ class LabAuthor(SourcedAuthor):
 
     metadata: AuthorMetadata = field(default_factory=AuthorMetadata)
 
+    @property
+    def fingerprint(self):
+        return self.key if self.key is not None else super().fingerprint
+
     def auto_img(self):
         for source in self.sources:
             img = getattr(source, "img", None)

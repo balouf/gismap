@@ -15,6 +15,7 @@ ghosts = [
     "Jacquet",
     "Panafieu",
     "Bušić",
+    "Durand",
 ]
 no_ghost = re_filter(ghosts)
 

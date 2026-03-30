@@ -150,6 +150,29 @@ def normalized_name(txt):
     )
 
 
+def normalized_title(txt):
+    """
+    Try to normalize titles for facilitating comparisons. Title is lowercased, asciified, and stripped of punctuation.
+
+    Parameters
+    ----------
+    txt: :class:`str`
+
+    Returns
+    -------
+    :class:`str`
+
+    Examples
+    --------
+
+    >>> normalized_title("An Efficient Algorithm for P2P Networks")
+    'an efficient algorithm for p2p networks'
+    >>> normalized_title("A Study on the Use of Millimeter Waves: 5G Networks.")
+    'a study on the use of millimeter waves 5g networks'
+    """
+    return " ".join("".join(c if c.isalnum() else " " for c in asciify(txt.lower())).split())
+
+
 def auto_int(txt):
     try:
         return int(txt)

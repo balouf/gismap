@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import ClassVar
 
 from gismap.utils.common import LazyRepr
+from gismap.utils.text import normalized_name, normalized_title
 
 
 @dataclass(repr=False)
@@ -19,6 +20,18 @@ class Author(LazyRepr):
     """
 
     name: str
+
+    @property
+    def fingerprint(self):
+        """
+        A normalized version of the author's name for matching purposes.
+
+        Returns
+        -------
+        :class:`str`
+            The fingerprint of the author's name.
+        """
+        return normalized_name(self.name)
 
 
 @dataclass(repr=False)
@@ -48,6 +61,18 @@ class Publication(LazyRepr):
     venue: str
     type: str
     year: int
+
+    @property
+    def fingerprint(self):
+        """
+        A normalized version of the publication's title for matching purposes.
+
+        Returns
+        -------
+        :class:`str`
+            The fingerprint of the publication's title.
+        """
+        return normalized_title(self.title) + "---" + "+++".join(a.fingerprint for a in self.authors)
 
 
 @dataclass(repr=False)

@@ -1,4 +1,3 @@
-import unicodedata
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -191,7 +190,7 @@ def regroup_authors(auth_dict, pub_dict):
         pub.authors = [redirection.get(a.key, redirection.get(a.name, a)) for a in pub.authors]
 
 
-def regroup_publications(pub_dict, threshold=85, length_impact=0.05, n_range=5):
+def regroup_publications(pub_dict, threshold=83, length_impact=0.05, n_range=5):
     """
     Puts together copies of the same publication.
 
@@ -214,7 +213,7 @@ def regroup_publications(pub_dict, threshold=85, length_impact=0.05, n_range=5):
     pub_list = [p for p in pub_dict.values()]
     res = dict()
     vectorizer = CountVectorizer(n_range=n_range)
-    x = vectorizer.fit_transform([unicodedata.normalize("NFKC", p.title) for p in pub_list])
+    x = vectorizer.fit_transform([p.fingerprint for p in pub_list])
     y = x.T.tocsr()
     jc_matrix = jit_square_factors(x.indices, x.indptr, y.indices, y.indptr, len(pub_list), length_impact)
     done = np.zeros(len(pub_list), dtype=bool)

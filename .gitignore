@@ -1,6 +1,7 @@
 # Claude
 .claude/
 CLAUDE.md
+TODO.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
