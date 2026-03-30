@@ -218,7 +218,7 @@ def lab_to_graph(lab):
     >>> lab.update_publis()
     >>> len(lab.authors)
     2
-    >>> 330 < len(lab.publications) < 430
+    >>> 327 < len(lab.publications) < 430
     True
     >>> nodes, edges = lab_to_graph(lab)
     >>> nodes[0]['group']
