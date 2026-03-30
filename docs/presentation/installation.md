@@ -42,6 +42,20 @@ Once you have a copy of the source, you can install it from the package director
 $ pip install .
 ```
 
+## LDB (Local DBLP) setup
+
+GisMap includes LDB, a local mirror of the DBLP database that provides fast, accurate access
+to Computer Science publications. LDB is automatically downloaded on first use (~1 GB compressed).
+
+```{important}
+After upgrading gismap to a new version, you may need to update your local LDB:
+
+    from gismap.sources import LDB
+    LDB.retrieve()
+
+See the [FAQ](../faq) for more details on LDB management.
+```
+
 [github repo]: https://github.com/balouf/gismap
 [pip]: https://pip.pypa.io
 [python installation guide]: http://docs.python-guide.org/en/latest/starting/installation/

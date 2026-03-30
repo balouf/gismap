@@ -9,6 +9,11 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
+## 0.5.2
+
+- Add version compatibility warning when loading an LDB built for a different gismap version
+- Document LDB management workflow in FAQ and installation guide
+
 ## 0.5.1 (2026-03-30)
 
 - Fix publication deduplication: fingerprint now combines title and authors (normalized) instead of title only, preventing incorrect merges of different papers with similar titles

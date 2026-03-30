@@ -141,6 +141,20 @@ class LDB(DB):
         raise TypeError("LDB should not be instantiated. Use class methods directly, e.g., LDB.search_author(name)")
 
     @classmethod
+    def _check_version_compatibility(cls):
+        """Warn if the loaded LDB was built for a different gismap version."""
+        meta = cls._load_meta()
+        if meta is None:
+            return
+        tag = meta.get("tag")
+        if tag and not _compatible_tag(tag):
+            pkg_v = pkg_version("gismap")
+            logger.warning(
+                f"Installed LDB ({tag}) was built for a different version of gismap "
+                f"(current: {pkg_v}). Run LDB.retrieve() to download a compatible version."
+            )
+
+    @classmethod
     def _ensure_loaded(cls):
         """Lazy-load the database if not already loaded."""
         if cls._initialized:
@@ -152,6 +166,7 @@ class LDB(DB):
             except RuntimeError as e:
                 logger.warning(f"Could not auto-retrieve LDB: {e}")
         cls.load_db()
+        cls._check_version_compatibility()
 
     @classmethod
     def build_db(cls, limit=None):
