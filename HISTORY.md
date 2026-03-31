@@ -13,6 +13,8 @@
 
 - Add version compatibility warning when loading an LDB built for a different gismap version
 - Document LDB management workflow in FAQ and installation guide
+- Add parametrized tests for lab_examples `_author_iterator()` (6 labs: IRIF graphes, Lamsade, LINCS, LAAS sara, AlgoRes2026, AlgoRes2016)
+- Remove placeholder test file (`test_gismap.py`)
 
 ## 0.5.1 (2026-03-30)
 
