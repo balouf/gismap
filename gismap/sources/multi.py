@@ -241,7 +241,7 @@ def regroup_publications(pub_dict, threshold=83, length_impact=0.05, n_range=5):
     >>> publis[-1].key = "key6"
     >>> regroup_publications({p.key: p for p in publis})  # doctest: +NORMALIZE_WHITESPACE
     {'key2': SourcedPublication(title='The coolest paper?', venue='WWW journal', type='journal', year=2004),
-    'key4': SourcedPublication(title='The hottest paper', venue='WWW journal', type='journal', year=2004)}
+    'key4': SourcedPublication(title='The hottest paper', venue='J. WWW', type='journal', year=2004)}
     >>> regroup_publications({})  # should not fail on empty input
     {}
     """

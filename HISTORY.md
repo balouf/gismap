@@ -16,6 +16,8 @@
 - Add parametrized tests for lab_examples `_author_iterator()` (6 labs: IRIF graphes, Lamsade, LINCS, LAAS sara, AlgoRes2026, AlgoRes2016)
 - Remove placeholder test file (`test_gismap.py`)
 - Fix slow import (~4.1s → ~0.2s): lazy imports for `bof.fuzz` in `text.py`, `GismapWidget`/`LDB`/`search`/`gismo` in `__init__.py`, `gismo`/`sklearn` in `gismo.py`
+- Fix lazy import regression: `db_dict()` now forces backend imports before `get_classes` discovery
+- Improve test coverage (81% → 83% lines, 61% → 64% branches): doctests for `models`, `filters`, `multi`, `dblp_ttl`; unit tests for `requests.py` retry logic and `dblp_ttl` parser
 
 ## 0.5.1 (2026-03-30)
 
