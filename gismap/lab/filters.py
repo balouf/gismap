@@ -18,6 +18,12 @@ def re_filter(words):
     -------
     callable
         Filter function.
+
+    Examples
+    --------
+    >>> f = re_filter("foo")
+    >>> f("foobar")
+    False
     """
     if isinstance(words, str):
         taboo = re.compile(words)

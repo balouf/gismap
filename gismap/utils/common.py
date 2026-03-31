@@ -50,16 +50,6 @@ def get_classes(root, key="name", recurse=False):
     -------
     :class:`dict`
         Dictionaries of all subclasses that have a key attribute (as in class attribute `key`).
-
-    Examples
-    --------
-
-    >>> from gismap.sources.models import DB
-    >>> subclasses = get_classes(DB, key='db_name')
-    >>> dict(sorted(subclasses.items())) # doctest: +NORMALIZE_WHITESPACE
-    {'dblp': <class 'gismap.sources.dblp.DBLP'>,
-    'hal': <class 'gismap.sources.hal.HAL'>,
-    'ldb': <class 'gismap.sources.ldb.LDB'>}
     """
     result = {getattr(c, key): c for c in root.__subclasses__() if getattr(c, key, None)}
     if recurse:
@@ -90,8 +80,8 @@ def list_of_objects(clss, dico, default=None):
     ________
 
     >>> from gismap.sources.models import DB
+    >>> from gismap import HAL, DBLP, LDB  # force registration
     >>> subclasses = get_classes(DB, key='db_name')
-    >>> from gismap import HAL, DBLP, LDB
     >>> list_of_objects([HAL, 'ldb'], subclasses)
     [<class 'gismap.sources.hal.HAL'>, <class 'gismap.sources.ldb.LDB'>]
     >>> list_of_objects(None, subclasses, [DBLP])

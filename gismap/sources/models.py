@@ -71,6 +71,13 @@ class Publication(LazyRepr):
         -------
         :class:`str`
             The fingerprint of the publication's title.
+
+        Examples
+        --------
+        >>> pub = Publication(title="A Studÿ: on Foo!!",
+        ... authors=[Author(name="John Döe"), Author(name="Jáne Smith")], venue="", type="", year=2020)
+        >>> pub.fingerprint
+        'a study on foo---doe john+++jane smith'
         """
         return normalized_title(self.title) + "---" + "+++".join(a.fingerprint for a in self.authors)
 
@@ -139,6 +146,14 @@ def db_class_to_auth_class(db_class):
     -------
     :class:`type` or None
         The corresponding Author subclass, or None if not found.
+
+    Examples
+    --------
+    >>> from gismap.sources.hal import HAL
+    >>> db_class_to_auth_class(HAL)
+    <class 'gismap.sources.hal.HALAuthor'>
+    >>> class Alien: pass
+    >>> db_class_to_auth_class(Alien)
     """
     for subclass in Author.__subclasses__():
         if db_class in subclass.__mro__:

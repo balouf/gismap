@@ -24,6 +24,24 @@ def score_author_source(dbauthor):
     -------
     :class:`int`
         Score value (higher is better).
+
+    Examples
+    --------
+
+    >>> from gismap.sources.models import Author, DB
+    >>> from gismap.sources.hal import HALAuthor
+    >>> from gismap.sources.ldb import LDBAuthor
+    >>> class YADB(DB):
+    ...     db_name = "YADB"
+    >>> class YAAuthor(Author, YADB):
+    ...     pass
+    >>> authors = [HALAuthor("Titi", key="titi"), HALAuthor("Toto", key="1234"),
+    ... LDBAuthor("Tata", key="tata"), YAAuthor("John Doe"),
+    ... HALAuthor("Dolly", key_type="fullname")]
+    >>> sorted(authors, key=score_author_source, reverse=True)  # doctest: +NORMALIZE_WHITESPACE
+    [HALAuthor(name='Titi', key='titi'), HALAuthor(name='Toto', key='1234', key_type='pid'),
+    LDBAuthor(name='Tata', key='tata'), YAAuthor(name='John Doe'),
+    HALAuthor(name='Dolly', key_type='fullname')]
     """
     if dbauthor.db_name == "hal":
         if dbauthor.key_type == "fullname":
@@ -138,7 +156,7 @@ class SourcedPublication(Publication):
         List of author objects.
     venue: :class:`str`
         Publication venue.
-    type: :class:`str`
+            type: :class:`str`
         Publication type.
     year: :class:`int`
         Publication year.
@@ -207,6 +225,25 @@ def regroup_publications(pub_dict, threshold=83, length_impact=0.05, n_range=5):
     -------
     :class:`dict`
         Unified publications.
+
+    Examples
+    --------
+
+    >>> from gismap.sources.models import Publication
+    >>> from gismap.sources.hal import HALPublication
+    >>> from gismap.sources.ldb import LDBPublication
+    >>> publis = [HALPublication("The coolest paper", [], "WWW", "conference", 2004, "key1"),
+    ... HALPublication("The coolest paper?", [], "WWW journal", "journal", 2004, "key2"),
+    ... HALPublication("The coolest paper!", [], "unpublished", "report", 2003, "key3"),
+    ... LDBPublication(title="The hottest paper", authors=[], venue="J. WWW", type="journal", year=2004, key="key4"),
+    ... LDBPublication(title="The hottest paper?", authors=[], venue="CoRR", type="journal", year=2003, key="key5"),
+    ... Publication("The hottest paper!", [], "informal", "zoom meeting", 2002)]
+    >>> publis[-1].key = "key6"
+    >>> regroup_publications({p.key: p for p in publis})  # doctest: +NORMALIZE_WHITESPACE
+    {'key2': SourcedPublication(title='The coolest paper?', venue='WWW journal', type='journal', year=2004),
+    'key4': SourcedPublication(title='The hottest paper', venue='WWW journal', type='journal', year=2004)}
+    >>> regroup_publications({})  # should not fail on empty input
+    {}
     """
     if len(pub_dict) == 0:
         return dict()
@@ -217,7 +254,7 @@ def regroup_publications(pub_dict, threshold=83, length_impact=0.05, n_range=5):
     y = x.T.tocsr()
     jc_matrix = jit_square_factors(x.indices, x.indptr, y.indices, y.indptr, len(pub_list), length_impact)
     done = np.zeros(len(pub_list), dtype=bool)
-    for i, paper in enumerate(pub_list):
+    for i in range(len(pub_list)):
         if done[i]:
             continue
         locs = np.where(jc_matrix[i, :] > threshold)[0]

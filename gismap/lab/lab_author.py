@@ -10,7 +10,13 @@ default_dbs = ["hal", "ldb"]
 
 
 def db_dict():
-    """Lazy lookup of DB subclasses (avoids import-order dependency)."""
+    """Lazy lookup of DB subclasses (avoids import-order dependency).
+
+    Forces import of all known backends so that ``get_classes`` sees them
+    even when some are lazily imported at package level.
+    """
+    from gismap import DBLP, HAL, LDB  # noqa: F401
+
     return get_classes(DB, key="db_name")
 
 
