@@ -1,7 +1,5 @@
 import unicodedata
 
-from bof.fuzz import Process
-
 
 class Corrector:
     """
@@ -30,6 +28,8 @@ class Corrector:
     """
 
     def __init__(self, voc, score_cutoff=20, min_length=3):
+        from bof.fuzz import Process
+
         self.voc = {k.lower() for w in voc for k in w.split() if len(k) >= min_length}
         self.cutoff = score_cutoff
         self.min_length = min_length

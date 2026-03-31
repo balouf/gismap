@@ -1,9 +1,3 @@
-from gismo.corpus import Corpus
-from gismo.embedding import Embedding
-from gismo.gismo import Gismo
-from sklearn.feature_extraction.text import CountVectorizer
-
-
 def make_post_publi(lab):
     """
     Hook to turn publication key stored in a corpus into actual publication.
@@ -41,6 +35,11 @@ def make_gismo(lab, vectorizer_parameters=None):
     gismo: :class:`~gismo.gismo.Gismo`
         Gismo of the lab.
     """
+    from gismo.corpus import Corpus
+    from gismo.embedding import Embedding
+    from gismo.gismo import Gismo
+    from sklearn.feature_extraction.text import CountVectorizer
+
     parameters = {"ngram_range": (1, 3), "dtype": float, "stop_words": sw, "min_df": 3}
     if vectorizer_parameters is not None:
         parameters.update(vectorizer_parameters)
