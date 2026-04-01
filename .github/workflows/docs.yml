@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       full_rebuild:
-        description: 'Force full rebuild (re-execute all notebooks)'
+        description: 'Force full rebuild (re-execute all notebooks, ignore cache)'
         type: boolean
         default: false
 
@@ -21,84 +21,108 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+
+  list-notebooks:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    outputs:
+      notebooks: ${{ steps.find.outputs.notebooks }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: find
+        run: |
+          notebooks=$(find docs -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | jq -R -s -c 'split("\n") | map(select(. != ""))')
+          echo "notebooks=$notebooks" >> "$GITHUB_OUTPUT"
+
+  execute-notebooks:
+    needs: list-notebooks
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        notebook: ${{ fromJson(needs.list-notebooks.outputs.notebooks) }}
     steps:
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          lfs: true
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        id: setup-python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Set up uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          version: "0.11.0"
-
-      - name: Setup Pandoc
-        uses: pandoc/actions/setup@v1
-        with:
-          version: '3.9'
-
-      - name: Cache virtual environment
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('uv.lock') }}
-
-      - name: Install dependencies
-        run: uv sync --all-extras
-
-      - name: Cache executed notebooks
+      - name: Cache executed notebook
         if: inputs.full_rebuild != true
+        id: nb-cache
         uses: actions/cache@v4
         with:
           path: .notebook-cache
-          key: nb-${{ hashFiles('docs/**/*.ipynb', 'uv.lock') }}
-          restore-keys: nb-
+          key: nb-${{ hashFiles(matrix.notebook, 'uv.lock') }}-${{ matrix.notebook }}
 
-      - name: Pre-execute notebooks
-        if: inputs.full_rebuild != true
+      - name: Restore from cache
+        if: steps.nb-cache.outputs.cache-hit == 'true'
+        run: cp .notebook-cache/executed.ipynb "${{ matrix.notebook }}"
+
+      - name: Set up uv
+        if: steps.nb-cache.outputs.cache-hit != 'true'
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.11.0"
+          enable-cache: true
+
+      - name: Execute notebook
+        if: steps.nb-cache.outputs.cache-hit != 'true'
         run: |
+          uv sync --all-extras
           mkdir -p .notebook-cache
-          # Hash based on uv.lock (deps) only — gismap code changes use full_rebuild
-          deps_hash=$(sha256sum uv.lock | cut -d' ' -f1)
-          find docs -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | while read nb; do
-            nb_hash=$(echo "${deps_hash}-$(sha256sum "$nb" | cut -d' ' -f1)" | sha256sum | cut -d' ' -f1)
-            cached=".notebook-cache/${nb_hash}.ipynb"
-            if [ -f "$cached" ]; then
-              echo "Cache hit: $nb"
-              cp "$cached" "$nb"
-            else
-              echo "Executing: $nb"
-              uv run jupyter nbconvert --execute --to notebook --inplace "$nb" --ExecutePreprocessor.timeout=1800
-              cp "$nb" "$cached"
-            fi
+          uv run jupyter nbconvert --execute --to notebook --inplace \
+            "${{ matrix.notebook }}" --ExecutePreprocessor.timeout=1800
+          cp "${{ matrix.notebook }}" .notebook-cache/executed.ipynb
+
+      - name: Upload executed notebook
+        uses: actions/upload-artifact@v4
+        with:
+          name: notebook-${{ strategy.job-index }}
+          path: ${{ matrix.notebook }}
+          retention-days: 1
+
+  build-docs:
+    needs: execute-notebooks
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.11.0"
+          enable-cache: true
+
+      - uses: pandoc/actions/setup@v1
+        with:
+          version: '3.9'
+
+      - run: uv sync --all-extras
+
+      - name: Download executed notebooks
+        uses: actions/download-artifact@v4
+        with:
+          pattern: notebook-*
+          path: _nb
+          merge-multiple: true
+
+      - name: Overlay executed notebooks
+        run: |
+          find _nb -name "*.ipynb" | while read nb; do
+            target="${nb#_nb/}"
+            cp "$nb" "$target"
           done
 
       - name: Build Sphinx documentation
-        run: |
-          if [ "${{ inputs.full_rebuild }}" = "true" ]; then
-            uv run sphinx-build -a -E -b html docs build
-          else
-            NBSPHINX_EXECUTE=never uv run sphinx-build -b html docs build
-          fi
+        run: NBSPHINX_EXECUTE=never uv run sphinx-build -b html docs build
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: build/
 
   deploy:
+    needs: build-docs
     runs-on: ubuntu-latest
-    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
