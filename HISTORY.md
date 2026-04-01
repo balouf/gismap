@@ -20,6 +20,7 @@
 - Improve test coverage (81% → 83% lines, 61% → 64% branches): doctests for `models`, `filters`, `multi`, `dblp_ttl`; unit tests for `requests.py` retry logic and `dblp_ttl` parser
 - Replace domonic with f-strings in `gisgraphs/` (builder, graph, groups), removing domonic + 4 transitive dependencies
 - Parallelize notebook execution in docs CI: matrix strategy (1 job per notebook) with per-notebook cache
+- Add LDB cache to build CI (per Python version) and simplify workflow (remove setup-python, enable uv cache)
 
 ## 0.5.1 (2026-03-30)
 
