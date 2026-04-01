@@ -1,5 +1,4 @@
 import distinctipy
-from domonic import tags
 
 
 def auto_groups(lab, groups=None, rng=None, pastel_factor=0.3):
@@ -34,36 +33,25 @@ ego_groups = {
 
 
 def make_legend(groups, uid):
-    legend = tags.div(_id=f"legend-{uid}", _class="legend")
+    color_box_style = "width: 14px; height: 14px; display: inline-block; margin-right: 5px; vertical-align: middle;"
+    entries = []
     if len(groups) > 1:
         for group_name, props in groups.items():
             color = props.get("color", "#cccccc")
             display_name = props.get("display", group_name)
-            color_box = tags.span(
-                _style=(
-                    f"background-color: {color}; width: 14px; height: 14px;"
-                    " display: inline-block; margin-right: 5px; vertical-align: middle;"
-                )
+            entries.append(
+                f'<label class="legend-entry">'
+                f'<span style="background-color: {color}; {color_box_style}"></span>'
+                f'<input type="checkbox" class="legend-checkbox" data-group="{group_name}" checked="true">'
+                f"{display_name}"
+                f"</label>"
             )
-            check_box = tags.input(
-                **{
-                    "type": "checkbox",
-                    "class": "legend-checkbox",
-                    "data-group": group_name,
-                },
-                checked=True,
-            )
-            entry = tags.label(color_box, _class="legend-entry")
-            entry.appendChild(check_box)
-            entry.appendChild(display_name)
-            legend.appendChild(entry)
     # Add comet checkbox
-    empty_box = tags.span(
-        _style="width: 14px; height: 14px; display: inline-block; margin-right: 5px; vertical-align: middle;"
+    entries.append(
+        f'<label class="comet-entry">'
+        f'<span style="{color_box_style}"></span>'
+        f'<input type="checkbox" id="comet-{uid}">'
+        f"Show Comets"
+        f"</label>"
     )
-    comet_check = tags.input(**{"type": "checkbox", "id": f"comet-{uid}"})
-    entry = tags.label(empty_box, _class="comet-entry")
-    entry.appendChild(comet_check)
-    entry.appendChild("Show Comets")
-    legend.appendChild(entry)
-    return legend
+    return f'<div id="legend-{uid}" class="legend">{"".join(entries)}</div>'

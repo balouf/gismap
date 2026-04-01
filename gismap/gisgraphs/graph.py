@@ -2,7 +2,6 @@ from collections import defaultdict
 from itertools import combinations
 
 import numpy as np
-from domonic import tags
 
 
 def initials(name):
@@ -114,7 +113,7 @@ def publications_list(publications, n=10):
 
     Returns
     -------
-    :class:`~domonic.html.ul`
+    :class:`str`
     """
     lis = []
     for i, pub in enumerate(publications):
@@ -141,14 +140,12 @@ def to_node(s, node_pubs):
     :class:`dict`
         A display-ready representation of the author.
     """
-    overlay = tags.div()
-    overlay.appendChild(tags.div(f"Publications of {author_html(s)}"))
-    overlay.appendChild(tags.div(publications_list(node_pubs[s.key])))
+    overlay = f"<div><div>Publications of {author_html(s)}</div><div>{publications_list(node_pubs[s.key])}</div></div>"
 
     res = {
         "id": s.key,
         "hover": f"Click for details on {s.name}.",
-        "overlay": f"{overlay}",
+        "overlay": overlay,
         "group": s.metadata.group,
     }
     if s.metadata.img:
@@ -178,16 +175,17 @@ def to_edge(k, v, searchers):
         A display-ready representation of the collaboration edge.
     """
     strength = 1 + np.log2(len(v))
-    overlay = tags.div()
-    overlay.appendChild(
-        tags.div(f"Joint publications from {author_html(searchers[k[0]])} and {author_html(searchers[k[1]])}:")
+    overlay = (
+        f"<div>"
+        f"<div>Joint publications from {author_html(searchers[k[0]])} and {author_html(searchers[k[1]])}:</div>"
+        f"<div>{publications_list(v)}</div>"
+        f"</div>"
     )
-    overlay.appendChild(tags.div(f"{publications_list(v)}"))
     res = {
         "from": k[0],
         "to": k[1],
         "hover": f"Show joint publications from {searchers[k[0]].name} and {searchers[k[1]].name}",
-        "overlay": f"{overlay}",
+        "overlay": overlay,
         "width": int(strength),
         "length": int(200 / strength),
     }

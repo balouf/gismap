@@ -19,8 +19,7 @@ dependencies = [
     "beautifulsoup4>=4.14.3",
     "bof>=0.4.2",
     "distinctipy>=1.3.4",
-    "domonic>=0.9.13",
-    "gismo>=0.5.4",  # spacy (optional in gismo) incompatible with Python 3.14
+"gismo>=0.5.4",  # spacy (optional in gismo) incompatible with Python 3.14
     "ipykernel>=7.1.0",
     "ipywidgets>=8.1.8",
     "platformdirs>=4.5.1",
@@ -62,9 +61,7 @@ directory = "cov"
 
 [tool.pytest.ini_options]
 addopts = "--doctest-modules --cov --cov-config=pyproject.toml --cov-report xml --cov-report html --showlocals --capture=no --exitfirst --failed-first"
-filterwarnings = [
-    "ignore::SyntaxWarning:domonic",
-]
+filterwarnings = []
 
 [tool.ruff]
 target-version = "py311"

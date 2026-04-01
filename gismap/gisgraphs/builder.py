@@ -1,8 +1,6 @@
 import json
 import uuid
 
-from domonic import tags
-
 from gismap.gisgraphs.graph import lab_to_graph
 from gismap.gisgraphs.groups import auto_groups, make_legend
 from gismap.gisgraphs.js import default_script
@@ -14,12 +12,7 @@ from gismap.gisgraphs.style import default_style
 
 default_vis_url = '"https://cdn.jsdelivr.net/npm/vis-network/standalone/esm/vis-network.min.js"'
 
-gislink = tags.a(
-    "&copy; GisMap 2025",
-    _href="https://balouf.github.io/gismap/",
-    _target="_blank",
-    _class="watermark gislink",
-)
+gislink = '<a href="https://balouf.github.io/gismap/" target="_blank" class="watermark gislink">&copy; GisMap 2025</a>'
 
 
 def make_vis(lab, **kwargs):
@@ -88,22 +81,25 @@ def make_vis(lab, **kwargs):
         "edges": json.dumps(edges),
         "options": json.dumps(options),
     }
-    div = tags.div(_class="gisgraph", _id=f"box-{uid}")
-    div.appendChild(tags.div(_id=f"vis-{uid}"))
-    div.appendChild(gislink)
-    div.appendChild(tags.button("Redraw()", _id=f"redraw-{uid}", _class="watermark button redraw"))
-    div.appendChild(tags.button("Full Screen", _id=f"fullscreen-{uid}", _class="watermark button fullscreen"))
     comets = not all(n.get("connected") for n in nodes)
-    if draw_legend or comets:
-        div.appendChild(make_legend(groups, uid))
-    modal = tags.div(_class="modal", _id=f"modal-{uid}")
-    modal_content = tags.div(_class="modal-content")
-    modal_content.appendChild(tags.span("&times;", _class="close", _id=f"modal-close-{uid}"))
-    modal_content.appendChild(tags.div(_id=f"modal-body-{uid}"))
-    modal.appendChild(modal_content)
-    div.appendChild(modal)
+    legend_html = make_legend(groups, uid) if draw_legend or comets else ""
 
-    style = tags.style(style.substitute(**parameters))
-    script = tags.script(script.substitute(**parameters), _type="module")
+    div = (
+        f'<div class="gisgraph" id="box-{uid}">'
+        f'<div id="vis-{uid}"></div>'
+        f"{gislink}"
+        f'<button id="redraw-{uid}" class="watermark button redraw">Redraw()</button>'
+        f'<button id="fullscreen-{uid}" class="watermark button fullscreen">Full Screen</button>'
+        f"{legend_html}"
+        f'<div class="modal" id="modal-{uid}">'
+        f'<div class="modal-content">'
+        f'<span class="close" id="modal-close-{uid}">&times;</span>'
+        f'<div id="modal-body-{uid}"></div>'
+        f"</div></div>"
+        f"</div>"
+    )
 
-    return "\n".join(f"{content}" for content in [div, style, script])
+    style_html = f"<style>{style.substitute(**parameters)}</style>"
+    script_html = f'<script type="module">{script.substitute(**parameters)}</script>'
+
+    return "\n".join([div, style_html, script_html])
