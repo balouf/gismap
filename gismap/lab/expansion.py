@@ -241,7 +241,7 @@ def proper_prospects(lab, length_impact=0.05, threshold=80, n_range=4, max_new=N
     p.fit(names)
     jc = p.transform(names)
     new_lab = []
-    for i, prospect in enumerate(prospects):
+    for i in range(len(prospects)):
         if done[i]:
             continue
         locs = [j for j in np.where(jc[i, :] > threshold)[0] if not done[j]]
