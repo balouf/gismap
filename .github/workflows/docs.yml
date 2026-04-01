@@ -33,8 +33,29 @@ jobs:
           notebooks=$(find docs -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | jq -R -s -c 'split("\n") | map(select(. != ""))')
           echo "notebooks=$notebooks" >> "$GITHUB_OUTPUT"
 
+  prepare-ldb:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: ldb-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/gismap
+          key: ldb-${{ hashFiles('pyproject.toml') }}
+          restore-keys: ldb-
+
+      - name: Set up uv and download LDB
+        if: steps.ldb-cache.outputs.cache-hit != 'true'
+        run: |
+          curl -LsSf https://astral.sh/uv/0.11.0/install.sh | sh
+          export PATH="$HOME/.local/bin:$PATH"
+          uv sync --all-extras
+          uv run python -c "from gismap.sources.ldb import LDB; LDB._ensure_loaded(); print('LDB ready')"
+
   execute-notebooks:
-    needs: list-notebooks
+    needs: [list-notebooks, prepare-ldb]
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
@@ -64,6 +85,14 @@ jobs:
           version: "0.11.0"
           enable-cache: true
 
+      - name: Restore LDB database
+        if: steps.nb-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.local/share/gismap
+          key: ldb-${{ hashFiles('pyproject.toml') }}
+          restore-keys: ldb-
+
       - name: Execute notebook
         if: steps.nb-cache.outputs.cache-hit != 'true'
         run: |
@@ -74,10 +103,14 @@ jobs:
           cp "${{ matrix.notebook }}" .notebook-cache/executed.ipynb
 
       - name: Upload executed notebook
-        uses: actions/upload-artifact@v4
+        run: |
+          mkdir -p _upload/$(dirname "${{ matrix.notebook }}")
+          cp "${{ matrix.notebook }}" "_upload/${{ matrix.notebook }}"
+
+      - uses: actions/upload-artifact@v4
         with:
           name: notebook-${{ strategy.job-index }}
-          path: ${{ matrix.notebook }}
+          path: _upload/
           retention-days: 1
 
   build-docs:
