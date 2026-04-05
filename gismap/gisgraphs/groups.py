@@ -51,7 +51,7 @@ def make_legend(groups, uid):
         f'<label class="comet-entry">'
         f'<span style="{color_box_style}"></span>'
         f'<input type="checkbox" id="comet-{uid}">'
-        f"Show Comets"
+        f"Comets (Singletons)"
         f"</label>"
     )
     return f'<div id="legend-{uid}" class="legend">{"".join(entries)}</div>'

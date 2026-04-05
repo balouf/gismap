@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 
 import numpy as np
-from bof.feature_extraction import CountVectorizer
-from bof.fuzz import jit_square_factors
 
 from gismap.sources.models import Author, Publication
+from gismap.utils.fuzzy import similarity_matrix
 from gismap.utils.text import clean_aliases
 
 
@@ -156,7 +155,7 @@ class SourcedPublication(Publication):
         List of author objects.
     venue: :class:`str`
         Publication venue.
-            type: :class:`str`
+    type: :class:`str`
         Publication type.
     year: :class:`int`
         Publication year.
@@ -249,15 +248,12 @@ def regroup_publications(pub_dict, threshold=83, length_impact=0.05, n_range=5):
         return dict()
     pub_list = [p for p in pub_dict.values()]
     res = dict()
-    vectorizer = CountVectorizer(n_range=n_range)
-    x = vectorizer.fit_transform([p.fingerprint for p in pub_list])
-    y = x.T.tocsr()
-    jc_matrix = jit_square_factors(x.indices, x.indptr, y.indices, y.indptr, len(pub_list), length_impact)
+    jc = similarity_matrix(pub_list, key=lambda p: p.fingerprint, n_range=n_range, length_impact=length_impact)
     done = np.zeros(len(pub_list), dtype=bool)
     for i in range(len(pub_list)):
         if done[i]:
             continue
-        locs = np.where(jc_matrix[i, :] > threshold)[0]
+        locs = np.where(jc[i, :] > threshold)[0]
         pub = SourcedPublication.from_sources([pub_list[i] for i in locs])
         res[pub.key] = pub
         done[locs] = True

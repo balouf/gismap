@@ -11,16 +11,34 @@
 
 ## 0.5.2
 
+### New features
+
+- Add `add_publication()` method to manually add publications to a lab with fuzzy author matching
+- New `Manual` database backend with `Outsider` and `Informal` classes (`sources/manual.py`)
+- New `similarity_matrix()` utility for unified fuzzy matching (`utils/fuzzy.py`)
+
+### Improvements
+
+- Replace domonic with f-strings in `gisgraphs/`, removing domonic + 4 transitive dependencies
+- Fix slow import (~4.1s → ~0.2s): lazy imports for `bof.fuzz`, `GismapWidget`, `LDB`, `gismo`
+- Refactor expansion: `proper_prospects()` returns a simple list, `labify_publications` replaced by `regroup_authors`
 - Add version compatibility warning when loading an LDB built for a different gismap version
-- Document LDB management workflow in FAQ and installation guide
-- Add parametrized tests for lab_examples `_author_iterator()` (6 labs: IRIF graphes, Lamsade, LINCS, LAAS sara, AlgoRes2026, AlgoRes2016)
-- Remove placeholder test file (`test_gismap.py`)
-- Fix slow import (~4.1s → ~0.2s): lazy imports for `bof.fuzz` in `text.py`, `GismapWidget`/`LDB`/`search`/`gismo` in `__init__.py`, `gismo`/`sklearn` in `gismo.py`
-- Fix lazy import regression: `db_dict()` now forces backend imports before `get_classes` discovery
-- Improve test coverage (81% → 83% lines, 61% → 64% branches): doctests for `models`, `filters`, `multi`, `dblp_ttl`; unit tests for `requests.py` retry logic and `dblp_ttl` parser
-- Replace domonic with f-strings in `gisgraphs/` (builder, graph, groups), removing domonic + 4 transitive dependencies
-- Parallelize notebook execution in docs CI: matrix strategy (1 job per notebook) with per-notebook cache
-- Add LDB cache to build CI (per Python version) and simplify workflow (remove setup-python, enable uv cache)
+
+### CI/CD
+
+- Parallelize notebook execution in docs CI (matrix strategy, per-notebook cache, shared LDB cache)
+- Add LDB cache to build CI (per Python version), simplify workflows (remove setup-python, enable uv cache)
+
+### Tests
+
+- Add parametrized tests for lab_examples `_author_iterator()` (6 labs)
+- Improve test coverage (81% → 83% lines, 61% → 64% branches)
+- Fix lazy import regression: `db_dict()` forces backend imports before discovery
+
+### Documentation
+
+- Document LDB management workflow in FAQ
+- Simplify "Adding publications" tutorial with `add_publication()`
 
 ## 0.5.1 (2026-03-30)
 

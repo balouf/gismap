@@ -17,9 +17,10 @@ from gismap.lab.lab_author import (
     LabAuthor,
     db_dict,
     default_dbs,
-    labify_publications,
 )
+from gismap.sources.manual import Informal
 from gismap.sources.multi import (
+    SourcedPublication,
     regroup_authors,
     regroup_publications,
 )
@@ -116,34 +117,45 @@ class LabMap(MixInIO):
         self.publications = regroup_publications(pubs)
 
     def expand(self, target=None, group="moon", desc="Moon information", **kwargs):
+        """
+        Expand the lab with external collaborators found in publications.
+
+        Discovers authors who co-published with lab members, ranks them by
+        collaboration strength, and adds the top candidates.
+
+        Parameters
+        ----------
+        target : :class:`int`, optional
+            Number of new authors to add. Defaults to ``len(self.authors) // 3``.
+        group : :class:`str`, default="moon"
+            Group label assigned to new authors.
+        desc : :class:`str`, default="Moon information"
+            Progress bar description.
+        **kwargs
+            Passed to :func:`~gismap.lab.expansion.proper_prospects`.
+        """
         if target is None:
             target = len(self.authors) // 3
-        old, rosetta = proper_prospects(self, max_new=target, **kwargs)
-        new = {a.key: a for a in rosetta.values()}
-        for k, v in old.items():
-            rosetta[k] = self.authors[v]
-        logger.debug(f"{len(new)} new authors selected")
-        if len(new) == 0:
+        new_authors = proper_prospects(self, max_new=target, **kwargs)
+        if not new_authors:
             logger.warning("Expansion failed: no new author found.")
-            return None
+            return
+        logger.debug(f"{len(new_authors)} new authors selected")
 
-        self.authors.update(new)
-
-        pubs = dict()
-        for author in tqdm(new.values(), desc=desc):
+        for author in tqdm(new_authors, desc=desc):
             author.auto_img()
             author.metadata.group = group
-            pubs.update(author.get_publications(clean=False, selector=self.publication_selectors))
 
+        pubs = dict()
+        for author in new_authors:
+            pubs.update(author.get_publications(clean=False, selector=self.publication_selectors))
         for pub in self.publications.values():
             for source in pub.sources:
                 pubs[source.key] = source
 
-        labify_publications(pubs.values(), rosetta)
-
+        self.authors.update({a.key: a for a in new_authors})
+        regroup_authors(self.authors, pubs)
         self.publications = regroup_publications(pubs)
-
-        return None
 
     def html(self, **kwargs):
         """
@@ -196,6 +208,32 @@ class LabMap(MixInIO):
         None
         """
         display(HTML(self.html(**kwargs)))
+
+    def add_publication(self, title, authors, **kwargs):
+        """
+        Add a manual publication to the lab.
+
+        Author names given as strings are resolved to known authors from the lab's
+        publications using fuzzy matching. Unmatched names become
+        :class:`~gismap.sources.manual.Outsider` instances.
+
+        Parameters
+        ----------
+        title : :class:`str`
+            Publication title.
+        authors : :class:`list`
+            Author names (:class:`str`) or author objects.
+        **kwargs
+            Passed to :class:`~gismap.sources.manual.Informal` (``venue``, ``type``,
+            ``year``, ``key``, ``metadata``) and to
+            :func:`~gismap.sources.manual.fit_names` (``threshold``, ``n_range``,
+            ``length_impact``).
+        """
+        fit_kwargs = {k: kwargs.pop(k) for k in ["threshold", "n_range", "length_impact"] if k in kwargs}
+        pub = Informal(title=title, authors=list(authors), **kwargs)
+        pub.fit_authors(self, **fit_kwargs)
+        pub = SourcedPublication.from_sources([pub])
+        self.publications[pub.key] = pub
 
 
 class ListMap(LabMap):

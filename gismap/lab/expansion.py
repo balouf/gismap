@@ -2,10 +2,10 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 
 import numpy as np
-from bof.fuzz import Process
 
 from gismap.lab.lab_author import LabAuthor
 from gismap.sources.multi import sort_author_sources
+from gismap.utils.fuzzy import similarity_matrix
 from gismap.utils.text import normalized_name
 
 
@@ -128,26 +128,9 @@ def get_prospects(lab):
         for p in lab.publications.values()
         for s in p.sources
         for a in s.authors
-        if hasattr(a, "db_name") and all(f(a) for f in lab.author_selectors)
+        if not isinstance(a, LabAuthor) and all(f(a) for f in lab.author_selectors)
     }
     return [Prospect(a, strengths) for a in prospect_dico.values()]
-
-
-@dataclass
-class Member:
-    """
-    Basic information about a lab member for name matching.
-
-    Parameters
-    ----------
-    name : :class:`str`
-        Normalized name.
-    key : :class:`str`
-        Author key.
-    """
-
-    name: str
-    key: str
 
 
 def get_member_names(lab):
@@ -211,9 +194,8 @@ def proper_prospects(lab, length_impact=0.05, threshold=80, n_range=4, max_new=N
 
     Returns
     -------
-    :class:`tuple`
-        (existing, new_rosetta) where existing maps external keys to lab member keys,
-        and new_rosetta maps source keys to new LabAuthor objects.
+    :class:`list` of :class:`~gismap.lab.lab_author.LabAuthor`
+        New authors ranked by collaboration strength (descending).
     """
     member_names = get_member_names(lab)
     prospects = get_prospects(lab)
@@ -223,28 +205,29 @@ def proper_prospects(lab, length_impact=0.05, threshold=80, n_range=4, max_new=N
 
     done = np.zeros(len(prospects), dtype=bool)
 
-    # Compare current and prospects names to re-attach ghosts
-    p = Process(length_impact=length_impact, n_range=n_range)
-    p.allow_updates = False
-    p.fit([n[0] for n in member_names])
-    jc = p.transform([prospect.name for prospect in prospects])
+    # Filter out prospects that match existing lab members
+    jc = similarity_matrix(
+        member_names,
+        candidates=prospects,
+        key=lambda x: x[0],
+        key2=lambda p: p.name,
+        n_range=n_range,
+        length_impact=length_impact,
+    )
     best_choice = np.argmax(jc, axis=1)
-    existing = dict()
     for i, j in enumerate(best_choice):
         if jc[i, j] > threshold:
-            existing[prospects[i].author.key] = member_names[j][1]
             done[i] = True
 
-    # Regroup remaining prospects
-    p.reset()
-    names = [prospect.name for prospect in prospects]
-    p.fit(names)
-    jc = p.transform(names)
+    # Regroup remaining prospects by name similarity
+    prospects = [p for i, p in enumerate(prospects) if not done[i]]
+    done = np.zeros(len(prospects), dtype=bool)
+    jc = similarity_matrix(prospects, key=lambda p: p.name, n_range=n_range, length_impact=length_impact)
     new_lab = []
     for i in range(len(prospects)):
         if done[i]:
             continue
-        locs = [j for j in np.where(jc[i, :] > threshold)[0] if not done[j]]
+        locs = [j for j in np.where(jc[i, :] > threshold)[0]]
         done[locs] = True
         sources = sort_author_sources([prospects[j].author for j in locs])
         if sources:
@@ -254,11 +237,9 @@ def proper_prospects(lab, length_impact=0.05, threshold=80, n_range=4, max_new=N
 
     # Extract top prospects
     new_lab = [a[1] for a in sorted(new_lab, key=lambda a: a[0], reverse=True)][:max_new]
-    new_rosetta = {s.key: a for a in new_lab for s in a.sources}
 
-    # Remove extra sources
     if trim:
         for a in new_lab:
             trim_sources(a)
 
-    return existing, new_rosetta
+    return new_lab
