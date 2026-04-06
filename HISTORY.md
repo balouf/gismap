@@ -9,7 +9,7 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
-## 0.5.2
+## 0.5.2 (2026-04-06)
 
 ### New features
 
