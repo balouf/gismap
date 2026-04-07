@@ -34,7 +34,6 @@ jobs:
         with:
           path: ~/.local/share/gismap
           key: ldb-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
-          restore-keys: ldb-${{ matrix.python-version }}-
 
       - run: uv sync --all-extras
       - run: uv run pytest

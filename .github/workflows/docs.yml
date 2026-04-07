@@ -44,7 +44,6 @@ jobs:
         with:
           path: ~/.local/share/gismap
           key: ldb-${{ hashFiles('pyproject.toml') }}
-          restore-keys: ldb-
 
       - name: Set up uv and download LDB
         if: steps.ldb-cache.outputs.cache-hit != 'true'
@@ -91,7 +90,6 @@ jobs:
         with:
           path: ~/.local/share/gismap
           key: ldb-${{ hashFiles('pyproject.toml') }}
-          restore-keys: ldb-
 
       - name: Execute notebook
         if: steps.nb-cache.outputs.cache-hit != 'true'
