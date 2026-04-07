@@ -11,6 +11,7 @@ on:
 
 env:
   NUMBA_DISABLE_JIT: 0
+  TQDM_DISABLE: 1
 
 jobs:
   build:

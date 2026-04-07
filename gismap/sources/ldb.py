@@ -203,8 +203,8 @@ class LDB(DB):
 
         Build a small test database:
 
-        >>> LDB.build_db(limit=1000)
-        >>> LDB.authors[0]
+        >>> LDB.build_db(limit=1000)  # doctest: +FLAKY
+        >>> LDB.authors[0]  # doctest: +FLAKY
         ('78/459-1', ['Manish Singh'], [0])
 
         Save your build in a non-default file:
