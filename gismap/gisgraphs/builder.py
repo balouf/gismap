@@ -55,7 +55,7 @@ def make_vis(lab, **kwargs):
     vis_url = kwargs.pop("vis_url", default_vis_url)
     groups = kwargs.pop("groups", None)
     groups = auto_groups(lab, groups)
-    draw_legend = kwargs.pop("draw_legend", len(groups) > 1)
+    draw_legend = kwargs.pop("draw_legend", True)
     physics = kwargs.pop("physics", def_physics)
     nodes_options = kwargs.pop("nodes_options", def_nodes)
     edges_options = kwargs.pop("edges_options", def_edges)
@@ -81,8 +81,7 @@ def make_vis(lab, **kwargs):
         "edges": json.dumps(edges),
         "options": json.dumps(options),
     }
-    comets = not all(n.get("connected") for n in nodes)
-    legend_html = make_legend(groups, uid) if draw_legend or comets else ""
+    legend_html = make_legend(groups, uid) if draw_legend else ""
 
     div = (
         f'<div class="gisgraph" id="box-{uid}">'

@@ -46,9 +46,9 @@ def make_legend(groups, uid):
                 f"{display_name}"
                 f"</label>"
             )
-    # Add comet checkbox
+    # Comet checkbox (hidden by default, JS reveals it if singletons exist)
     entries.append(
-        f'<label class="comet-entry">'
+        f'<label class="comet-entry" id="comet-entry-{uid}" style="display:none">'
         f'<span style="{color_box_style}"></span>'
         f'<input type="checkbox" id="comet-{uid}">'
         f"Comets (Singletons)"

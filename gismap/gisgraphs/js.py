@@ -37,16 +37,25 @@ function draw_graph() {
     // Reduce edges
     const visibleEdges = new DataSet(edges.get({
         filter: edge => visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)}));
-    //  Optiional: remove comets
-    if (!document.getElementById("comet-$uid")?.checked) {
-        visibleNodeIds = new Set();
-        visibleEdges.forEach(edge => {
-            visibleNodeIds.add(edge.from);
-            visibleNodeIds.add(edge.to);
-        });
-        visibleNodes = new DataSet(nodes.get({filter: node => visibleNodeIds.has(node.id)}));
-    }
+    // Detect singletons: nodes with no visible edges
+    const connectedIds = new Set();
+    visibleEdges.forEach(edge => {
+        connectedIds.add(edge.from);
+        connectedIds.add(edge.to);
+    });
+    const hasSingletons = visibleNodes.length > connectedIds.size;
 
+    // Show/hide the comet checkbox and the legend
+    const cometEntry = document.getElementById("comet-entry-$uid");
+    const legend = document.getElementById("legend-$uid");
+    if (cometEntry) cometEntry.style.display = hasSingletons ? "" : "none";
+    if (legend) legend.style.display =
+        (Object.keys(options.groups).length > 1 || hasSingletons) ? "" : "none";
+
+    // Remove singletons unless comet checkbox is checked
+    if (hasSingletons && !document.getElementById("comet-$uid")?.checked) {
+        visibleNodes = new DataSet(nodes.get({filter: node => connectedIds.has(node.id)}));
+    }
 
     // Set graph, nodes, and edges
     const network = new Network(container, {nodes: visibleNodes, edges: visibleEdges}, options);
