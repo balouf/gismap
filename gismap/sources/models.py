@@ -113,7 +113,10 @@ class Publication(LazyRepr):
         return normalized_title(self.title) + "---" + "+++".join(a.fingerprint for a in self.authors)
 
     def __str__(self):
-        return f"{self.title}, by {format_authors(self.authors)}. In {self.venue} [{self.type}], {self.year}."
+        title = self.title
+        if title.endswith("."):
+            title = title[:-1]
+        return f"{title}, by {format_authors(self.authors)}. In {self.venue} [{self.type}], {self.year}."
 
 
 @dataclass(repr=False)

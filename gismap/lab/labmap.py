@@ -25,6 +25,7 @@ from gismap.sources.multi import (
     regroup_publications,
 )
 from gismap.utils.common import list_of_objects
+from gismap.utils.fuzzy import similarity_matrix
 from gismap.utils.logger import logger
 
 
@@ -70,7 +71,12 @@ class LabMap(MixInIO):
         self.publications = None
 
     def __repr__(self):
-        return f"Lab {self.name}"
+        return f"LabMap('{self.name}')"
+
+    def __str__(self):
+        n_auth = len(self.authors) if self.authors else "?"
+        n_pub = len(self.publications) if self.publications else "?"
+        return f"LabMap of {self.name} ({n_auth} authors, {n_pub} publications)"
 
     def _author_iterator(self):
         """
@@ -231,6 +237,79 @@ class LabMap(MixInIO):
         pub.fit_authors(self, **fit_kwargs)
         pub = SourcedPublication.from_sources([pub])
         self.publications[pub.key] = pub
+
+    def select_publications(self, query, n_range=4, length_impact=0.001, threshold=80):
+        """
+        Search for publications matching a query.
+
+        Parameters
+        ----------
+        query : :class:`str` or :class:`callable`
+            If a string, matches by exact key or fuzzy title similarity.
+            If a callable, used as a filter ``f(pub) -> bool`` on each publication.
+        n_range : :class:`int`, default=4
+            Passed to :func:`~gismap.utils.fuzzy.similarity_matrix`.
+        length_impact : :class:`float`, default=0.001
+            Passed to :func:`~gismap.utils.fuzzy.similarity_matrix`.
+        threshold : :class:`int`, default=80
+            Minimum similarity score (0-100) for fuzzy title matching.
+
+        Returns
+        -------
+        :class:`list`
+            Matching publications.
+        """
+        if isinstance(query, str):
+            if query in self.publications:
+                candidates = [self.publications[query]]
+            else:
+                jc = similarity_matrix(
+                    self.publications.values(),
+                    key=lambda p: p.title,
+                    candidates=[query],
+                    key2=lambda q: q,
+                    n_range=n_range,
+                    length_impact=length_impact,
+                )
+                candidates = [p for p, s in zip(self.publications.values(), jc[0]) if s >= threshold]
+        else:
+            candidates = [p for p in self.publications.values() if query(p)]
+        n = len(candidates)
+        match n:
+            case 0:
+                logger.info("No match found for query.")
+                return []
+            case 1:
+                logger.info("1 publication found.")
+            case _:
+                logger.info(f"{n} publications found.")
+        return candidates
+
+    def del_publication(self, query, confirm=True, **kwargs):
+        """
+        Remove publications matching a query from the lab.
+
+        Parameters
+        ----------
+        query : :class:`str` or :class:`callable`
+            Passed to :meth:`select_publications`.
+        confirm : :class:`bool`, default=True
+            If True, display matches and prompt for confirmation before deletion.
+        **kwargs
+            Passed to :meth:`select_publications`.
+        """
+        candidates = self.select_publications(query, **kwargs)
+        if len(candidates) == 0:
+            return
+        prompt = "The following publications have been selected:\n"
+        prompt += "\n".join(str(p) for p in candidates)
+        prompt += f"\nConfirm their deletion from the {self.__class__.__name__} of {self.name} (y/N):"
+        if not confirm or (input(prompt).lower().strip() or "N") in ["y", "yes"]:
+            for p in candidates:
+                del self.publications[p.key]
+            logger.info(f"{len(candidates)} publication(s) removed.")
+        else:
+            logger.info("Publication deletion aborted")
 
 
 class ListMap(LabMap):

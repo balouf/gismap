@@ -16,9 +16,17 @@
 - Fix comets (singletons) legend: checkbox visibility is now fully dynamic, appearing only when singletons exist for the current group selection
 - Fix `HALAuthor.check_cv()`: adapt CV page detection to current HAL markup (`soup.main.section` instead of `soup.form`), and catch `AttributeError` in image extraction
 
+### New features
+
+- Add `select_publications()` method for querying publications by fuzzy title match, key, or callable filter
+- Add `del_publication()` method for removing publications from a lab with optional confirmation
+
 ### Improvements
 
-- Add `Author.__str__` and `Publication.__str__` for human-readable display
+- Add `__str__` and `__repr__` to `LabMap`, `EgoMap`, `Author`, and `Publication` for human-readable display
+- `EgoMap` automatically uses the star's name when no name is provided
+- Fix `Publication.__str__` to avoid double period when title ends with "."
+- Fix misleading tqdm progress in `expand()`: progress bar now reflects actual work (network calls) instead of completing instantly
 - Add `format_authors()` utility with Oxford comma formatting (`sources/models.py`)
 - Use `format_authors()` in publication overlays (`gisgraphs/graph.py`)
 - `auto_sources` now completes missing DBs instead of being all-or-nothing: specifying a HAL key no longer prevents automatic LDB discovery
