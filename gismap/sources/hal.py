@@ -216,6 +216,9 @@ class HALAuthor(Author, HAL):
                 self.key_type = "pid"
             if " " in self.key:
                 self.key_type = "fullname"
+            elif self.key == "fullname":
+                self.key_type = "fullname"
+                self.key = self.name
 
     def check_cv(self):
         if self.key_type is not None:

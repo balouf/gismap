@@ -20,6 +20,9 @@
 - Add `Author.__str__` and `Publication.__str__` for human-readable display
 - Add `format_authors()` utility with Oxford comma formatting (`sources/models.py`)
 - Use `format_authors()` in publication overlays (`gisgraphs/graph.py`)
+- `auto_sources` now completes missing DBs instead of being all-or-nothing: specifying a HAL key no longer prevents automatic LDB discovery
+- Add `hal:fullname` shorthand to force HAL name-based search (useful when pid is too restrictive)
+- Add `no_auto` flag in parentheses notation to disable automatic source completion
 
 ## 0.5.2 (2026-04-06)
 

@@ -66,9 +66,25 @@ class LabAuthor(SourcedAuthor):
     [HALAuthor(name='My Name', key='key1'),
     HALAuthor(name='My Name', key='123456', key_type='pid'),
     HALAuthor(name='My Name', key='My Other Name', key_type='fullname')]
+
+    For HAL, ``hal:fullname`` is a shorthand to force a fullname search
+    using the author's name (useful when the pid is too restrictive).
+
+    >>> dummy3 = LabAuthor("Élie de Panafieu (hal:fullname)")
+    >>> dummy3.sources
+    [HALAuthor(name='Élie de Panafieu', key='Élie de Panafieu', key_type='fullname')]
+
+    By default, :meth:`auto_sources` completes missing DBs automatically.
+    Use the ``no_auto`` flag to disable this and keep only the explicit sources
+    (e.g. to avoid homonyme pollution from other databases).
+
+    >>> dummy4 = LabAuthor("John Smith (hal:fullname, no_auto)")
+    >>> dummy4.no_auto
+    True
     """
 
     metadata: AuthorMetadata = field(default_factory=AuthorMetadata)
+    no_auto: bool = False
 
     @property
     def fingerprint(self):
@@ -90,7 +106,11 @@ class LabAuthor(SourcedAuthor):
             if content:
                 for kv in content.split(","):
                     if ":" not in kv:
-                        logger.warning(f"I don't know what to do with {kv}.")
+                        flag = kv.strip().lower()
+                        if flag == "no_auto":
+                            self.no_auto = True
+                        else:
+                            logger.warning(f"I don't know what to do with {kv}.")
                         continue
                     k, v = kv.split(":", 1)
                     k = k.strip().lower()
@@ -107,7 +127,10 @@ class LabAuthor(SourcedAuthor):
 
     def auto_sources(self, dbs=None):
         """
-        Automatically populate the sources based on author's name.
+        Automatically search for the author in databases not already represented in sources.
+
+        If the author already has explicit sources (e.g. from parentheses notation),
+        only the missing databases are queried. Does nothing if :attr:`no_auto` is True.
 
         Parameters
         ----------
@@ -118,9 +141,15 @@ class LabAuthor(SourcedAuthor):
         -------
         None
         """
+        if self.no_auto:
+            logger.info(f"Automatic source retrieval is disabled for {self.name}.")
+            return
         dbs = list_of_objects(dbs, db_dict(), default=default_dbs)
+        known_dbs = {s.db_name for s in self.sources}
         sources = []
         for db in dbs:
+            if db.db_name in known_dbs:
+                continue
             source = db.search_author(self.name)
             if len(source) == 0:
                 logger.info(f"{self.name} not found in {db.db_name}")
@@ -128,4 +157,4 @@ class LabAuthor(SourcedAuthor):
                 logger.info(f"Multiple entries for {self.name} in {db.db_name}")
             sources += source
         if len(sources) > 0:
-            self.sources = sort_author_sources(sources)
+            self.sources = sort_author_sources(self.sources + sources)
