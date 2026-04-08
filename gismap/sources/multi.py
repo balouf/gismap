@@ -109,6 +109,96 @@ class SourcedAuthor(Author):
         sources = sort_author_sources(sources)
         return cls(name=sources[0].name, sources=sources)
 
+    def _resolve_sources(self, spec):
+        if isinstance(spec, int):
+            return [self.sources[spec]]
+        matches = [s for s in self.sources if s.db_name == spec]
+        if not matches:
+            available = ", ".join(s.db_name for s in self.sources)
+            raise ValueError(f"No source matching '{spec}'. Available: {available}")
+        return matches
+
+    def _label(self, spec):
+        if isinstance(spec, int):
+            return f"{self.sources[spec].db_name} ({spec})"
+        return spec
+
+    def _fetch_pubs(self, spec):
+        sources = self._resolve_sources(spec)
+        return {p.key: p for s in sources for p in s.get_publications()}
+
+    def diff_sources(self, a, b):
+        """
+        Compare publications between two sources.
+
+        Parameters
+        ----------
+        a : :class:`int` or :class:`str`
+            First source: index in ``self.sources`` or db_name to match.
+        b : :class:`int` or :class:`str`
+            Second source.
+
+        Returns
+        -------
+        :class:`~gismap.sources.multi.DiffResult`
+            Publications found only in a and only in b.
+
+        Examples
+        --------
+
+        >>> from gismap.lab import LabAuthor
+        >>> me = LabAuthor("Fabien Mathieu (hal:fabien-mathieu, ldb:66/2077)")
+        >>> diff = me.diff_sources(0, 1)  # doctest: +ELLIPSIS
+        >>> diff  # doctest: +ELLIPSIS
+        DiffResult(only_hal (0)=..., only_ldb (1)=...)
+        >>> isinstance(diff.only_a, list) and isinstance(diff.only_b, list)
+        True
+        """
+        pubs_a = self._fetch_pubs(a)
+        pubs_b = self._fetch_pubs(b)
+        keys_a = set(pubs_a)
+        keys_b = set(pubs_b)
+        merged = regroup_publications({**pubs_a, **pubs_b})
+        only_a, only_b = [], []
+        for pub in merged.values():
+            source_keys = {s.key for s in pub.sources}
+            if source_keys <= keys_a and not (source_keys & keys_b):
+                only_a.append(pub)
+            elif source_keys <= keys_b and not (source_keys & keys_a):
+                only_b.append(pub)
+        label_a = self._label(a)
+        label_b = self._label(b)
+        return DiffResult(label_a=label_a, label_b=label_b, only_a=only_a, only_b=only_b)
+
+    def find_duplicates(self, a):
+        """
+        Find duplicate publications within a single source.
+
+        Parameters
+        ----------
+        a : :class:`int` or :class:`str`
+            Source: index in ``self.sources`` or db_name to match.
+
+        Returns
+        -------
+        :class:`~gismap.sources.multi.DuplicateResult`
+            Groups of publications that appear to be duplicates.
+
+        Examples
+        --------
+
+        >>> from gismap.lab import LabAuthor
+        >>> me = LabAuthor("Fabien Mathieu (hal:fabien-mathieu, ldb:66/2077)")
+        >>> dups = me.find_duplicates("hal")  # doctest: +ELLIPSIS
+        >>> dups  # doctest: +ELLIPSIS
+        DuplicateResult(hal, ... groups)
+        """
+        pubs = self._fetch_pubs(a)
+        merged = regroup_publications(pubs)
+        groups = [sp.sources for sp in merged.values() if len(sp.sources) > 1]
+        label = self._label(a)
+        return DuplicateResult(label=label, groups=groups)
+
     def get_publications(self, clean=True, selector=None):
         if selector is None:
             selector = []
@@ -171,6 +261,14 @@ class SourcedPublication(Publication):
             return self.sources[0].key
         else:
             return None
+
+    @property
+    def url(self):
+        for s in self.sources:
+            url = getattr(s, "url", None)
+            if url:
+                return url
+        return None
 
     @classmethod
     def from_sources(cls, sources):
@@ -253,8 +351,48 @@ def regroup_publications(pub_dict, threshold=83, length_impact=0.05, n_range=5):
     for i in range(len(pub_list)):
         if done[i]:
             continue
-        locs = np.where(jc[i, :] > threshold)[0]
+        locs = np.where((jc[i, :] > threshold) & ~done)[0]
         pub = SourcedPublication.from_sources([pub_list[i] for i in locs])
         res[pub.key] = pub
         done[locs] = True
     return res
+
+
+@dataclass
+class DiffResult:
+    """Result of comparing publications between two sources."""
+
+    label_a: str
+    label_b: str
+    only_a: list
+    only_b: list
+
+    def __str__(self):
+        lines = []
+        for label, pubs in [(self.label_a, self.only_a), (self.label_b, self.only_b)]:
+            lines.append(f"=== Only in {label} ({len(pubs)}) ===")
+            for pub in pubs:
+                lines.append(pub.short_str())
+        return "\n".join(lines)
+
+    def __repr__(self):
+        return f"DiffResult(only_{self.label_a}={len(self.only_a)}, only_{self.label_b}={len(self.only_b)})"
+
+
+@dataclass
+class DuplicateResult:
+    """Result of finding duplicate publications within a source."""
+
+    label: str
+    groups: list
+
+    def __str__(self):
+        lines = [f"=== Duplicates in {self.label} ({len(self.groups)} groups) ==="]
+        for i, group in enumerate(self.groups, 1):
+            lines.append(f"  Group {i}:")
+            for pub in group:
+                lines.append(f"  {pub.short_str()}")
+        return "\n".join(lines)
+
+    def __repr__(self):
+        return f"DuplicateResult({self.label}, {len(self.groups)} groups)"

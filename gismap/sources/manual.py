@@ -106,7 +106,7 @@ def fit_names(lab, candidates, n_range=4, length_impact=0.05, threshold=80):
     Each string entry in ``candidates`` is compared against all known authors
     (from the lab's publications). If a match is found above ``threshold``,
     the string is replaced in place by the matching author object. Otherwise,
-    it is replaced by an :class:`Outsider`.
+    it is replaced by an :class:`~gismap.sources.manual.Outsider`.
 
     Parameters
     ----------

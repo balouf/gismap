@@ -132,7 +132,7 @@ class DBLPPublication(Publication, DBLP):
     title: :class:`str`
         Publication title.
     authors: :class:`list`
-        List of :class:`DBLPAuthor` objects.
+        List of :class:`~gismap.sources.dblp.DBLPAuthor` objects.
     venue: :class:`str`
         Publication venue.
     type: :class:`str`

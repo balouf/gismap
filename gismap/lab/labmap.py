@@ -302,7 +302,7 @@ class LabMap(MixInIO):
         if len(candidates) == 0:
             return
         prompt = "The following publications have been selected:\n"
-        prompt += "\n".join(str(p) for p in candidates)
+        prompt += "\n".join(p.short_str() for p in candidates)
         prompt += f"\nConfirm their deletion from the {self.__class__.__name__} of {self.name} (y/N):"
         if not confirm or (input(prompt).lower().strip() or "N") in ["y", "yes"]:
             for p in candidates:

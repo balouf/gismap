@@ -81,8 +81,6 @@ def pub_html(pub):
     """
     # Title as link if available
     url = getattr(pub, "url", None)
-    if url is None and hasattr(pub, "sources"):
-        url = getattr(pub.sources[0], "url", None)
     title_html = linkify(pub.title, url)
 
     # Authors: render in order, separated by comma

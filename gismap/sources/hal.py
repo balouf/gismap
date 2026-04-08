@@ -311,7 +311,7 @@ class HALPublication(Publication, HAL):
     title: :class:`str`
         Publication title.
     authors: :class:`list`
-        List of :class:`HALAuthor` objects.
+        List of :class:`~gismap.sources.hal.HALAuthor` objects.
     venue: :class:`str`
         Publication venue.
     type: :class:`str`

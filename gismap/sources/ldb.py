@@ -737,7 +737,7 @@ class LDBPublication(Publication, LDB):
     title: :class:`str`
         Publication title.
     authors: :class:`list`
-        List of :class:`LDBAuthor` objects.
+        List of :class:`~gismap.sources.ldb.LDBAuthor` objects.
     venue: :class:`str`
         Publication venue.
     type: :class:`str`

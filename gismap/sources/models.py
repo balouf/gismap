@@ -78,7 +78,7 @@ class Publication(LazyRepr):
     title : :class:`str`
         The publication title.
     authors : :class:`list`
-        List of :class:`Author` objects.
+        List of :class:`~gismap.sources.models.Author` objects.
     venue : :class:`str`
         Publication venue (journal, conference, etc.).
     type : :class:`str`
@@ -111,6 +111,12 @@ class Publication(LazyRepr):
         'a study on foo---doe john+++jane smith'
         """
         return normalized_title(self.title) + "---" + "+++".join(a.fingerprint for a in self.authors)
+
+    def short_str(self):
+        """One-line compact representation with URL or key when available."""
+        ref = getattr(self, "url", None) or getattr(self, "key", "") or ""
+        suffix = f" - {ref}" if ref else ""
+        return f'"{self.title}" ({self.year}, {self.type}){suffix}'
 
     def __str__(self):
         title = self.title
@@ -148,7 +154,7 @@ class DB(LazyRepr):
         Returns
         -------
         :class:`list`
-            List of matching :class:`Author` objects.
+            List of matching :class:`~gismap.sources.models.Author` objects.
         """
         raise NotImplementedError
 
@@ -159,13 +165,13 @@ class DB(LazyRepr):
 
         Parameters
         ----------
-        a : :class:`Author`
+        a : :class:`~gismap.sources.models.Author`
             The author whose publications to retrieve.
 
         Returns
         -------
         :class:`list`
-            List of :class:`Publication` objects.
+            List of :class:`~gismap.sources.models.Publication` objects.
         """
         raise NotImplementedError
 

@@ -9,18 +9,14 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
-## 0.5.3 (2026-04-XX)
-
-### Bug fixes
-
-- Fix comets (singletons) legend: checkbox visibility is now fully dynamic, appearing only when singletons exist for the current group selection
-- Fix `HALAuthor.check_cv()`: adapt CV page detection to current HAL markup (`soup.main.section` instead of `soup.form`), and catch `AttributeError` in image extraction
-- Fix `LDB.search_author()` returning duplicate entries when aliases normalize to the same name; deduplicate at index build time and at query time
+## 0.5.3 (2026-04-09)
 
 ### New features
 
-- Add `select_publications()` method for querying publications by fuzzy title match, key, or callable filter
+- Add `select_publications()` method for querying publications of a lab by fuzzy title match, key, or callable filter
 - Add `del_publication()` method for removing publications from a lab with optional confirmation
+- Add `diff_sources()` to compare publications between two databases or search strategies
+- Add `find_duplicates()` to find duplicate publications within a single database
 
 ### Improvements
 
@@ -33,6 +29,15 @@
 - `auto_sources` now completes missing DBs instead of being all-or-nothing: specifying a HAL key no longer prevents automatic LDB discovery
 - Add `hal:fullname` shorthand to force HAL name-based search (useful when pid is too restrictive)
 - Add `no_auto` flag in parentheses notation to disable automatic source completion
+- Add `Publication.short_str()` for compact one-line display with URL
+- Add `SourcedPublication.url` property (delegates to first source with a URL)
+
+### Bug fixes
+
+- Fix comets (singletons) legend: checkbox visibility is now fully dynamic, appearing only when singletons exist for the current group selection
+- Fix `HALAuthor.check_cv()`: adapt CV page detection to current HAL markup (`soup.main.section` instead of `soup.form`), and catch `AttributeError` in image extraction
+- Fix `LDB.search_author()` returning duplicate entries when aliases normalize to the same name; deduplicate at index build time and at query time
+- Fix `regroup_publications()` partition bug: a publication matching two groups could appear in both instead of just the first
 
 ## 0.5.2 (2026-04-06)
 
