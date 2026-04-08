@@ -15,6 +15,7 @@
 
 - Fix comets (singletons) legend: checkbox visibility is now fully dynamic, appearing only when singletons exist for the current group selection
 - Fix `HALAuthor.check_cv()`: adapt CV page detection to current HAL markup (`soup.main.section` instead of `soup.form`), and catch `AttributeError` in image extraction
+- Fix `LDB.search_author()` returning duplicate entries when aliases normalize to the same name; deduplicate at index build time and at query time
 
 ### New features
 

@@ -269,10 +269,15 @@ class LDB(DB):
         aliases = []
         aliases_indices = []
         for i, a in enumerate(cls.authors):
-            main_names.append(normalized_name(a[1][0]))
+            main = normalized_name(a[1][0])
+            main_names.append(main)
+            seen = {main}
             for alias in a[1][1:]:
-                aliases_indices.append(i)
-                aliases.append(normalized_name(alias))
+                n = normalized_name(alias)
+                if n not in seen:
+                    seen.add(n)
+                    aliases_indices.append(i)
+                    aliases.append(n)
         cls.search_engine.fit(main_names + aliases)
         aliases_indices = np.array(aliases_indices)
         cls.search_engine.choices = np.concatenate((np.arange(len(cls.authors)), aliases_indices))
@@ -340,7 +345,7 @@ class LDB(DB):
         target = max(cls.parameters.search.cutoff, res[0][1] - cls.parameters.search.slack)
         res = [r[0] for r in res if r[1] > target]
         sorted_ids = {i: cls.author_by_index(i) for i in sorted(res)}
-        return [sorted_ids[i] for i in res]
+        return list(sorted_ids.values())
 
     @classmethod
     def _invalidate_cache(cls):
