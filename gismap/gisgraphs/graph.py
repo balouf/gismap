@@ -3,6 +3,8 @@ from itertools import combinations
 
 import numpy as np
 
+from gismap.sources.models import format_authors
+
 
 def initials(name):
     """
@@ -84,7 +86,7 @@ def pub_html(pub):
     title_html = linkify(pub.title, url)
 
     # Authors: render in order, separated by comma
-    authors_html = ", ".join([author_html(author) for author in getattr(pub, "authors", [])])
+    authors_html = format_authors(getattr(pub, "authors", []), transform=author_html)
 
     # Venue, Year
     venue = getattr(pub, "venue", "")

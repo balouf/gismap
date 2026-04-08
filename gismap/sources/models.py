@@ -33,6 +33,37 @@ class Author(LazyRepr):
         """
         return normalized_name(self.name)
 
+    def __str__(self):
+        return self.name
+
+
+def format_authors(authors, transform=None):
+    """Format a list of Author objects into a human-readable string.
+
+    Parameters
+    ----------
+    authors : :class:`list`
+        List of Author objects.
+    transform : :class:`callable`, optional
+        A function to apply to each Author for display purposes (e.g., extracting a name).
+         If None, the default string representation of Author is used.
+
+    Returns
+        -------
+        :class:`str`
+            A human-readable string representing the formatted authors.
+    """
+    if transform is None:
+        transform = str
+
+    if not authors:
+        return ""
+    if len(authors) == 1:
+        return transform(authors[0])
+    if len(authors) == 2:
+        return f"{transform(authors[0])} and {transform(authors[1])}"
+    return ", ".join(transform(author) for author in authors[:-1]) + ", and " + transform(authors[-1])
+
 
 @dataclass(repr=False)
 class Publication(LazyRepr):
@@ -80,6 +111,9 @@ class Publication(LazyRepr):
         'a study on foo---doe john+++jane smith'
         """
         return normalized_title(self.title) + "---" + "+++".join(a.fingerprint for a in self.authors)
+
+    def __str__(self):
+        return f"{self.title}, by {format_authors(self.authors)}. In {self.venue} [{self.type}], {self.year}."
 
 
 @dataclass(repr=False)

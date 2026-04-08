@@ -9,6 +9,18 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
+## 0.5.3 (2026-04-XX)
+
+### Bug fixes
+
+- Fix comets (singletons) legend: checkbox visibility is now fully dynamic, appearing only when singletons exist for the current group selection
+
+### Improvements
+
+- Add `Author.__str__` and `Publication.__str__` for human-readable display
+- Add `format_authors()` utility with Oxford comma formatting (`sources/models.py`)
+- Use `format_authors()` in publication overlays (`gisgraphs/graph.py`)
+
 ## 0.5.2 (2026-04-06)
 
 ### New features
