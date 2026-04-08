@@ -149,7 +149,7 @@ class HAL(DB):
         >>> HAL.from_author(HALAuthor('Fabien Mathieu'))
         Traceback (most recent call last):
         ...
-        ValueError: HALAuthor(name='Fabien Mathieu') must have a key for publications to be fetched.
+        ValueError: Fabien Mathieu must have a key for publications to be fetched.
         """
         api = "https://api.archives-ouvertes.fr/search/"
         fields = [
