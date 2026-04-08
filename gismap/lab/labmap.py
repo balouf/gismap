@@ -141,12 +141,10 @@ class LabMap(MixInIO):
             return
         logger.debug(f"{len(new_authors)} new authors selected")
 
+        pubs = dict()
         for author in tqdm(new_authors, desc=desc):
             author.auto_img()
             author.metadata.group = group
-
-        pubs = dict()
-        for author in new_authors:
             pubs.update(author.get_publications(clean=False, selector=self.publication_selectors))
         for pub in self.publications.values():
             for source in pub.sources:

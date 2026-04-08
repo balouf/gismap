@@ -226,14 +226,14 @@ class HALAuthor(Author, HAL):
             return None
         url = f"https://cv.hal.science/{self.key}"
         soup = Soup(get(url), "lxml")
-        if soup.form:
+        if not (soup.main and soup.main.section):
             self._cv = False
             return None
         self._cv = True
         self._url = url
         try:
             self._img = soup.main.section.div.div.div.img["src"]
-        except TypeError:
+        except (TypeError, AttributeError):
             return None
 
     @property
