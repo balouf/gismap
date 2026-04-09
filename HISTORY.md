@@ -9,14 +9,14 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
-## 0.5.3 (2026-04-09)
+## 0.5.3 (2026-04-09): HALTools v1
 
 ### New features
 
-- Add `select_publications()` method for querying publications of a lab by fuzzy title match, key, or callable filter
-- Add `del_publication()` method for removing publications from a lab with optional confirmation
 - Add `diff_sources()` to compare publications between two databases or search strategies
 - Add `find_duplicates()` to find duplicate publications within a single database
+- Add `select_publications()` method for querying publications of a lab by fuzzy title match, key, or callable filter
+- Add `del_publication()` method for removing publications from a lab with optional confirmation
 
 ### Improvements
 
