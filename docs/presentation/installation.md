@@ -50,7 +50,7 @@ to Computer Science publications. LDB is automatically downloaded on first use (
 ```{important}
 After upgrading gismap to a new version, you may need to update your local LDB:
 
-    from gismap.sources import LDB
+    from gismap import LDB
     LDB.retrieve()
 
 See the [FAQ](../faq) for more details on LDB management.
