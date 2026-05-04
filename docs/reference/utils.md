@@ -47,3 +47,12 @@ Text manipulation tools.
 .. automodule:: gismap.utils.text
     :members:
 ```
+
+## Fuzzy
+
+Fuzzy matching utilities (`similarity_matrix`).
+
+```{eval-rst}
+.. automodule:: gismap.utils.fuzzy
+    :members:
+```

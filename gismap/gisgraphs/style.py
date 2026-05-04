@@ -122,4 +122,61 @@ default_style = Template("""
                              align-items: center;
                              cursor: pointer;
                          }
+
+                         .pub a.bib-toggle, .pub a.abs-toggle {
+                             font-size: 0.85em;
+                             text-decoration: none;
+                             padding: 0 0.3em;
+                             border: 1px solid #bbb;
+                             border-radius: 3px;
+                             margin-left: 0.3em;
+                         }
+
+                         .pub-list a.dl-all-bib {
+                             display: inline-block;
+                             font-size: 0.9em;
+                             text-decoration: none;
+                             padding: 0.15em 0.6em;
+                             border: 1px solid #bbb;
+                             border-radius: 4px;
+                             margin-bottom: 0.4em;
+                         }
+
+                         .pub pre.bib, .pub pre.abs {
+                             position: relative;
+                             background: #f0f0f4;
+                             border: 1px solid #ccc;
+                             border-radius: 4px;
+                             padding: 0.6em 0.8em;
+                             margin: 0.4em 0;
+                             font-size: 0.85em;
+                             white-space: pre-wrap;
+                             word-break: break-word;
+                         }
+
+                         .pub pre.bib .copybtn {
+                             position: absolute;
+                             top: 4px;
+                             right: 4px;
+                             padding: 0.1em 0.4em;
+                             font-size: 0.75em;
+                             background: #fff;
+                             border: 1px solid #aaa;
+                             border-radius: 3px;
+                             cursor: pointer;
+                             opacity: 0;
+                             transition: opacity 0.15s;
+                         }
+
+                         .pub pre.bib:hover .copybtn,
+                         .pub pre.bib .copybtn:focus {
+                             opacity: 1;
+                         }
+
+                         .pub pre.bib .copybtn.copied {
+                             color: #fff;
+                             background: #2a9d4a;
+                             border-color: #2a9d4a;
+                             opacity: 1;
+                         }
                          """)

@@ -1,6 +1,7 @@
 import errno
 import json
 import os
+import sys
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from functools import lru_cache
@@ -25,11 +26,14 @@ from gismap.utils.logger import logger
 from gismap.utils.text import normalized_name
 from gismap.utils.zlist import ZList
 
-DATA_DIR = Path(
-    user_data_dir(
-        appname="gismap",
-        appauthor=False,
+DATA_DIR = (
+    Path(
+        user_data_dir(
+            appname="gismap",
+            appauthor=False,
+        )
     )
+    / f"py{sys.version_info.major}.{sys.version_info.minor}"
 )
 LDB_STEM = "ldb"
 GITHUB_REPO = "balouf/gismap"
@@ -416,7 +420,7 @@ class LDB(DB):
         total_size = int(response.headers.get("content-length", 0))
 
         with (
-            open(dest, "wb") as f,
+            safe_write(dest) as f,
             tqdm(
                 desc=desc,
                 total=total_size,
@@ -648,10 +652,10 @@ class LDB(DB):
         cls.keys = state["keys"]
         cls.search_engine = state["search_engine"]
 
-        if restore_search:
+        if restore_search or cls.search_engine is None:
             cls._build_search_engine()
             cls.dump(filename=filename, path=path, overwrite=True, include_search=True)
-        elif cls.search_engine is not None:
+        else:
             cls.search_engine.vectorizer.features_ = cls.numbify_dict(cls.search_engine.vectorizer.features_)
 
         cls._invalidate_cache()

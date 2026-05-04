@@ -90,6 +90,21 @@ class LabAuthor(SourcedAuthor):
     def fingerprint(self):
         return self.key if self.key is not None else super().fingerprint
 
+    def to_dict(self):
+        d = super().to_dict()
+        meta = {
+            k: v
+            for k, v in {
+                "group": self.metadata.group,
+                "url": self.metadata.url,
+                "img": self.metadata.img,
+            }.items()
+            if v
+        }
+        if meta:
+            d["metadata"] = meta
+        return d
+
     def auto_img(self):
         for source in self.sources:
             img = getattr(source, "img", None)

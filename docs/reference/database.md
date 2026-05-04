@@ -54,3 +54,21 @@ Interface for handling multiple sources at once.
 .. automodule:: gismap.sources.multi
     :members:
 ```
+
+## Manual entries
+
+Hand-crafted publications and external authors (`Manual`, `Outsider`, `Informal`).
+
+```{eval-rst}
+.. automodule:: gismap.sources.manual
+    :members:
+```
+
+## BibTeX export
+
+Per-publication BibTeX rendering. Lab-level aggregation lives in {meth}`gismap.lab.labmap.LabMap.to_bib`.
+
+```{eval-rst}
+.. automodule:: gismap.sources.bibtex
+    :members:
+```

@@ -144,6 +144,83 @@ function draw_graph() {
     };
 }
 
+// Event delegation on the modal body: handles inline .bib / abstract toggles,
+// the per-pre copy button, and the per-list "Download .bib" action. Attached
+// once at init; modal contents change but modal-body itself is stable.
+function init_modal_handlers() {
+    const modalBody = document.getElementById('modal-body-$uid');
+    if (!modalBody) return;
+    modalBody.addEventListener('click', function(event) {
+        const t = event.target;
+
+        // Inline toggles (.bib / abstract)
+        if (t.matches('a.bib-toggle, a.abs-toggle')) {
+            event.preventDefault();
+            const cls = t.classList.contains('bib-toggle') ? 'pre.bib' : 'pre.abs';
+            const pre = t.closest('.pub')?.querySelector(cls);
+            if (pre) pre.hidden = !pre.hidden;
+            return;
+        }
+
+        // sphinx_copybutton-style copy
+        if (t.closest('.copybtn')) {
+            event.preventDefault();
+            const btn = t.closest('.copybtn');
+            const pre = btn.parentElement;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                const orig = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = orig;
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+            return;
+        }
+
+        // Download all visible publications as a .bib file
+        if (t.matches('a.dl-all-bib')) {
+            event.preventDefault();
+            const list = t.closest('.pub-list');
+            if (!list) return;
+            const bibs = Array.from(list.querySelectorAll('pre.bib')).map(p => p.textContent);
+            const blob = new Blob([bibs.join('\\n\\n') + '\\n'], {type: 'application/x-bibtex'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = (t.dataset.name || 'publications') + '.bib';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+            return;
+        }
+    });
+}
+
+// Decorate every <pre class="bib"> rendered into the modal with a copy button.
+// Runs after each modal open via a MutationObserver on modal-body.
+function init_copybuttons() {
+    const modalBody = document.getElementById('modal-body-$uid');
+    if (!modalBody) return;
+    const decorate = () => {
+        modalBody.querySelectorAll('pre.bib:not(.has-copybtn)').forEach(pre => {
+            pre.classList.add('has-copybtn');
+            const btn = document.createElement('button');
+            btn.className = 'copybtn';
+            btn.type = 'button';
+            btn.title = 'Copy to clipboard';
+            btn.textContent = 'Copy';
+            pre.appendChild(btn);
+        });
+    };
+    new MutationObserver(decorate).observe(modalBody, {childList: true, subtree: true});
+    decorate();
+}
+
+init_modal_handlers();
+init_copybuttons();
+
 draw_graph();
 
 """

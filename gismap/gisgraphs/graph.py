@@ -1,9 +1,29 @@
+import html
+import re
 from collections import defaultdict
 from itertools import combinations
 
 import numpy as np
 
+from gismap.sources.bibtex import pub_to_bibtex
 from gismap.sources.models import format_authors
+
+_FILENAME_RE = re.compile(r"[^A-Za-z0-9_\-]")
+
+
+def _safe_filename(s):
+    """Sanitize an arbitrary string for use as a download filename stem."""
+    return _FILENAME_RE.sub("_", s).strip("_") or "publications"
+
+
+def _publication_metadata(pub):
+    md = getattr(pub, "metadata", None)
+    if md is not None:
+        return md
+    sources = getattr(pub, "sources", None)
+    if sources:
+        return getattr(sources[0], "metadata", None) or {}
+    return {}
 
 
 def initials(name):
@@ -70,6 +90,13 @@ def author_html(author):
 
 def pub_html(pub):
     """
+    Render a publication for the modal overlay.
+
+    Output is a ``<div class="pub">`` containing the inline citation, a
+    ``[.bib]`` toggle that reveals a ``<pre class="bib">`` (always present),
+    and an ``[abstract]`` toggle revealing a ``<pre class="abs">`` (only
+    when the publication has a non-empty abstract).
+
     Parameters
     ----------
     pub: :class:`~gismap.sources.models.Publication`
@@ -79,20 +106,26 @@ def pub_html(pub):
     -------
     HTML string with hyperlinks where applicable.
     """
-    # Title as link if available
     url = getattr(pub, "url", None)
     title_html = linkify(pub.title, url)
-
-    # Authors: render in order, separated by comma
     authors_html = format_authors(getattr(pub, "authors", []), transform=author_html)
-
-    # Venue, Year
     venue = getattr(pub, "venue", "")
     year = getattr(pub, "year", "")
 
-    # Basic HTML layout
-    html = f"{title_html}, by <i>{authors_html}</i>. {venue}, {year}."
-    return html.strip()
+    bib = html.escape(pub_to_bibtex(pub))
+    abstract = _publication_metadata(pub).get("abstract") or ""
+
+    parts = [
+        f'<div class="pub">{title_html}, by <i>{authors_html}</i>. {venue}, {year}.',
+        ' <a href="#" class="bib-toggle">.bib</a>',
+    ]
+    if abstract:
+        parts.append(' <a href="#" class="abs-toggle">abstract</a>')
+    parts.append(f'<pre class="bib" hidden>{bib}</pre>')
+    if abstract:
+        parts.append(f'<pre class="abs" hidden>{html.escape(abstract)}</pre>')
+    parts.append("</div>")
+    return "".join(parts)
 
 
 expand_script = """var elts = this.parentElement.parentElement.querySelectorAll('.extra-publication');
@@ -101,7 +134,7 @@ this.parentElement.style.display = 'none';
 return false;"""
 
 
-def publications_list(publications, n=10):
+def publications_list(publications, n=10, download_name="publications"):
     """
     Parameters
     ----------
@@ -110,6 +143,8 @@ def publications_list(publications, n=10):
     n: :class:`int`, default=10
         Number of publications to display. If there are more publications,
         a *Show more* option is available to unravel them.
+    download_name: :class:`str`, default="publications"
+        Stem of the filename used when the user clicks "Download .bib".
 
     Returns
     -------
@@ -123,7 +158,9 @@ def publications_list(publications, n=10):
             lis.append(f'<li class="extra-publication" style="display:none;">{pub_html(pub)}</li>')
     if len(publications) > n:
         lis.append(f'<li><a href="#" onclick="{expand_script}">Show more…</a></li>')
-    return "<ul>\n" + "\n".join(lis) + "</ul>\n"
+    fname = html.escape(_safe_filename(download_name), quote=True)
+    header = f'<a href="#" class="dl-all-bib" data-name="{fname}">Download .bib</a>'
+    return f'<div class="pub-list">{header}\n<ul>\n' + "\n".join(lis) + "</ul></div>\n"
 
 
 def to_node(s, node_pubs):
@@ -140,7 +177,10 @@ def to_node(s, node_pubs):
     :class:`dict`
         A display-ready representation of the author.
     """
-    overlay = f"<div><div>Publications of {author_html(s)}</div><div>{publications_list(node_pubs[s.key])}</div></div>"
+    overlay = (
+        f"<div><div>Publications of {author_html(s)}</div>"
+        f"<div>{publications_list(node_pubs[s.key], download_name=s.name)}</div></div>"
+    )
 
     res = {
         "id": s.key,
@@ -175,10 +215,11 @@ def to_edge(k, v, searchers):
         A display-ready representation of the collaboration edge.
     """
     strength = 1 + np.log2(len(v))
+    pair_name = f"{searchers[k[0]].name}_{searchers[k[1]].name}"
     overlay = (
         f"<div>"
         f"<div>Joint publications from {author_html(searchers[k[0]])} and {author_html(searchers[k[1]])}:</div>"
-        f"<div>{publications_list(v)}</div>"
+        f"<div>{publications_list(v, download_name=pair_name)}</div>"
         f"</div>"
     )
     res = {

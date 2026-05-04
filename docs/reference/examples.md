@@ -42,3 +42,10 @@
 .. automodule:: gismap.lab_examples.lincs
     :members:
 ```
+
+## IRIF
+
+```{eval-rst}
+.. automodule:: gismap.lab_examples.irif
+    :members:
+```

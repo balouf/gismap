@@ -109,6 +109,15 @@ class SourcedAuthor(Author):
         sources = sort_author_sources(sources)
         return cls(name=sources[0].name, sources=sources)
 
+    def to_dict(self):
+        d = super().to_dict()
+        if "url" not in d and self.sources:
+            url = getattr(self.sources[0], "url", None)
+            if url:
+                d["url"] = url
+        d["sources"] = [s.to_dict() for s in self.sources]
+        return d
+
     def _resolve_sources(self, spec):
         if isinstance(spec, int):
             return [self.sources[spec]]
@@ -279,6 +288,11 @@ class SourcedPublication(Publication):
             sources=sources,
         )
         return res
+
+    def to_dict(self):
+        d = super().to_dict()
+        d["sources"] = [s.to_dict() for s in self.sources]
+        return d
 
 
 def regroup_authors(auth_dict, pub_dict):

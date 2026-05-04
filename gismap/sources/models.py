@@ -36,6 +36,32 @@ class Author(LazyRepr):
     def __str__(self):
         return self.name
 
+    def to_dict(self):
+        """
+        JSON-serializable representation of the author.
+
+        Includes ``name``, plus ``key``, ``aliases``, ``url``, and ``db_name``
+        when defined on the subclass. Source-aggregating subclasses (e.g.
+        :class:`~gismap.sources.multi.SourcedAuthor`) override this to expose
+        their underlying sources.
+
+        Returns
+        -------
+        :class:`dict`
+        """
+        d = {"name": self.name}
+        for attr in ("key", "db_name"):
+            v = getattr(self, attr, None)
+            if v is not None:
+                d[attr] = v
+        aliases = getattr(self, "aliases", None)
+        if aliases:
+            d["aliases"] = list(aliases)
+        url = getattr(self, "url", None)
+        if url:
+            d["url"] = url
+        return d
+
 
 def format_authors(authors, transform=None):
     """Format a list of Author objects into a human-readable string.
@@ -123,6 +149,38 @@ class Publication(LazyRepr):
         if title.endswith("."):
             title = title[:-1]
         return f"{title}, by {format_authors(self.authors)}. In {self.venue} [{self.type}], {self.year}."
+
+    def to_dict(self):
+        """
+        JSON-serializable representation of the publication.
+
+        Authors are serialized via :meth:`Author.to_dict`. ``key``, ``url``,
+        ``metadata`` and ``db_name`` are included when defined on the
+        subclass. Source-aggregating subclasses override this to expose their
+        underlying sources.
+
+        Returns
+        -------
+        :class:`dict`
+        """
+        d = {
+            "title": self.title,
+            "authors": [a.to_dict() if hasattr(a, "to_dict") else {"name": str(a)} for a in (self.authors or [])],
+            "venue": self.venue,
+            "type": self.type,
+            "year": self.year,
+        }
+        for attr in ("key", "db_name"):
+            v = getattr(self, attr, None)
+            if v is not None:
+                d[attr] = v
+        url = getattr(self, "url", None)
+        if url:
+            d["url"] = url
+        metadata = getattr(self, "metadata", None)
+        if metadata:
+            d["metadata"] = dict(metadata)
+        return d
 
 
 @dataclass(repr=False)

@@ -9,6 +9,37 @@
 - Custom CSS (e.g. transparent background)
 - Gismo integration
 
+## 0.5.4 (2026-05-04): Some user requests
+
+### New features
+
+- Add `LabMap.to_bib(name=None, query=None)` to export a lab's publications as a BibTeX file. Optional `query` argument reuses `select_publications` to filter (string match, fuzzy title, or callable).
+- Add `LabMap.to_json(name=None)` and `LabMap.to_csv(name=None)`. CSV produces two files (`<name>_authors.csv`, `<name>_publications.csv`).
+- Add `pub_to_bibtex(pub)` in `gismap.sources.bibtex` for per-publication BibTeX rendering (handles all `Publication` subclasses including `SourcedPublication` with `note = {Also at: …}` for non-primary source URLs).
+- Add `to_dict()` on `Author`, `Publication`, `SourcedAuthor`, `SourcedPublication`, and `LabAuthor` for JSON-friendly serialization.
+- Tuning kwargs on `LabMap.__init__`: `max_co_authors`, `min_title_words`, `taboo_words`, `taboo_authors`. Subclasses can adjust default filters without mutating `publication_selectors` by index.
+- `LaasMap`/`LaasFull` (`gismap.lab_examples.toulouse`) gain `department_level` to label authors by parent department; `LaasFull` gains `with_support` to include LAAS support services and deduplicates authors appearing in multiple teams.
+
+### Visualization
+
+- Per-publication `[.bib]` toggle in the modal overlay reveals an inline `<pre>` with the BibTeX entry. A sphinx_copybutton-style copy button (revealed on hover) sits in the top-right of each `<pre>`.
+- Per-publication `[abstract]` toggle for publications that carry an abstract (HAL).
+- "Download .bib" link at the top of each modal overlay; downloads all visible publications as a `.bib` file named after the author or pair of authors.
+- All overlay button handling uses event delegation on the modal body — no per-click listener attachment.
+
+### Improvements
+
+- `LAAS_TABOO` now extends `editorials` instead of duplicating it.
+- Docstrings completed on `LaasMap`, `LaasFull`, and `LabMap` (full Parameters sections).
+- `LabMap.save_html()` and the new export methods raise `ValueError` if neither `name=` nor `self.name` is set, instead of crashing on `Path(None)`.
+- LDB cache is now stored under a Python-version-specific subdirectory (`<user_data_dir>/gismap/py{X.Y}/ldb.pkl.zst`) so that running gismap from multiple Python interpreters on the same machine no longer leads to mutually corrupted dumps. Users with several Python versions will pay one (re-)`retrieve` per interpreter; mono-Python users see no change other than the new path.
+
+### Bug fixes
+
+- Fix `LaasMap._author_iterator` department-level scraping: `find("p", {"class", "font11"})` (a set) was silently wrong; replaced by `{"class": "font11"}` (a dict).
+- Fix `LDB._initialized = True` being set even when `search_engine` was `None` (e.g. interrupted download leaving the GitHub release pickle as-is, or pre-existing dump from a previous build). Subsequent `search_author()` calls then crashed with `AttributeError: 'NoneType' object has no attribute 'extract'`. `LDB.load()` now rebuilds and re-dumps the search engine whenever the loaded state has none.
+- `LDB._download_file` now writes through `safe_write` (temp file + atomic rename) so an interrupted download no longer leaves a partial `ldb.pkl.zst` that the next run would try to load.
+
 ## 0.5.3 (2026-04-09): HALTools v1
 
 ### New features

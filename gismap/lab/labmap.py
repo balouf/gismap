@@ -1,3 +1,5 @@
+import csv
+import json
 from pathlib import Path
 
 from gismo import MixInIO
@@ -18,6 +20,7 @@ from gismap.lab.lab_author import (
     db_dict,
     default_dbs,
 )
+from gismap.sources.bibtex import alternate_urls, pub_to_bibtex, sanitize_cite_key
 from gismap.sources.manual import Informal
 from gismap.sources.multi import (
     SourcedPublication,
@@ -189,6 +192,13 @@ class LabMap(MixInIO):
         """
         return make_vis(self, **kwargs)
 
+    def _resolve_export_name(self, name):
+        if name is None:
+            name = self.name
+        if name is None:
+            raise ValueError("No lab name set; pass an explicit name=… argument.")
+        return Path(name)
+
     def save_html(self, name=None, **kwargs):
         """
         Save the collaboration graph as an HTML file.
@@ -196,7 +206,8 @@ class LabMap(MixInIO):
         Parameters
         ----------
         name: :class:`str`, optional
-            Output filename. Defaults to lab name.
+            Output filename. Defaults to lab name. Raises :class:`ValueError`
+            if neither is set.
         **kwargs
             Passed to :meth:`html`.
 
@@ -204,11 +215,115 @@ class LabMap(MixInIO):
         -------
         None
         """
-        if name is None:
-            name = self.name
-        name = Path(name).with_suffix(".html")
-        with open(name, "w", encoding="utf8") as f:
+        path = self._resolve_export_name(name).with_suffix(".html")
+        with open(path, "w", encoding="utf8") as f:
             f.write(self.html(**kwargs))
+
+    def to_bib(self, name=None, query=None, **kwargs):
+        """
+        Export publications as a BibTeX file.
+
+        Parameters
+        ----------
+        name: :class:`str`, optional
+            Output filename. Defaults to lab name; ``.bib`` suffix is added.
+        query: :class:`str` or :class:`callable`, optional
+            Filter for publications. Passed to :meth:`select_publications`;
+            if None, all publications are exported.
+        **kwargs
+            Forwarded to :meth:`select_publications` when ``query`` is given.
+
+        Returns
+        -------
+        None
+        """
+        path = self._resolve_export_name(name).with_suffix(".bib")
+        if query is None:
+            pubs = list(self.publications.values())
+        else:
+            pubs = self.select_publications(query, **kwargs)
+        with open(path, "w", encoding="utf8") as f:
+            f.write("\n\n".join(pub_to_bibtex(p) for p in pubs))
+            f.write("\n")
+
+    def to_json(self, name=None):
+        """
+        Export the lab as a JSON file.
+
+        The structure exposes ``name``, ``authors`` (list of
+        :meth:`~gismap.sources.models.Author.to_dict`) and ``publications``
+        (list of :meth:`~gismap.sources.models.Publication.to_dict`).
+
+        Parameters
+        ----------
+        name: :class:`str`, optional
+            Output filename. Defaults to lab name; ``.json`` suffix is added.
+
+        Returns
+        -------
+        None
+        """
+        path = self._resolve_export_name(name).with_suffix(".json")
+        data = {
+            "name": self.name,
+            "authors": [a.to_dict() for a in (self.authors or {}).values()],
+            "publications": [p.to_dict() for p in (self.publications or {}).values()],
+        }
+        with open(path, "w", encoding="utf8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2, default=str)
+
+    def to_csv(self, name=None):
+        """
+        Export the lab to two CSV files.
+
+        Writes ``<name>_authors.csv`` (key, name, group, url, sources) and
+        ``<name>_publications.csv`` (cite_key, title, year, type, venue,
+        authors, primary_url, abstract, other_urls). Multi-valued cells use
+        ``|`` as a separator.
+
+        Parameters
+        ----------
+        name: :class:`str`, optional
+            Base filename. Defaults to lab name.
+
+        Returns
+        -------
+        None
+        """
+        base = self._resolve_export_name(name)
+        authors_path = base.with_name(base.name + "_authors.csv")
+        pubs_path = base.with_name(base.name + "_publications.csv")
+
+        with open(authors_path, "w", encoding="utf8", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["key", "name", "group", "url", "sources"])
+            for a in (self.authors or {}).values():
+                meta = getattr(a, "metadata", None)
+                group = getattr(meta, "group", "") or ""
+                url = getattr(meta, "url", None) or (
+                    getattr(a.sources[0], "url", "") if getattr(a, "sources", None) else ""
+                )
+                sources = "|".join(f"{s.db_name}:{s.key}" for s in getattr(a, "sources", []))
+                writer.writerow([a.key, a.name, group, url or "", sources])
+
+        with open(pubs_path, "w", encoding="utf8", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(
+                ["cite_key", "title", "year", "type", "venue", "authors", "primary_url", "abstract", "other_urls"]
+            )
+            for p in (self.publications or {}).values():
+                cite_key = sanitize_cite_key(p.key) if p.key else ""
+                authors = "|".join(getattr(a, "name", str(a)) for a in (p.authors or []))
+                primary_url = getattr(p, "url", "") or ""
+                metadata = getattr(p, "metadata", None)
+                if metadata is None and getattr(p, "sources", None):
+                    metadata = getattr(p.sources[0], "metadata", None) or {}
+                metadata = metadata or {}
+                abstract = metadata.get("abstract", "") or ""
+                other_urls = "|".join(alternate_urls(p))
+                writer.writerow(
+                    [cite_key, p.title, p.year, p.type, p.venue, authors, primary_url, abstract, other_urls]
+                )
 
     def show_html(self, **kwargs):
         """
