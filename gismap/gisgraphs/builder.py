@@ -72,27 +72,118 @@ def make_vis(lab, **kwargs):
     if kwargs:
         raise TypeError(f"unexpected keyword arguments: {repr(kwargs)}")
 
-    nodes, edges = lab_to_graph(lab)
+    nodes, edges, publications = lab_to_graph(lab)
+
+    # Embed JSON inside <script>: a literal "</" anywhere in the data
+    # (e.g. "</script>" inside a pub title) would terminate the host
+    # <script> tag. JSON allows the alternative spelling "<\/", which
+    # parses identically and is inert as HTML.
+    def _embed(obj):
+        return json.dumps(obj).replace("</", "<\\/")
 
     parameters = {
         "vis_url": vis_url,
         "uid": uid,
-        "nodes": json.dumps(nodes),
-        "edges": json.dumps(edges),
-        "options": json.dumps(options),
+        "nodes": _embed(nodes),
+        "edges": _embed(edges),
+        "publications": _embed(publications),
+        "options": _embed(options),
+        "lab_name": _embed(lab.name or "gismap"),
     }
     legend_html = make_legend(groups, uid) if draw_legend else ""
+
+    # Inline SVGs for the bottom-right fullscreen icon. CSS toggles which
+    # one is shown via the :fullscreen pseudo-class on box-$uid.
+    expand_svg = (
+        '<svg class="fs-expand" viewBox="0 0 18 18" width="16" height="16" fill="none"'
+        ' stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"'
+        ' aria-hidden="true">'
+        '<polyline points="3,7 3,3 7,3"/>'
+        '<polyline points="11,3 15,3 15,7"/>'
+        '<polyline points="15,11 15,15 11,15"/>'
+        '<polyline points="7,15 3,15 3,11"/>'
+        "</svg>"
+    )
+    compress_svg = (
+        '<svg class="fs-compress" viewBox="0 0 18 18" width="16" height="16" fill="none"'
+        ' stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"'
+        ' aria-hidden="true">'
+        '<polyline points="7,3 7,7 3,7"/>'
+        '<polyline points="15,7 11,7 11,3"/>'
+        '<polyline points="11,15 11,11 15,11"/>'
+        '<polyline points="3,11 7,11 7,15"/>'
+        "</svg>"
+    )
+
+    menu_button_attrs = 'class="watermark button menu" aria-label="Menu" aria-haspopup="true" aria-expanded="false"'
+    fs_icon_attrs = (
+        'viewBox="0 0 18 18" width="14" height="14" fill="none"'
+        ' stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"'
+        ' aria-hidden="true"'
+    )
+    fs_menu_icon = (
+        f'<svg class="menu-icon fs-expand" {fs_icon_attrs}>'
+        '<polyline points="3,7 3,3 7,3"/>'
+        '<polyline points="11,3 15,3 15,7"/>'
+        '<polyline points="15,11 15,15 11,15"/>'
+        '<polyline points="7,15 3,15 3,11"/>'
+        "</svg>"
+        f'<svg class="menu-icon fs-compress" {fs_icon_attrs}>'
+        '<polyline points="7,3 7,7 3,7"/>'
+        '<polyline points="15,7 11,7 11,3"/>'
+        '<polyline points="11,15 11,11 15,11"/>'
+        '<polyline points="3,11 7,11 7,15"/>'
+        "</svg>"
+    )
+    menu_item_template = (
+        '<li role="none"><a href="#" role="menuitem" class="menu-item" data-action="{a}">'
+        '<span class="menu-label">{label}</span>{icon}'
+        "</a></li>"
+    )
+    menu_entries = "".join(
+        menu_item_template.format(a=a, label=label, icon=icon)
+        for a, label, icon in [
+            ("redraw", "Redraw", ""),
+            ("fullscreen", "Full Screen", fs_menu_icon),
+            ("toggle-legend", "Hide Legend", ""),
+            ("dl-bib", "Download lab.bib", ""),
+            ("dl-png", "Download PNG", ""),
+            ("copy-png", "Copy PNG to clipboard", ""),
+        ]
+    )
+    menu_html = (
+        f'<div class="menu-wrap" id="menu-wrap-{uid}">'
+        f'<button id="menu-{uid}" {menu_button_attrs}>'
+        '<svg viewBox="0 0 18 18" width="16" height="16" fill="none" stroke="currentColor"'
+        ' stroke-width="1.8" stroke-linecap="round" aria-hidden="true">'
+        '<line x1="3" y1="5" x2="15" y2="5"/>'
+        '<line x1="3" y1="9" x2="15" y2="9"/>'
+        '<line x1="3" y1="13" x2="15" y2="13"/>'
+        "</svg>"
+        "</button>"
+        f'<ul id="menu-list-{uid}" class="menu-list" role="menu" hidden>'
+        f"{menu_entries}"
+        "</ul>"
+        "</div>"
+    )
+
+    fs_button_attrs = 'class="watermark button fullscreen" title="Full Screen" aria-label="Full Screen"'
+    fs_button_html = f'<button id="fullscreen-{uid}" {fs_button_attrs}>{expand_svg}{compress_svg}</button>'
 
     div = (
         f'<div class="gisgraph" id="box-{uid}">'
         f'<div id="vis-{uid}"></div>'
         f"{gislink}"
-        f'<button id="redraw-{uid}" class="watermark button redraw">Redraw()</button>'
-        f'<button id="fullscreen-{uid}" class="watermark button fullscreen">Full Screen</button>'
+        f"{menu_html}"
+        f"{fs_button_html}"
         f"{legend_html}"
         f'<div class="modal" id="modal-{uid}">'
         f'<div class="modal-content">'
-        f'<span class="close" id="modal-close-{uid}">&times;</span>'
+        f'<div class="modal-header">'
+        f'<div class="modal-title" id="modal-title-{uid}"></div>'
+        f'<div class="modal-actions" id="modal-actions-{uid}"></div>'
+        f'<span class="close" id="modal-close-{uid}" role="button" tabindex="0" aria-label="Close">&times;</span>'
+        f"</div>"
         f'<div id="modal-body-{uid}"></div>'
         f"</div></div>"
         f"</div>"

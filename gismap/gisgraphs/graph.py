@@ -1,29 +1,9 @@
-import html
-import re
 from collections import defaultdict
 from itertools import combinations
 
 import numpy as np
 
 from gismap.sources.bibtex import pub_to_bibtex
-from gismap.sources.models import format_authors
-
-_FILENAME_RE = re.compile(r"[^A-Za-z0-9_\-]")
-
-
-def _safe_filename(s):
-    """Sanitize an arbitrary string for use as a download filename stem."""
-    return _FILENAME_RE.sub("_", s).strip("_") or "publications"
-
-
-def _publication_metadata(pub):
-    md = getattr(pub, "metadata", None)
-    if md is not None:
-        return md
-    sources = getattr(pub, "sources", None)
-    if sources:
-        return getattr(sources[0], "metadata", None) or {}
-    return {}
 
 
 def initials(name):
@@ -42,152 +22,82 @@ def initials(name):
     return first_letters[0].upper() + first_letters[-1].upper()
 
 
-def linkify(name, url):
-    """
-    Wrap a name in an HTML link if URL is provided.
-
-    Parameters
-    ----------
-    name : :class:`str`
-        Display text.
-    url : :class:`str` or None
-        Target URL, or None for no link.
-
-    Returns
-    -------
-    :class:`str`
-        HTML anchor tag or span.
-    """
-    if url:
-        return f'<a href="{url}" target="_blank">{name}</a>'
-    else:
-        return f"<span>{name}</span>"
+def _publication_metadata(pub):
+    md = getattr(pub, "metadata", None)
+    if md is not None:
+        return md
+    sources = getattr(pub, "sources", None)
+    if sources:
+        return getattr(sources[0], "metadata", None) or {}
+    return {}
 
 
-def author_html(author):
-    """
-    Parameters
-    ----------
-    author: :class:`~gismap.sources.models.Author`
-        Author.
-
-    Returns
-    -------
-    HTML string with URL if applicable.
-    """
-    name = getattr(author, "name", "Unknown Author")
-    # Try direct URL property (optional)
+def _resolve_author_url(author):
     url = getattr(author, "url", None)
-    # For LabAuthor, check metadata.url
     if hasattr(author, "metadata"):
         meta_url = getattr(author.metadata, "url", None)
         if meta_url:
             url = meta_url
-        elif hasattr(author.sources[0], "url"):
+        elif getattr(author, "sources", None) and hasattr(author.sources[0], "url"):
             url = author.sources[0].url
-    return linkify(name, url)
+    return url
 
 
-def pub_html(pub):
+def _author_to_dict(author):
+    """Compact dict ``{name, url?}`` for an author of any flavor."""
+    d = {"name": getattr(author, "name", "Unknown Author")}
+    url = _resolve_author_url(author)
+    if url:
+        d["url"] = url
+    return d
+
+
+def _pub_to_dict(pub):
+    """Per-publication payload shipped once to JS.
+
+    Empty fields are dropped to keep the JSON small.
     """
-    Render a publication for the modal overlay.
-
-    Output is a ``<div class="pub">`` containing the inline citation, a
-    ``[.bib]`` toggle that reveals a ``<pre class="bib">`` (always present),
-    and an ``[abstract]`` toggle revealing a ``<pre class="abs">`` (only
-    when the publication has a non-empty abstract).
-
-    Parameters
-    ----------
-    pub: :class:`~gismap.sources.models.Publication`
-        Publication.
-
-    Returns
-    -------
-    HTML string with hyperlinks where applicable.
-    """
+    d = {
+        "title": pub.title,
+        "year": pub.year,
+        "venue": getattr(pub, "venue", "") or "",
+        "authors": [_author_to_dict(a) for a in getattr(pub, "authors", []) or []],
+        "bib": pub_to_bibtex(pub),
+    }
     url = getattr(pub, "url", None)
-    title_html = linkify(pub.title, url)
-    authors_html = format_authors(getattr(pub, "authors", []), transform=author_html)
-    venue = getattr(pub, "venue", "")
-    year = getattr(pub, "year", "")
-
-    bib = html.escape(pub_to_bibtex(pub))
+    if url:
+        d["url"] = url
     abstract = _publication_metadata(pub).get("abstract") or ""
-
-    parts = [
-        f'<div class="pub">{title_html}, by <i>{authors_html}</i>. {venue}, {year}.',
-        ' <a href="#" class="bib-toggle">.bib</a>',
-    ]
     if abstract:
-        parts.append(' <a href="#" class="abs-toggle">abstract</a>')
-    parts.append(f'<pre class="bib" hidden>{bib}</pre>')
-    if abstract:
-        parts.append(f'<pre class="abs" hidden>{html.escape(abstract)}</pre>')
-    parts.append("</div>")
-    return "".join(parts)
+        d["abstract"] = abstract
+    return d
 
 
-expand_script = """var elts = this.parentElement.parentElement.querySelectorAll('.extra-publication');
-for (var i = 0; i < elts.length; ++i) {elts[i].style.display = 'list-item';}
-this.parentElement.style.display = 'none';
-return false;"""
-
-
-def publications_list(publications, n=10, download_name="publications"):
-    """
-    Parameters
-    ----------
-    publications: :class:`list` of :class:`~gismap.sources.models.Publication`
-        Publications to display.
-    n: :class:`int`, default=10
-        Number of publications to display. If there are more publications,
-        a *Show more* option is available to unravel them.
-    download_name: :class:`str`, default="publications"
-        Stem of the filename used when the user clicks "Download .bib".
-
-    Returns
-    -------
-    :class:`str`
-    """
-    lis = []
-    for i, pub in enumerate(publications):
-        if i < n:
-            lis.append(f"<li>{pub_html(pub)}</li>")
-        else:
-            lis.append(f'<li class="extra-publication" style="display:none;">{pub_html(pub)}</li>')
-    if len(publications) > n:
-        lis.append(f'<li><a href="#" onclick="{expand_script}">Show more…</a></li>')
-    fname = html.escape(_safe_filename(download_name), quote=True)
-    header = f'<a href="#" class="dl-all-bib" data-name="{fname}">Download .bib</a>'
-    return f'<div class="pub-list">{header}\n<ul>\n' + "\n".join(lis) + "</ul></div>\n"
-
-
-def to_node(s, node_pubs):
+def to_node(s, pub_keys):
     """
     Parameters
     ----------
     s: :class:`~gismap.lab.lab_author.LabAuthor`
         Author.
-    node_pubs: :class:`dict`
-        Lab publications.
+    pub_keys: :class:`list`
+        Publication keys associated with this author, year-desc order.
 
     Returns
     -------
     :class:`dict`
-        A display-ready representation of the author.
+        Display-ready data for the node. Modal HTML is rendered on click by
+        the JS layer using ``pub_keys`` and the shared publications dict.
     """
-    overlay = (
-        f"<div><div>Publications of {author_html(s)}</div>"
-        f"<div>{publications_list(node_pubs[s.key], download_name=s.name)}</div></div>"
-    )
-
     res = {
         "id": s.key,
+        "name": s.name,
         "hover": f"Click for details on {s.name}.",
-        "overlay": overlay,
         "group": s.metadata.group,
+        "pub_keys": pub_keys,
     }
+    url = _resolve_author_url(s)
+    if url:
+        res["url"] = url
     if s.metadata.img:
         res.update({"image": s.metadata.img, "shape": "circularImage"})
     else:
@@ -198,37 +108,30 @@ def to_node(s, node_pubs):
     return res
 
 
-def to_edge(k, v, searchers):
+def to_edge(k, pub_keys, searchers):
     """
     Parameters
     ----------
     k: :class:`tuple`
-        Keys of the authors involved.
-    v: :class:`list`
-        List of joint publications.
-    authors: :class:`dict`
-        Authors.
+        Keys of the two authors.
+    pub_keys: :class:`list`
+        Joint publication keys, year-desc order.
+    searchers: :class:`dict`
+        Authors keyed by author key.
 
     Returns
     -------
     :class:`dict`
-        A display-ready representation of the collaboration edge.
+        Display-ready data for the collaboration edge.
     """
-    strength = 1 + np.log2(len(v))
-    pair_name = f"{searchers[k[0]].name}_{searchers[k[1]].name}"
-    overlay = (
-        f"<div>"
-        f"<div>Joint publications from {author_html(searchers[k[0]])} and {author_html(searchers[k[1]])}:</div>"
-        f"<div>{publications_list(v, download_name=pair_name)}</div>"
-        f"</div>"
-    )
+    strength = 1 + np.log2(len(pub_keys))
     res = {
         "from": k[0],
         "to": k[1],
         "hover": f"Show joint publications from {searchers[k[0]].name} and {searchers[k[1]].name}",
-        "overlay": overlay,
         "width": int(strength),
         "length": int(200 / strength),
+        "pub_keys": pub_keys,
     }
     g1, g2 = searchers[k[0]].metadata.group, searchers[k[1]].metadata.group
     if g1 and g2 and g1 != g2:
@@ -245,8 +148,13 @@ def lab_to_graph(lab):
 
     Returns
     -------
-    :class:`str`
-        Collaboration graph.
+    :class:`tuple`
+        ``(nodes, edges, publications)`` where ``nodes`` and ``edges`` carry
+        only display data plus ``pub_keys`` references, and ``publications``
+        is a dict keyed by publication key with the full per-pub payload
+        (title, authors, venue, year, url, abstract, bib). Modal HTML is
+        built JS-side from this shared dict, so each publication is shipped
+        only once even when it touches many authors and pairs.
 
     Examples
     --------
@@ -259,14 +167,17 @@ def lab_to_graph(lab):
     2
     >>> 320 < len(lab.publications) < 430
     True
-    >>> nodes, edges = lab_to_graph(lab)
+    >>> nodes, edges, pubs = lab_to_graph(lab)
     >>> nodes[0]['group']
     'mini'
     >>> edges[0]['hover']
     'Show joint publications from Mathieu Fabien and Tixeuil Sébastien'
+    >>> sample = next(iter(pubs.values()))
+    >>> {'title', 'authors', 'bib'} <= set(sample)
+    True
     >>> html = lab.html(groups={"mini": {"color": "#777"}})
     """
-    node_pubs = defaultdict(list)  # {k: [] for k in lab.authors}
+    node_pubs = defaultdict(list)
     edges_dict = defaultdict(list)
     for p in lab.publications.values():
         # Strange things can happen with multiple sources. This should take care of it.
@@ -276,17 +187,13 @@ def lab_to_graph(lab):
             node_pubs[a.key].append(p)
         for a1, a2 in combinations(lauths, 2):
             edges_dict[a1.key, a2.key].append(p)
-    # connected = {k for kl in edges_dict for k in kl}
     for k, v in node_pubs.items():
-        node_pubs[k] = sorted(v, key=lambda p: -p.year)
+        node_pubs[k] = [p.key for p in sorted(v, key=lambda p: -p.year)]
     for k, v in edges_dict.items():
-        edges_dict[k] = sorted(v, key=lambda p: -p.year)
-    nodes = [
-        to_node(s, node_pubs)
-        for s in lab.authors.values()  # if s.key in connected
-    ]
-    edges = [to_edge(k, v, lab.authors) for k, v in edges_dict.items()]
-    # for node in nodes:
-    #     node['connected'] = node['id'] in connected
+        edges_dict[k] = [p.key for p in sorted(v, key=lambda p: -p.year)]
 
-    return nodes, edges
+    nodes = [to_node(s, node_pubs.get(s.key, [])) for s in lab.authors.values()]
+    edges = [to_edge(k, v, lab.authors) for k, v in edges_dict.items()]
+    publications = {pk: _pub_to_dict(p) for pk, p in lab.publications.items()}
+
+    return nodes, edges, publications

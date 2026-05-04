@@ -44,23 +44,50 @@ default_style = Template("""
                          }
 
                          .modal-content {
-                             background-color: #f4f4f7;
-                             color: #222235;
+                             background-color: var(--pst-color-on-background, var(--jp-layout-color0, #f4f4f7));
+                             color: var(--pst-color-text-base, var(--jp-content-font-color1, #222235));
                              margin: 10% auto;
                              padding: 24px;
-                             border: 1px solid #888;
+                             border: 1px solid var(--pst-color-border, #888);
                              width: 50%;
                              border-radius: 8px;
                              box-shadow: 0 5px 15px rgba(0, 0, 0, .6);
                          }
-                         .modal a {color: #2958d7;}
-                         .modal a:visited {color: #8435a8;}
+                         .modal a {color: var(--pst-color-link, var(--jp-content-link-color, #2958d7));}
+                         .modal a:visited {color: var(--pst-color-link-hover, #8435a8);}
+
+                         .modal-header {
+                             display: flex;
+                             align-items: center;
+                             gap: 16px;
+                             margin-bottom: 0.6em;
+                         }
+
+                         .modal-title {
+                             flex: 1 1 auto;
+                             min-width: 0;
+                         }
+
+                         .modal-actions {
+                             flex: 0 0 auto;
+                         }
+
+                         .modal-actions a.dl-all-bib {
+                             display: inline-block;
+                             font-size: 0.9em;
+                             text-decoration: none;
+                             padding: 0.15em 0.6em;
+                             border: 1px solid var(--pst-color-border, #bbb);
+                             border-radius: 4px;
+                             white-space: nowrap;
+                         }
 
                          .close {
+                             flex: 0 0 auto;
                              color: #777;
-                             float: right;
                              font-size: 28px;
                              font-weight: bold;
+                             line-height: 1;
                              cursor: pointer;
                          }
 
@@ -92,15 +119,92 @@ default_style = Template("""
                              cursor: pointer;
                          }
 
-                         .redraw {
+                         .menu-wrap {
+                             position: absolute;
                              left: 10px;
                              top: 10px;
+                             z-index: 30;
+                         }
+
+                         .menu-wrap .menu {
+                             position: static;
+                             color: var(--pst-color-text-base, var(--jp-content-font-color1, #888));
+                             padding: 4px;
+                             border-radius: 3px;
+                             display: inline-flex;
+                             align-items: center;
+                             justify-content: center;
+                             pointer-events: auto;
+                         }
+
+                         .menu-wrap .menu:hover, .menu-wrap .menu:focus {
+                             background: var(--pst-color-surface, var(--jp-layout-color2, rgba(0, 0, 0, 0.08)));
+                         }
+
+                         .menu-list {
+                             list-style: none;
+                             list-style-type: none;
+                             margin: 4px 0 0 0;
+                             padding: 4px 0;
+                             min-width: 200px;
+                             background: var(--pst-color-on-background, var(--jp-layout-color0, #fff));
+                             color: var(--pst-color-text-base, var(--jp-content-font-color1, #222235));
+                             border: 1px solid var(--pst-color-border, #bbb);
+                             border-radius: 6px;
+                             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                             font-size: 13px;
+                             line-height: 1.3;
+                         }
+
+                         .menu-list li {
+                             list-style: none;
+                             list-style-type: none;
+                             margin: 0;
+                             padding: 0;
+                             display: block;
+                         }
+
+                         .menu-list[hidden] { display: none; }
+
+                         .menu-list .menu-item {
+                             display: flex;
+                             align-items: center;
+                             justify-content: space-between;
+                             gap: 14px;
+                             padding: 6px 14px;
+                             text-decoration: none;
+                             color: inherit;
+                             white-space: nowrap;
+                         }
+
+                         .menu-list .menu-icon {
+                             flex-shrink: 0;
+                             opacity: 0.65;
+                         }
+
+                         .menu-list .menu-item:hover, .menu-list .menu-item:focus {
+                             background: var(--pst-color-surface, var(--jp-layout-color2, rgba(0, 0, 0, 0.06)));
                          }
 
                          .fullscreen {
                              bottom: 10px;
                              right: 10px;
+                             color: var(--pst-color-text-base, var(--jp-content-font-color1, #888));
+                             padding: 4px;
+                             border-radius: 3px;
+                             display: inline-flex;
+                             align-items: center;
+                             justify-content: center;
+                             pointer-events: auto;
                          }
+
+                         .fullscreen:hover, .fullscreen:focus {
+                             background: var(--pst-color-surface, var(--jp-layout-color2, rgba(0, 0, 0, 0.08)));
+                         }
+
+                         .fs-compress { display: none; }
+                         #box-$uid:fullscreen .fs-expand { display: none; }
+                         #box-$uid:fullscreen .fs-compress { display: inline; }
 
                          .legend {
                              display: inline-block;
@@ -127,25 +231,16 @@ default_style = Template("""
                              font-size: 0.85em;
                              text-decoration: none;
                              padding: 0 0.3em;
-                             border: 1px solid #bbb;
+                             border: 1px solid var(--pst-color-border, #bbb);
                              border-radius: 3px;
                              margin-left: 0.3em;
                          }
 
-                         .pub-list a.dl-all-bib {
-                             display: inline-block;
-                             font-size: 0.9em;
-                             text-decoration: none;
-                             padding: 0.15em 0.6em;
-                             border: 1px solid #bbb;
-                             border-radius: 4px;
-                             margin-bottom: 0.4em;
-                         }
-
                          .pub pre.bib, .pub pre.abs {
                              position: relative;
-                             background: #f0f0f4;
-                             border: 1px solid #ccc;
+                             background: var(--pst-color-surface, var(--jp-layout-color2, #f0f0f4));
+                             color: var(--pst-color-text-base, inherit);
+                             border: 1px solid var(--pst-color-border, #ccc);
                              border-radius: 4px;
                              padding: 0.6em 0.8em;
                              margin: 0.4em 0;
@@ -160,8 +255,9 @@ default_style = Template("""
                              right: 4px;
                              padding: 0.1em 0.4em;
                              font-size: 0.75em;
-                             background: #fff;
-                             border: 1px solid #aaa;
+                             background: var(--pst-color-on-background, var(--jp-layout-color0, #fff));
+                             color: var(--pst-color-text-base, inherit);
+                             border: 1px solid var(--pst-color-border, #aaa);
                              border-radius: 3px;
                              cursor: pointer;
                              opacity: 0;

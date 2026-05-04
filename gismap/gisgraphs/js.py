@@ -6,12 +6,107 @@ import { DataSet, Network } from $vis_url;
 
 const nodes = new DataSet($nodes);
 const edges = new DataSet($edges);
+const publications = $publications;
 const options = $options;
+const labName = $lab_name;
 const container = document.getElementById('vis-$uid');
 let hoveredEdgeId = null;
 let hoveredNodeId = null;
+let currentNetwork = null;
+let lastHasSingletons = false;
+// null = follow auto rule (multi-group OR singletons present);
+// true/false = user override from the menu.
+let legendVisibilityOverride = null;
 
-// Get the group color and position of a node. Useful for gradient edges
+// ----- Modal rendering helpers (fed by the shared `publications` dict) -----
+
+function escapeHtml(s) {
+    return String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function safeFilename(s) {
+    // Preserve UTF-8 (accents, etc.); only strip filesystem-hostile chars
+    // (Windows-forbidden + control chars) and collapse whitespace.
+    const cleaned = String(s)
+        .replace(/[\\\\\\/:*?"<>|\\x00-\\x1f]/g, '_')
+        .replace(/\\s+/g, '_')
+        .replace(/^[._]+|[._]+$$/g, '');
+    return cleaned || 'publications';
+}
+
+function linkifyAuthor(a) {
+    const name = escapeHtml(a.name || 'Unknown Author');
+    if (a.url) {
+        return '<a href="' + escapeHtml(a.url) + '" target="_blank">' + name + '</a>';
+    }
+    return '<span>' + name + '</span>';
+}
+
+function formatAuthors(authors) {
+    if (!authors || authors.length === 0) return '';
+    if (authors.length === 1) return linkifyAuthor(authors[0]);
+    if (authors.length === 2) return linkifyAuthor(authors[0]) + ' and ' + linkifyAuthor(authors[1]);
+    const head = authors.slice(0, -1).map(linkifyAuthor).join(', ');
+    return head + ', and ' + linkifyAuthor(authors[authors.length - 1]);
+}
+
+function renderPub(pub) {
+    const titleHtml = pub.url
+        ? '<a href="' + escapeHtml(pub.url) + '" target="_blank">' + escapeHtml(pub.title) + '</a>'
+        : '<span>' + escapeHtml(pub.title) + '</span>';
+    const authorsHtml = formatAuthors(pub.authors);
+    const venue = escapeHtml(pub.venue || '');
+    const year = escapeHtml(pub.year != null ? pub.year : '');
+    const parts = [
+        '<div class="pub">' + titleHtml + ', by <i>' + authorsHtml + '</i>. ' + venue + ', ' + year + '.',
+        ' <a href="#" class="bib-toggle">.bib</a>',
+    ];
+    if (pub.abstract) parts.push(' <a href="#" class="abs-toggle">abstract</a>');
+    parts.push('<pre class="bib" hidden>' + escapeHtml(pub.bib || '') + '</pre>');
+    if (pub.abstract) parts.push('<pre class="abs" hidden>' + escapeHtml(pub.abstract) + '</pre>');
+    parts.push('</div>');
+    return parts.join('');
+}
+
+function renderPubListBody(pubKeys, n) {
+    if (n == null) n = 10;
+    const keys = pubKeys || [];
+    const lis = keys.map((k, i) => {
+        const pub = publications[k];
+        if (!pub) return '';
+        const cls = i < n ? '' : ' class="extra-publication" style="display:none;"';
+        return '<li' + cls + '>' + renderPub(pub) + '</li>';
+    });
+    if (keys.length > n) {
+        lis.push('<li><a href="#" class="show-more">Show more…</a></li>');
+    }
+    return '<div class="pub-list"><ul>' + lis.join('') + '</ul></div>';
+}
+
+function renderActions(downloadName) {
+    const fname = escapeHtml(safeFilename(downloadName));
+    return '<a href="#" class="dl-all-bib" data-name="' + fname + '">Download .bib</a>';
+}
+
+function openModal(titleHtml, pubKeys, downloadName) {
+    document.getElementById('modal-title-$uid').innerHTML = titleHtml;
+    document.getElementById('modal-actions-$uid').innerHTML = renderActions(downloadName);
+    document.getElementById('modal-body-$uid').innerHTML = renderPubListBody(pubKeys);
+    document.getElementById('modal-$uid').style.display = "block";
+}
+
+function nodeTitleHtml(node) {
+    return 'Publications of ' + linkifyAuthor({name: node.name, url: node.url});
+}
+
+function edgeTitleHtml(a, b) {
+    return 'Joint publications from ' + linkifyAuthor({name: a.name, url: a.url})
+        + ' and ' + linkifyAuthor({name: b.name, url: b.url});
+}
+
+// ----- Get the group color and position of a node (gradient edges) -----
 function getNodeInfos(network, node) {
     if (node && !options.groups?.[node.group]?.hidden) {
         return [options.groups[node.group]?.color, network.getPositions([node.id])[node.id]]
@@ -47,10 +142,9 @@ function draw_graph() {
 
     // Show/hide the comet checkbox and the legend
     const cometEntry = document.getElementById("comet-entry-$uid");
-    const legend = document.getElementById("legend-$uid");
     if (cometEntry) cometEntry.style.display = hasSingletons ? "" : "none";
-    if (legend) legend.style.display =
-        (Object.keys(options.groups).length > 1 || hasSingletons) ? "" : "none";
+    lastHasSingletons = hasSingletons;
+    applyLegendVisibility();
 
     // Remove singletons unless comet checkbox is checked
     if (hasSingletons && !document.getElementById("comet-$uid")?.checked) {
@@ -59,6 +153,7 @@ function draw_graph() {
 
     // Set graph, nodes, and edges
     const network = new Network(container, {nodes: visibleNodes, edges: visibleEdges}, options);
+    currentNetwork = network;
     network.once("afterDrawing", function () {
       network.fit({ maxZoomLevel: 3 });
     });
@@ -121,36 +216,53 @@ function draw_graph() {
     });
 
 
-    // Modal overlay
+    // Modal overlay (rendered on demand from the shared publications dict)
     const modal = document.getElementById('modal-$uid');
-    const modalBody = document.getElementById('modal-body-$uid');
-    const modalClose = document.getElementById('modal-close-$uid');
     network.on("click", function(params) {
       if (params.nodes.length === 1) {
         const node = netNodes.get(params.nodes[0]);
-        modalBody.innerHTML = node.overlay || '';
-        modal.style.display = "block";
+        openModal(nodeTitleHtml(node), node.pub_keys || [], node.name);
       } else if (params.edges.length === 1) {
         const edge = netEdges.get(params.edges[0]);
-        modalBody.innerHTML = edge.overlay || '';
-        modal.style.display = "block";
+        const a = netNodes.get(edge.from);
+        const b = netNodes.get(edge.to);
+        openModal(edgeTitleHtml(a, b), edge.pub_keys || [], a.name + '_' + b.name);
       } else {
         modal.style.display = "none";
       }
     });
-    modalClose.onclick = function() { modal.style.display = "none"; };
-    window.onclick = function(event) {
-      if (event.target == modal) { modal.style.display = "none"; }
-    };
 }
 
-// Event delegation on the modal body: handles inline .bib / abstract toggles,
-// the per-pre copy button, and the per-list "Download .bib" action. Attached
-// once at init; modal contents change but modal-body itself is stable.
+// Event delegation on .modal-content: handles inline .bib / abstract toggles
+// and the per-pre copy button (in modal-body), the "Show more…" expansion
+// (in modal-body), and the per-list "Download .bib" action (now in
+// modal-actions, so the body-only delegation that 0.5.4-pre-toolbar used
+// would miss it). Plus the close X click and the background click. Re-parent
+// the modal to document.body so position:fixed actually covers the viewport
+// even when an ancestor (e.g. a JupyterLab cell wrapper) has a transform.
 function init_modal_handlers() {
+    const modal = document.getElementById('modal-$uid');
+    if (!modal) return;
+
+    // Re-parent: get out of any transformed ancestor so position:fixed works
+    // and click-outside-to-close fires correctly under JupyterLab.
+    if (modal.parentElement !== document.body) {
+        document.body.appendChild(modal);
+    }
+
+    const modalContent = modal.querySelector('.modal-content');
+    const modalClose = document.getElementById('modal-close-$uid');
     const modalBody = document.getElementById('modal-body-$uid');
-    if (!modalBody) return;
-    modalBody.addEventListener('click', function(event) {
+
+    modalClose.addEventListener('click', () => { modal.style.display = "none"; });
+    modalClose.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); modal.style.display = "none"; }
+    });
+    modal.addEventListener('click', event => {
+        if (event.target === modal) modal.style.display = "none";
+    });
+
+    modalContent.addEventListener('click', function(event) {
         const t = event.target;
 
         // Inline toggles (.bib / abstract)
@@ -179,12 +291,22 @@ function init_modal_handlers() {
             return;
         }
 
-        // Download all visible publications as a .bib file
-        if (t.matches('a.dl-all-bib')) {
+        // Show more
+        if (t.matches('a.show-more')) {
             event.preventDefault();
             const list = t.closest('.pub-list');
             if (!list) return;
-            const bibs = Array.from(list.querySelectorAll('pre.bib')).map(p => p.textContent);
+            list.querySelectorAll('.extra-publication').forEach(li => { li.style.display = 'list-item'; });
+            t.parentElement.style.display = 'none';
+            return;
+        }
+
+        // Download all publications in the modal as a .bib file. The button
+        // lives in modal-actions but the <pre class="bib"> sit in modal-body.
+        if (t.matches('a.dl-all-bib')) {
+            event.preventDefault();
+            const bibs = Array.from(modalBody.querySelectorAll('pre.bib')).map(p => p.textContent);
+            if (bibs.length === 0) return;
             const blob = new Blob([bibs.join('\\n\\n') + '\\n'], {type: 'application/x-bibtex'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
@@ -226,39 +348,270 @@ draw_graph();
 """
 
 # language=javascript
-redraw_script = """
-document.getElementById('redraw-$uid').addEventListener('click', function(event) {
-    event.preventDefault();  // Prevent page jump
-    draw_graph();
-});
-
-"""
-
-# language=javascript
-fs_script = """
-document.getElementById('fullscreen-$uid').addEventListener('click', function(event) {
-    event.preventDefault();
-    let elem = document.getElementById('box-$uid');
+menu_script = """
+function toggleFullscreen() {
+    const elem = document.getElementById('box-$uid');
     if (!document.fullscreenElement) {
-        // Request fullscreen mode
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen();
-        } else if (elem.webkitRequestFullscreen) { /* Safari */
-            elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) { /* IE11 */
-            elem.msRequestFullscreen();
-        }
+        const req = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.msRequestFullscreen;
+        if (req) req.call(elem);
     } else {
-        // Exit fullscreen mode
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) { /* Safari */
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { /* IE11 */
-            document.msExitFullscreen();
+        const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+        if (exit) exit.call(document);
+    }
+}
+
+function downloadBlob(blob, filename) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+}
+
+function downloadLabBib() {
+    const bibs = Object.values(publications).map(p => p.bib).filter(Boolean);
+    if (bibs.length === 0) return;
+    const blob = new Blob([bibs.join('\\n\\n') + '\\n'], {type: 'application/x-bibtex'});
+    downloadBlob(blob, safeFilename(labName) + '.bib');
+}
+
+// Native canvas rendering of the legend, bypassing html2canvas. Reason:
+// html2canvas scans every stylesheet in the document (Jupyter / Sphinx
+// load thousands of CSS rules) regardless of target size, costing ~10s
+// on a real notebook even for our tiny legend. The legend structure is
+// simple enough to draw directly: color box + checkbox + text per row.
+function renderLegendToCanvas(legend, scale) {
+    const lr = legend.getBoundingClientRect();
+    const w = Math.max(1, Math.ceil(lr.width));
+    const h = Math.max(1, Math.ceil(lr.height));
+    const c = document.createElement('canvas');
+    c.width = Math.ceil(w * scale);
+    c.height = Math.ceil(h * scale);
+    const ctx = c.getContext('2d');
+    ctx.scale(scale, scale);
+
+    const cs = getComputedStyle(legend);
+
+    // Background + border (single radius, single border-color: matches the
+    // current .legend rule).
+    const radius = parseFloat(cs.borderTopLeftRadius) || 0;
+    const bw = parseFloat(cs.borderTopWidth) || 0;
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(0, 0, w, h, radius);
+    else ctx.rect(0, 0, w, h);
+    ctx.fillStyle = cs.backgroundColor || '#ffffff';
+    ctx.fill();
+    if (bw > 0) {
+        ctx.lineWidth = bw;
+        ctx.strokeStyle = cs.borderTopColor || '#bbb';
+        ctx.stroke();
+    }
+
+    ctx.font = cs.font || (cs.fontSize + ' ' + cs.fontFamily);
+    ctx.textBaseline = 'middle';
+
+    legend.querySelectorAll('.legend-entry, .comet-entry').forEach(entry => {
+        if (entry.offsetParent === null) return;
+        const er = entry.getBoundingClientRect();
+        if (er.width === 0 || er.height === 0) return;
+
+        // Color box (first <span> in the entry, with inline background-color).
+        const colorBox = entry.querySelector('span');
+        if (colorBox) {
+            const sr = colorBox.getBoundingClientRect();
+            const sc = getComputedStyle(colorBox);
+            const bg = sc.backgroundColor;
+            if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+                ctx.fillStyle = bg;
+                ctx.fillRect(sr.left - lr.left, sr.top - lr.top, sr.width, sr.height);
+            }
+        }
+
+        // Checkbox (drawn manually: empty box + check mark if checked).
+        const cb = entry.querySelector('input[type="checkbox"]');
+        let textStartX = (er.left - lr.left) + 24;
+        if (cb) {
+            const cbr = cb.getBoundingClientRect();
+            const cbx = cbr.left - lr.left;
+            const cby = cbr.top - lr.top;
+            ctx.strokeStyle = cs.color || '#888';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(cbx + 0.5, cby + 0.5, Math.max(8, cbr.width - 1), Math.max(8, cbr.height - 1));
+            if (cb.checked) {
+                ctx.beginPath();
+                ctx.moveTo(cbx + 3, cby + cbr.height / 2);
+                ctx.lineTo(cbx + cbr.width * 0.4, cby + cbr.height - 4);
+                ctx.lineTo(cbx + cbr.width - 3, cby + 3);
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+            textStartX = cbr.right - lr.left + 4;
+        }
+
+        // Text label: concat direct text-node children of the label element.
+        let label = '';
+        entry.childNodes.forEach(n => {
+            if (n.nodeType === Node.TEXT_NODE) label += n.textContent;
+        });
+        label = label.trim();
+        if (label) {
+            ctx.fillStyle = cs.color || '#000000';
+            ctx.fillText(label, textStartX, (er.top - lr.top) + er.height / 2);
+        }
+    });
+
+    return c;
+}
+
+// Composite the vis-network canvas (already drawn, free to read) with the
+// natively-rendered legend. No CDN, no DOM walk, sub-millisecond on top of
+// the network read.
+function captureBox() {
+    const networkCanvas = currentNetwork && currentNetwork.canvas && currentNetwork.canvas.frame
+        ? currentNetwork.canvas.frame.canvas
+        : null;
+    if (!networkCanvas) throw new Error('Network canvas unavailable');
+
+    const out = document.createElement('canvas');
+    out.width = networkCanvas.width;
+    out.height = networkCanvas.height;
+    const ctx = out.getContext('2d');
+    ctx.drawImage(networkCanvas, 0, 0);
+
+    const legend = document.getElementById('legend-$uid');
+    if (legend && legend.style.display !== 'none' && legend.offsetParent !== null) {
+        try {
+            const visEl = document.getElementById('vis-$uid');
+            const visRect = visEl.getBoundingClientRect();
+            const legendRect = legend.getBoundingClientRect();
+            const scale = networkCanvas.width / visRect.width;
+            const legendCanvas = renderLegendToCanvas(legend, scale);
+            const dx = (legendRect.left - visRect.left) * scale;
+            const dy = (legendRect.top - visRect.top) * scale;
+            ctx.drawImage(legendCanvas, dx, dy);
+        } catch (err) {
+            console.warn('Legend overlay failed:', err);
         }
     }
+    return out;
+}
+
+function downloadPng() {
+    try {
+        const canvas = captureBox();
+        canvas.toBlob(blob => {
+            if (blob) downloadBlob(blob, safeFilename(labName) + '.png');
+        }, 'image/png');
+    } catch (err) {
+        console.warn('PNG export failed:', err);
+    }
+}
+
+function copyPngToClipboard() {
+    if (!navigator.clipboard || typeof window.ClipboardItem !== 'function') {
+        console.warn('Clipboard image API unavailable in this browser/context.');
+        return;
+    }
+    try {
+        const canvas = captureBox();
+        canvas.toBlob(blob => {
+            if (!blob) return;
+            navigator.clipboard.write([new ClipboardItem({'image/png': blob})])
+                .catch(err => console.warn('PNG clipboard copy failed:', err));
+        }, 'image/png');
+    } catch (err) {
+        console.warn('PNG clipboard copy failed:', err);
+    }
+}
+
+function applyLegendVisibility() {
+    const legend = document.getElementById("legend-$uid");
+    if (!legend) return;
+    const auto = (Object.keys(options.groups).length > 1 || lastHasSingletons);
+    const visible = legendVisibilityOverride !== null ? legendVisibilityOverride : auto;
+    legend.style.display = visible ? "" : "none";
+    const label = document.querySelector('#menu-list-$uid [data-action="toggle-legend"] .menu-label');
+    if (label) label.textContent = visible ? 'Hide Legend' : 'Show Legend';
+}
+
+function toggleLegend() {
+    const legend = document.getElementById("legend-$uid");
+    if (!legend) return;
+    const currentlyVisible = legend.style.display !== 'none';
+    legendVisibilityOverride = !currentlyVisible;
+    applyLegendVisibility();
+}
+
+function refreshFullscreenLabels() {
+    const inFs = !!document.fullscreenElement;
+    const label = inFs ? 'Exit Full Screen' : 'Full Screen';
+    const btn = document.getElementById('fullscreen-$uid');
+    if (btn) {
+        btn.title = label;
+        btn.setAttribute('aria-label', label);
+    }
+    const menuLabel = document.querySelector('#menu-list-$uid [data-action="fullscreen"] .menu-label');
+    if (menuLabel) menuLabel.textContent = label;
+}
+
+const menuActions = {
+    'redraw': draw_graph,
+    'fullscreen': toggleFullscreen,
+    'toggle-legend': toggleLegend,
+    'dl-bib': downloadLabBib,
+    'dl-png': downloadPng,
+    'copy-png': copyPngToClipboard,
+};
+
+const menuBtn = document.getElementById('menu-$uid');
+const menuList = document.getElementById('menu-list-$uid');
+const menuWrap = document.getElementById('menu-wrap-$uid');
+
+function setMenuOpen(open) {
+    menuList.hidden = !open;
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+menuBtn.addEventListener('click', function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    setMenuOpen(menuList.hidden);
 });
+
+menuList.addEventListener('click', function(event) {
+    const item = event.target.closest('a.menu-item');
+    if (!item) return;
+    event.preventDefault();
+    setMenuOpen(false);
+    const action = menuActions[item.dataset.action];
+    if (action) action();
+});
+
+document.addEventListener('click', function(event) {
+    if (!menuList.hidden && !menuWrap.contains(event.target)) {
+        setMenuOpen(false);
+    }
+});
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && !menuList.hidden) {
+        setMenuOpen(false);
+    }
+});
+
+document.getElementById('fullscreen-$uid').addEventListener('click', function(event) {
+    event.preventDefault();
+    toggleFullscreen();
+});
+
+document.addEventListener('fullscreenchange', refreshFullscreenLabels);
+refreshFullscreenLabels();
+
+// Reflect the actual filename in the menu entry, e.g. "Download Céline_Comte.bib".
+const dlBibLabel = document.querySelector('#menu-list-$uid [data-action="dl-bib"] .menu-label');
+if (dlBibLabel) dlBibLabel.textContent = 'Download ' + safeFilename(labName) + '.bib';
 
 """
 
@@ -273,4 +626,4 @@ document.querySelectorAll("#legend-$uid input").forEach(cb => {
 """
 
 
-default_script = Template(draw_script + redraw_script + fs_script + legend_script)
+default_script = Template(draw_script + menu_script + legend_script)

@@ -11,6 +11,25 @@
 
 ## 0.5.4 (2026-05-04): Some user requests
 
+### Highlights
+
+- BibTeX export everywhere: per-publication `[.bib]` toggle in the modal, per-author / per-pair "Download .bib" buttons, and a whole-lab download via the new menu (or programmatically via `LabMap.to_bib()`).
+- Reorganized graph controls: a hamburger menu (top-left) groups Redraw, Full Screen, Show/Hide Legend, PNG export, and the lab-level `.bib` export. Full Screen becomes a YouTube-style icon at the bottom-right.
+- Modal overlay is finally legible in Jupyter dark mode.
+- HTML produced by `lab.html()` / `save_html()` is ~4× smaller for typical labs.
+- New programmatic exports: `LabMap.to_bib()`, `LabMap.to_json()`, `LabMap.to_csv()`.
+- New tutorial [HALTools](docs/tutorials/haltools.ipynb): walk-through of `diff_sources()` and `find_duplicates()` on four real-world researcher profiles, with an explicit "what to act on, what to ignore" wrap-up. Replaces and expands the former *Analyzing sources* section of the EgoMap tutorial.
+
+### Visualization
+
+- New hamburger menu (top-left) replacing the standalone Redraw button. Single entry point for: Redraw, Full Screen, Show/Hide Legend, Download `<lab>.bib` (whole-lab BibTeX), Download PNG, Copy PNG to clipboard. The `<lab>` label always matches the actual downloaded filename.
+- PNG export of the collaboration graph (download or copy to clipboard). The legend is composited natively to canvas — no external dependency, no perceptible delay.
+- Full Screen icon (bottom-right, expand/compress glyph in YouTube style) replaces the text button. Tooltip and the matching menu entry switch between "Full Screen" and "Exit Full Screen" automatically.
+- Per-publication `[.bib]` toggle in the modal overlay reveals an inline `<pre>` with the BibTeX entry. A sphinx_copybutton-style copy button (revealed on hover) sits in the top-right of each `<pre>`.
+- Per-publication `[abstract]` toggle for publications that carry an abstract (HAL).
+- Per-list "Download .bib" button (author or author-pair) now sits right-aligned on the same line as the "Publications of …" / "Joint publications from …" header (used to wrap to a new line below).
+- All overlay button handling uses event delegation on the modal body — no per-click listener attachment.
+
 ### New features
 
 - Add `LabMap.to_bib(name=None, query=None)` to export a lab's publications as a BibTeX file. Optional `query` argument reuses `select_publications` to filter (string match, fuzzy title, or callable).
@@ -20,15 +39,15 @@
 - Tuning kwargs on `LabMap.__init__`: `max_co_authors`, `min_title_words`, `taboo_words`, `taboo_authors`. Subclasses can adjust default filters without mutating `publication_selectors` by index.
 - `LaasMap`/`LaasFull` (`gismap.lab_examples.toulouse`) gain `department_level` to label authors by parent department; `LaasFull` gains `with_support` to include LAAS support services and deduplicates authors appearing in multiple teams.
 
-### Visualization
+### Documentation
 
-- Per-publication `[.bib]` toggle in the modal overlay reveals an inline `<pre>` with the BibTeX entry. A sphinx_copybutton-style copy button (revealed on hover) sits in the top-right of each `<pre>`.
-- Per-publication `[abstract]` toggle for publications that carry an abstract (HAL).
-- "Download .bib" link at the top of each modal overlay; downloads all visible publications as a `.bib` file named after the author or pair of authors.
-- All overlay button handling uses event delegation on the modal body — no per-click listener attachment.
+- New tutorial `docs/tutorials/haltools.ipynb` covering `diff_sources()` and `find_duplicates()` end-to-end (clean profile, messy profile, duplicate-heavy profile, and `pid`-vs-fullname diagnosis). Wired into `docs/tutorials/index.md` and the FAQ Binder list.
+- The notebook is shipped with stored outputs on purpose: the analysis text references specific HAL/LDB items, so a stale narrative would be worse than a slightly stale snapshot. Re-execute locally before each release.
+- Removed the *Analyzing sources* section from `docs/tutorials/egomap.ipynb` (now superseded by the dedicated tutorial).
 
 ### Improvements
 
+- HTML output is ~4× smaller for typical labs. Each publication is now shipped once in a shared JS dict and referenced by key from nodes and edges; the modal is rendered on click from that dict, instead of inlining the full publication HTML once per author and once per author-pair. Internal refactor of `gismap.gisgraphs.graph` and `gismap.gisgraphs.js`.
 - `LAAS_TABOO` now extends `editorials` instead of duplicating it.
 - Docstrings completed on `LaasMap`, `LaasFull`, and `LabMap` (full Parameters sections).
 - `LabMap.save_html()` and the new export methods raise `ValueError` if neither `name=` nor `self.name` is set, instead of crashing on `Path(None)`.
@@ -36,6 +55,8 @@
 
 ### Bug fixes
 
+- Modal overlay was unreadable in Jupyter dark mode (fixed-light card on dark canvas). Modal colors now resolve through `var(--pst-color-…, var(--jp-…, fallback))` chains so the modal follows the host theme.
+- Harden JSON embedded inside `<script>`: any `</` (e.g. `</script>` inside a publication title) is rewritten to `<\/`, neutralizing a tag-breakout vector.
 - Fix `LaasMap._author_iterator` department-level scraping: `find("p", {"class", "font11"})` (a set) was silently wrong; replaced by `{"class": "font11"}` (a dict).
 - Fix `LDB._initialized = True` being set even when `search_engine` was `None` (e.g. interrupted download leaving the GitHub release pickle as-is, or pre-existing dump from a previous build). Subsequent `search_author()` calls then crashed with `AttributeError: 'NoneType' object has no attribute 'extract'`. `LDB.load()` now rebuilds and re-dumps the search engine whenever the loaded state has none.
 - `LDB._download_file` now writes through `safe_write` (temp file + atomic rename) so an interrupted download no longer leaves a partial `ldb.pkl.zst` that the next run would try to load.
