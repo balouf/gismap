@@ -56,6 +56,10 @@
 - `LabMap.save_html()` and the new export methods raise `ValueError` if neither `name=` nor `self.name` is set, instead of crashing on `Path(None)`.
 - LDB cache is now stored under a Python-version-specific subdirectory (`<user_data_dir>/gismap/py{X.Y}/ldb.pkl.zst`) so that running gismap from multiple Python interpreters on the same machine no longer leads to mutually corrupted dumps. Users with several Python versions will pay one (re-)`retrieve` per interpreter; mono-Python users see no change other than the new path.
 
+### CI
+
+- Network-heavy tests now run only on the 3.12 matrix runner (the one that feeds Codecov). The 3.11 / 3.13 / 3.14 runners skip them via `--ignore`. Two test paths are concerned: `gismap/sources/dblp.py` (live DBLP doctests) and `tests/test_lab_examples.py` (live scraping of irif.fr / lamsade / lincs / laas). With four runners hitting the same endpoints in parallel, the remote side would issue temporary bans, and the suite would stall for ~20 min on exponential backoff before `+FLAKY` downgraded DBLP failures to skips, or `test_lab_examples` failed outright on a `ConnectionError`. Live-network coverage is preserved on 3.12.
+
 ### Bug fixes
 
 - Modal overlay was unreadable in Jupyter dark mode (fixed-light card on dark canvas). Modal colors now resolve through `var(--pst-color-…, var(--jp-…, fallback))` chains so the modal follows the host theme.

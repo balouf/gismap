@@ -37,7 +37,16 @@ jobs:
           key: ldb-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
 
       - run: uv sync --all-extras
-      - run: uv run pytest
+
+      # Network-heavy tests (live DBLP doctests; live scraping of lab
+      # websites like irif.fr / lamsade / lincs / laas) are kept only on the
+      # 3.12 runner (the one feeding Codecov). With 4 matrix runners hitting
+      # the same endpoints in parallel, the remote side issues temporary
+      # bans, and the suite stalls for ~20 min on exponential backoff before
+      # `+FLAKY` (DBLP) downgrades to skip or `test_lab_examples` outright
+      # fails on a ConnectionError. Coverage is preserved on 3.12.
+      - name: Run tests
+        run: uv run pytest ${{ matrix.python-version != '3.12' && '--ignore=gismap/sources/dblp.py --ignore=tests/test_lab_examples.py' || '' }}
 
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.12'
