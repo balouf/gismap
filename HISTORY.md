@@ -42,8 +42,11 @@
 ### Documentation
 
 - New tutorial `docs/tutorials/haltools.ipynb` covering `diff_sources()` and `find_duplicates()` end-to-end (clean profile, messy profile, duplicate-heavy profile, and `pid`-vs-fullname diagnosis). Wired into `docs/tutorials/index.md` and the FAQ Binder list.
-- The notebook is shipped with stored outputs on purpose: the analysis text references specific HAL/LDB items, so a stale narrative would be worse than a slightly stale snapshot. Re-execute locally before each release.
+- The haltools notebook is shipped with stored outputs on purpose: the analysis text references specific HAL/LDB items, so a stale narrative would be worse than a slightly stale snapshot. Re-execute locally before each release.
 - Removed the *Analyzing sources* section from `docs/tutorials/egomap.ipynb` (now superseded by the dedicated tutorial).
+- New `## Exporting a lab` section in `docs/tutorials/lab_tutorial.ipynb` showing `to_bib()` (whole-lab and `query=`-filtered), `to_json()`, and `to_csv()`.
+- Updated lab_tutorial's "Few things about the generated graph" enumeration to describe the hamburger menu, the bottom-right Full Screen icon, and the in-modal `[.bib]` / `[abstract]` / "Download .bib" affordances.
+- Refreshed the FAQ: the *graph is spinning* and *it's too small* recipes now refer to the new menu and icon (`Redraw` is now a menu entry, not a standalone button); the *publication should be there in my LabMap* section leads with the new constructor kwargs (`max_co_authors`, `min_title_words`, `taboo_words`, `taboo_authors`) and keeps `publication_selectors` as the advanced escape hatch.
 
 ### Improvements
 
