@@ -43,29 +43,42 @@ class LabMap(MixInIO):
         Name of the lab. Can be set as class or instance attribute.
     dbs: :class:`list`, default=[:class:`~gismap.sources.hal.HAL`, :class:`~gismap.sources.ldb.LDB`]
         List of DB sources to use.
-
+    max_co_authors: :class:`int`, default=9
+        Reject publications with strictly more than this number of co-authors.
+    min_title_words: :class:`int`, default=2
+        Reject publications whose title contains fewer than this number of words.
+    taboo_words: :class:`list`, optional
+        Words/regexes; a publication is rejected if its title matches any of them.
+        Defaults to :data:`~gismap.lab.filters.editorials`.
+    taboo_authors: :class:`list`, optional
+        Words/regexes; an author is rejected if their name matches any of them.
+        Defaults to :data:`~gismap.lab.filters.charlatans`.
 
     Attributes
     -----------
 
     author_selectors: :class:`list`
-        Author filters. Default: minimal filtering.
+        Author filters. Built from ``taboo_authors`` at construction time but
+        can be reassigned for advanced use cases.
     publication_selectors: :class:`list`
-        Publication filter. Default: less than 10 authors, not an editorial, at least two words in the title.
+        Publication filters. Built from ``max_co_authors``, ``taboo_words`` and
+        ``min_title_words`` at construction time but can be reassigned.
     """
 
     name = None
     dbs = default_dbs
 
-    def __init__(self, name=None, dbs=None):
+    def __init__(
+        self, name=None, dbs=None, *, max_co_authors=9, min_title_words=2, taboo_words=None, taboo_authors=None
+    ):
         if name is not None:
             self.name = name
         self.dbs = dbs
-        self.author_selectors = [author_taboo_filter()]
+        self.author_selectors = [author_taboo_filter(taboo_authors)]
         self.publication_selectors = [
-            publication_size_filter(),
-            publication_taboo_filter(),
-            publication_oneword_filter(),
+            publication_size_filter(n_max=max_co_authors),
+            publication_taboo_filter(w=taboo_words),
+            publication_oneword_filter(n_min=min_title_words),
         ]
         self.authors = None
         self.publications = None
