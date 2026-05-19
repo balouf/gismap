@@ -3,6 +3,7 @@ import uuid
 
 from gismap.gisgraphs.graph import lab_to_graph
 from gismap.gisgraphs.groups import auto_groups, make_legend
+from gismap.gisgraphs.images import inline_node_images
 from gismap.gisgraphs.js import default_script
 from gismap.gisgraphs.options import edges as def_edges
 from gismap.gisgraphs.options import interaction as def_interaction
@@ -43,6 +44,14 @@ def make_vis(lab, **kwargs):
         CSS template.
     script: :class:`string.Template`, optional
         JavaScript template.
+    inline_images: :class:`bool`, default=True
+        If True, fetch each node image and embed it as a ``data:`` URI so
+        the canvas is not tainted and PNG export works. Images that fail
+        to download or exceed ``max_inline_bytes`` are left as URLs.
+    max_inline_bytes: :class:`int`, default=100_000
+        Skip inlining for any image larger than this (e.g. uncropped LDAP
+        portraits). The URL is kept; PNG export of that node may fail but
+        the rest of the graph still exports.
 
     Returns
     -------
@@ -69,10 +78,14 @@ def make_vis(lab, **kwargs):
     }
     style = kwargs.pop("style", default_style)
     script = kwargs.pop("script", default_script)
+    inline_images = kwargs.pop("inline_images", True)
+    max_inline_bytes = kwargs.pop("max_inline_bytes", 100_000)
     if kwargs:
         raise TypeError(f"unexpected keyword arguments: {repr(kwargs)}")
 
     nodes, edges, publications = lab_to_graph(lab)
+    if inline_images:
+        inline_node_images(nodes, max_bytes=max_inline_bytes)
 
     # Embed JSON inside <script>: a literal "</" anywhere in the data
     # (e.g. "</script>" inside a pub title) would terminate the host

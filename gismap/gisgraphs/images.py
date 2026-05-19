@@ -1,0 +1,89 @@
+import base64
+from concurrent.futures import ThreadPoolExecutor
+
+import requests
+
+from gismap.utils.logger import logger
+from gismap.utils.requests import session
+
+
+def fetch_data_uri(url, *, max_bytes, timeout):
+    """
+    Fetch an image and return its ``data:`` URI, or ``None`` on failure.
+
+    Streams the response and aborts as soon as ``max_bytes`` is exceeded, so
+    a 30 MB LDAP portrait never lands in memory.
+
+    Parameters
+    ----------
+    url : :class:`str`
+        Image URL.
+    max_bytes : :class:`int`
+        Hard cap on the downloaded payload. URLs exceeding this are skipped.
+    timeout : :class:`float`
+        Per-request timeout (connect + read), seconds.
+
+    Returns
+    -------
+    :class:`str` or None
+        ``data:<mime>;base64,...`` on success, ``None`` if the image is
+        unreachable, too large, or returns a non-2xx status.
+    """
+    try:
+        with session.get(url, stream=True, timeout=timeout) as r:
+            if r.status_code != 200:
+                return None
+            content_length = r.headers.get("Content-Length")
+            if content_length and int(content_length) > max_bytes:
+                return None
+            mime = (r.headers.get("Content-Type") or "image/jpeg").split(";", 1)[0].strip()
+            buf = bytearray()
+            for chunk in r.iter_content(chunk_size=8192):
+                buf.extend(chunk)
+                if len(buf) > max_bytes:
+                    return None
+    except (requests.RequestException, ValueError):
+        return None
+    return f"data:{mime};base64,{base64.b64encode(bytes(buf)).decode('ascii')}"
+
+
+def inline_node_images(nodes, *, max_bytes=100_000, timeout=5, max_workers=8):
+    """
+    Replace each node's ``image`` URL with an inlined ``data:`` URI when feasible.
+
+    Mutates ``nodes`` in place. URLs that fail to download, return non-200,
+    or exceed ``max_bytes`` are left untouched — the canvas may then become
+    tainted for those nodes, but PNG export still works whenever every
+    *successfully drawn* image is inlined (vis-network silently skips
+    unreachable images).
+
+    Parameters
+    ----------
+    nodes : :class:`list` of :class:`dict`
+        Node payloads as produced by :func:`~gismap.gisgraphs.graph.lab_to_graph`.
+    max_bytes : :class:`int`, default=100_000
+        Skip inlining if the image is larger than this.
+    timeout : :class:`float`, default=5
+        Per-image fetch timeout.
+    max_workers : :class:`int`, default=8
+        Parallel download workers.
+
+    Returns
+    -------
+    None
+    """
+    urls = {
+        n["image"] for n in nodes if isinstance(n.get("image"), str) and n["image"].startswith(("http://", "https://"))
+    }
+    if not urls:
+        return
+    with ThreadPoolExecutor(max_workers=max_workers) as ex:
+        cache = dict(zip(urls, ex.map(lambda u: fetch_data_uri(u, max_bytes=max_bytes, timeout=timeout), urls)))
+    n_inlined = sum(1 for v in cache.values() if v)
+    n_skipped = len(cache) - n_inlined
+    if n_skipped:
+        logger.info(f"inline_node_images: {n_inlined} inlined, {n_skipped} left as URL")
+    for n in nodes:
+        uri = cache.get(n.get("image"))
+        if uri:
+            n["image"] = uri
