@@ -201,7 +201,7 @@ def proper_prospects(lab, length_impact=0.05, threshold=80, n_range=4, max_new=N
     prospects = get_prospects(lab)
 
     if len(member_names) == 0 or len(prospects) == 0:
-        return dict(), dict()
+        return []
 
     done = np.zeros(len(prospects), dtype=bool)
 

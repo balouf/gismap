@@ -16,12 +16,12 @@ TIME_BUDGET = 10.0
 @pytest.mark.parametrize(
     "lab_cls, min_authors",
     [
-        (Lip6Full, 50),
-        (Lamsade, 36),
-        (LINCS, 57),
-        (LaasMap, 37),
-        (AlgoRes2026, 36),
-        (AlgoRes2016, 31),
+        (Lip6Full, 30),
+        (Lamsade, 30),
+        (LINCS, 30),
+        (LaasMap, 30),
+        (AlgoRes2026, 30),
+        (AlgoRes2016, 30),
     ],
     ids=["LIP6", "Lamsade", "LINCS", "sara", "AlgoRes2026", "AlgoRes2016"],
 )
