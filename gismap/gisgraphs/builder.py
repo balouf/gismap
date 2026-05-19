@@ -46,12 +46,12 @@ def make_vis(lab, **kwargs):
         JavaScript template.
     inline_images: :class:`bool`, default=True
         If True, fetch each node image and embed it as a ``data:`` URI so
-        the canvas is not tainted and PNG export works. Images that fail
-        to download or exceed ``max_inline_bytes`` are left as URLs.
-    max_inline_bytes: :class:`int`, default=100_000
+        the canvas stays clean and PNG export works. Images that fail to
+        download or exceed ``max_inline_bytes`` are demoted to the
+        initials fallback (no external URL is ever left on a node).
+    max_inline_bytes: :class:`int`, default=200_000
         Skip inlining for any image larger than this (e.g. uncropped LDAP
-        portraits). The URL is kept; PNG export of that node may fail but
-        the rest of the graph still exports.
+        portraits). The node is demoted to initials.
 
     Returns
     -------
@@ -79,7 +79,7 @@ def make_vis(lab, **kwargs):
     style = kwargs.pop("style", default_style)
     script = kwargs.pop("script", default_script)
     inline_images = kwargs.pop("inline_images", True)
-    max_inline_bytes = kwargs.pop("max_inline_bytes", 100_000)
+    max_inline_bytes = kwargs.pop("max_inline_bytes", 200_000)
     if kwargs:
         raise TypeError(f"unexpected keyword arguments: {repr(kwargs)}")
 
