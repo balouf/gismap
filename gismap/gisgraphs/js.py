@@ -233,22 +233,29 @@ function draw_graph() {
     });
 }
 
+// Pick the right parent for the modal: when our box is the fullscreen
+// element, only its descendants are rendered, so the modal must live inside
+// it. Outside fullscreen, we reparent to document.body to escape any
+// transformed ancestor (JupyterLab cell wrappers) that would otherwise
+// break position:fixed and click-outside-to-close.
+function setModalParent() {
+    const modal = document.getElementById('modal-$uid');
+    if (!modal) return;
+    const box = document.getElementById('box-$uid');
+    const target = (document.fullscreenElement === box) ? box : document.body;
+    if (modal.parentElement !== target) target.appendChild(modal);
+}
+
 // Event delegation on .modal-content: handles inline .bib / abstract toggles
 // and the per-pre copy button (in modal-body), the "Show more…" expansion
 // (in modal-body), and the per-list "Download .bib" action (now in
 // modal-actions, so the body-only delegation that 0.5.4-pre-toolbar used
-// would miss it). Plus the close X click and the background click. Re-parent
-// the modal to document.body so position:fixed actually covers the viewport
-// even when an ancestor (e.g. a JupyterLab cell wrapper) has a transform.
+// would miss it). Plus the close X click and the background click.
 function init_modal_handlers() {
     const modal = document.getElementById('modal-$uid');
     if (!modal) return;
 
-    // Re-parent: get out of any transformed ancestor so position:fixed works
-    // and click-outside-to-close fires correctly under JupyterLab.
-    if (modal.parentElement !== document.body) {
-        document.body.appendChild(modal);
-    }
+    setModalParent();
 
     const modalContent = modal.querySelector('.modal-content');
     const modalClose = document.getElementById('modal-close-$uid');
@@ -606,7 +613,10 @@ document.getElementById('fullscreen-$uid').addEventListener('click', function(ev
     toggleFullscreen();
 });
 
-document.addEventListener('fullscreenchange', refreshFullscreenLabels);
+document.addEventListener('fullscreenchange', () => {
+    refreshFullscreenLabels();
+    setModalParent();
+});
 refreshFullscreenLabels();
 
 // Reflect the actual filename in the menu entry, e.g. "Download Céline_Comte.bib".
