@@ -72,12 +72,12 @@ def format_authors(authors, transform=None):
         List of Author objects.
     transform : :class:`callable`, optional
         A function to apply to each Author for display purposes (e.g., extracting a name).
-         If None, the default string representation of Author is used.
+        If None, the default string representation of Author is used.
 
     Returns
-        -------
-        :class:`str`
-            A human-readable string representing the formatted authors.
+    -------
+    :class:`str`
+        A human-readable string representing the formatted authors.
     """
     if transform is None:
         transform = str

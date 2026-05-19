@@ -18,7 +18,7 @@
 - Modal overlay is finally legible in Jupyter dark mode.
 - HTML produced by `lab.html()` / `save_html()` is ~4× smaller for typical labs.
 - New programmatic exports: `LabMap.to_bib()`, `LabMap.to_json()`, `LabMap.to_csv()`.
-- New tutorial [HALTools](docs/tutorials/haltools.ipynb): walk-through of `diff_sources()` and `find_duplicates()` on four real-world researcher profiles, with an explicit "what to act on, what to ignore" wrap-up. Replaces and expands the former *Analyzing sources* section of the EgoMap tutorial.
+- New tutorial [HALTools](https://balouf.github.io/gismap/tutorials/haltools.html): walk-through of `diff_sources()` and `find_duplicates()` on four real-world researcher profiles, with an explicit "what to act on, what to ignore" wrap-up. Replaces and expands the former *Analyzing sources* section of the EgoMap tutorial.
 
 ### Visualization
 
