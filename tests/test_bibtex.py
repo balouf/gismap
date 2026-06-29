@@ -1,5 +1,7 @@
 """Unit tests for the BibTeX export module."""
 
+import re
+
 from gismap.sources.bibtex import (
     BIBTEX_TYPES,
     alternate_urls,
@@ -198,6 +200,40 @@ def test_alternate_urls_skips_sources_without_url():
     urls = alternate_urls(sp)
     assert isinstance(urls, list)
     assert all(u for u in urls)
+
+
+def _validate_bibtex_document(doc):
+    """Lightweight structural validation of a (possibly multi-entry) BibTeX document.
+
+    Returns the number of entries. Raises AssertionError on malformed output:
+    unbalanced braces, missing cite key, or stray content between entries (the
+    kind of leak the modal "Copy"-button bug produced in the downloaded file).
+    """
+    assert doc.count("{") == doc.count("}"), "unbalanced braces"
+    chunks = [c.strip() for c in re.split(r"\n\s*\n", doc.strip()) if c.strip()]
+    for chunk in chunks:
+        assert chunk.startswith("@"), f"stray content before an entry: {chunk[:40]!r}"
+        assert chunk.endswith("}"), f"entry not properly closed: {chunk[-40:]!r}"
+        m = re.match(r"@(\w+)\{([^,\n]+),", chunk)
+        assert m and m.group(1) and m.group(2).strip(), f"bad entry header: {chunk[:40]!r}"
+    return len(chunks)
+
+
+def test_multi_entry_document_is_well_formed():
+    pubs = [
+        Publication(title="First", authors=[Author(name="Alice Smith")], venue="Nature", type="journal", year=2024),
+        Publication(
+            title="Second {tricky}", authors=[Author(name="Bob Jones")], venue="STOC", type="conference", year=2023
+        ),
+        Informal(title="A chat", authors=[Outsider(name="Dee")]),
+    ]
+    for i, p in enumerate(pubs):
+        if getattr(p, "key", None) is None:
+            p.key = f"k{i}"
+    # This is exactly how the lab-level / modal download concatenates entries.
+    doc = "\n\n".join(pub_to_bibtex(p) for p in pubs) + "\n"
+    assert _validate_bibtex_document(doc) == 3
+    assert "Copy" not in doc  # the phantom-"Copy" leak was JS-only; never in the source
 
 
 def test_pub_to_bibtex_round_trip_parses():

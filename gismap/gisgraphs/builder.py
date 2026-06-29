@@ -81,7 +81,13 @@ def make_vis(lab, **kwargs):
     physics = {**def_physics, **kwargs.pop("physics", {})}
     nodes_options = {**def_nodes, **kwargs.pop("nodes_options", {})}
     edges_options = {**def_edges, **kwargs.pop("edges_options", {})}
-    interaction_options = {**def_interaction, **kwargs.pop("interaction_option", {})}
+    # Accept both the documented "interaction_options" and the historical
+    # "interaction_option"; make_vis raises on unknown kwargs, so the documented
+    # plural name used to be silently rejected.
+    interaction_kw = kwargs.pop("interaction_options", None)
+    if interaction_kw is None:
+        interaction_kw = kwargs.pop("interaction_option", {})
+    interaction_options = {**def_interaction, **interaction_kw}
     options = {
         "physics": physics,
         "groups": groups,

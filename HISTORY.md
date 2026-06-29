@@ -8,6 +8,22 @@
 - OpenAlex source
 - Conf2Lab: build a lab from a set of publications (e.g. a conference)
 
+## 0.6.1 (2026-06-29): Bug fixes
+
+### Bug fixes
+
+- BibTeX export from the graph modal — the per-node / per-edge **Download .bib** button and
+  the per-entry **copy** button — no longer appends a stray `Copy` after each entry, which
+  made the downloaded/copied BibTeX unparsable. The copy button lives inside the `<pre>`, so
+  the readers now keep only its text nodes (not the button). The whole-lab export
+  (`LabMap.to_bib` / menu) was already clean. No LDB format change.
+
+### Improvements
+
+- `make_vis()` (hence `LabMap.html()` / `show_html()`) now accepts the documented
+  `interaction_options` keyword. The code only read `interaction_option`, so passing the
+  documented plural name raised ``TypeError: unexpected keyword arguments``. Both names work.
+
 ## 0.6.0 (2026-06-29): User requests, vol. 2
 
 ### Highlights

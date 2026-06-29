@@ -93,6 +93,15 @@ function renderActions(downloadName) {
     return '<a href="#" class="dl-all-bib" data-name="' + fname + '">Download .bib</a>';
 }
 
+// Read a <pre class="bib"> without its appended copy button: that button lives
+// inside the <pre>, so pre.textContent would otherwise leak "Copy"/"Copied!"
+// into the BibTeX and break parsing. We keep only the direct text nodes.
+function bibText(pre) {
+    let s = '';
+    pre.childNodes.forEach(n => { if (n.nodeType === Node.TEXT_NODE) s += n.textContent; });
+    return s;
+}
+
 function openModal(titleHtml, pubKeys, downloadName) {
     document.getElementById('modal-title-$uid').innerHTML = titleHtml;
     document.getElementById('modal-actions-$uid').innerHTML = renderActions(downloadName);
@@ -347,7 +356,7 @@ function init_modal_handlers() {
             event.preventDefault();
             const btn = t.closest('.copybtn');
             const pre = btn.parentElement;
-            navigator.clipboard.writeText(pre.textContent).then(() => {
+            navigator.clipboard.writeText(bibText(pre)).then(() => {
                 const orig = btn.textContent;
                 btn.textContent = 'Copied!';
                 btn.classList.add('copied');
@@ -373,7 +382,7 @@ function init_modal_handlers() {
         // lives in modal-actions but the <pre class="bib"> sit in modal-body.
         if (t.matches('a.dl-all-bib')) {
             event.preventDefault();
-            const bibs = Array.from(modalBody.querySelectorAll('pre.bib')).map(p => p.textContent);
+            const bibs = Array.from(modalBody.querySelectorAll('pre.bib')).map(bibText);
             if (bibs.length === 0) return;
             const blob = new Blob([bibs.join('\\n\\n') + '\\n'], {type: 'application/x-bibtex'});
             const a = document.createElement('a');

@@ -141,3 +141,19 @@ class TestTheme:
 
     def test_theme_kwarg(self, lab):
         assert 'let themeMode = "dark"' in lab.html(theme="dark")
+
+
+class TestBibExport:
+    def test_bib_download_excludes_copy_button(self, html):
+        # Regression guard: the modal .bib download/copy must read the <pre> via
+        # bibText() (text nodes only), never p.textContent — which would include
+        # the appended "Copy" button and break the BibTeX.
+        assert "function bibText(pre)" in html
+        assert ".map(bibText)" in html
+        assert "writeText(bibText(pre))" in html
+        assert "p => p.textContent" not in html
+
+    def test_interaction_options_kwarg_accepted(self, lab):
+        # Documented plural name must not raise (used to be silently rejected).
+        assert lab.html(interaction_options={"hover": False})
+        assert lab.html(interaction_option={"hover": False})  # historical name still works
