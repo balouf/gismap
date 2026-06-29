@@ -132,7 +132,7 @@ class WordCloud:
             spans.append(
                 f'<span style="display:inline-block;margin:0.1em 0.32em;line-height:1.15;'
                 f"font-size:{size:.1f}px;font-weight:{400 + int(300 * t)};"
-                f'color:hsl({hue},62%,55%);" title="{escape(f"{weight:.4g}")}">{escape(word)}</span>'
+                f'color:hsl({hue},62%,55%);" title="{escape(f"{weight:.4g}")}">{escape(word.title())}</span>'
             )
         header = (
             f'<div style="font-size:0.85em;opacity:0.7;margin-bottom:0.5em;color:inherit;">{escape(self.title)}</div>'

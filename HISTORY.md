@@ -65,10 +65,14 @@
   fuzzy source resolution.
 - **Keyword clouds**: `LabMap.wordcloud(query=, group=)` and `LabMap.keywords(...)` extract
   weighted keywords for a topic, an author, a group, or the whole lab, via a new `GismoLab`
-  (authors ↔ words cross-embedding over titles + abstracts; reuse one instance for many
-  queries). `WordCloud` renders a self-contained HTML cloud (`_repr_html_` in notebooks,
-  `save_html` to a file). Near-duplicate n-grams are merged ("p2p" absorbed by "p2p
-  networks"). No new dependency (built on Gismo).
+  (authors ↔ words cross-embedding over titles + abstracts). Pass `gismo_lab=` to reuse a
+  prebuilt instance across many queries instead of rebuilding each call. A group's keywords
+  aggregate the text of all its publications (word-space), so the cloud reflects the group's
+  actual output instead of giving low-output authors disproportionate weight. A large curated
+  English + French + scraping-noise stop-word list keeps the clouds clean. `WordCloud` renders
+  a self-contained HTML cloud (`_repr_html_` in notebooks, `save_html` to a file).
+  Near-duplicate n-grams are merged ("p2p" absorbed by "p2p networks"). No new dependency
+  (built on Gismo).
 
 ### Documentation
 
@@ -88,6 +92,28 @@
 - **The LDB asset format changed**: the `ldb.pkl.zst` shipped with this release is rebuilt;
   older local caches are incompatible and are re-fetched automatically on first use
   (`LDB.retrieve()` to force it).
+- `build_db` logs each phase, including the two-pass `optimize` (dictionary training +
+  level-19 recompression); `python -m gismap.build` configures timestamped logging so build
+  phases and their durations are visible in CI.
+
+### Robustness
+
+- `gismap.utils.requests.get()` now passes a connect/read `timeout` (and retries on timeout),
+  so a slow or hung endpoint no longer blocks a scrape (or the test suite) indefinitely.
+- `AlgoRes2016` reads through the archive.org mirror: the live LaBRI page has a ~20 s
+  cold-cache penalty on first hit; the mirror serves byte-identical content in ~2 s and is
+  more durable for a long-dead conference site.
+
+### CI / build
+
+- The `ldb-build` workflow uploads the rebuilt `ldb.pkl.zst` to the release that *matches the
+  built version* (derived from `gismap.__version__`), aborting if that release does not exist,
+  instead of always clobbering the latest release. A `ref` input rebuilds a specific release's
+  asset (e.g. `v0.5.4`) with the current workflow logic.
+- Author / publication counts in the verify step are read straight from the dump instead of
+  via `load_db()`, which used to rebuild the search engine and re-dump the asset — silently
+  re-inflating a `--no-search` asset.
+- Progress bars are throttled in CI (`TQDM_MININTERVAL`) so logs stay readable.
 
 ## 0.5.4 (2026-05-04): Some user requests
 
