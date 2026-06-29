@@ -74,15 +74,15 @@ def publication_text(pub):
     """
     title = getattr(pub, "title", "") or ""
     abstract = ""
-    for source in getattr(pub, "sources", None) or []:
-        md = getattr(source, "metadata", None)
-        if isinstance(md, dict) and md.get("abstract"):
-            abstract = md["abstract"]
-            break
+    md = getattr(pub, "metadata", None)
+    if isinstance(md, dict) and md.get("abstract"):
+        abstract = md["abstract"]
     if not abstract:
-        md = getattr(pub, "metadata", None)
-        if isinstance(md, dict) and md.get("abstract"):
-            abstract = md["abstract"]
+        for source in getattr(pub, "sources", None) or []:
+            md = getattr(source, "metadata", None)
+            if isinstance(md, dict) and md.get("abstract"):
+                abstract = md["abstract"]
+                break
     return f"{title}\n\n{abstract}" if abstract else title
 
 
@@ -201,10 +201,16 @@ class GismoLab(XGismo):
 
         super().__init__(x_embedding=a_embedding, y_embedding=text_embedding)
         self.author_dict = {a.key: a for p in pubs for a in (p.authors or []) if getattr(a, "key", None)}
+        self.publications = lab.publications
         self.post_features_item = lambda g, i: (g.embedding.features[i], g.diteration.y_relevance[i])
 
-    def _group_keys(self, group):
-        return [k for k, a in self.author_dict.items() if getattr(getattr(a, "metadata", None), "group", None) == group]
+    def _group_query(self, group):
+        """Concatenated text of every publication with at least one author in ``group``."""
+        return "\n\n\n".join(
+            publication_text(p)
+            for p in self.publications.values()
+            if any(getattr(getattr(a, "metadata", None), "group", None) == group for a in (p.authors or []))
+        )
 
     def keywords(self, query=None, group=None, y=True, k=50, threshold=50, length_impact=0.1):
         """Return ranked ``(word, weight)`` pairs, with near-duplicate n-grams merged.
@@ -220,11 +226,11 @@ class GismoLab(XGismo):
             Ranking and de-duplication tuning (see Gismo / similarity_matrix).
         """
         if group is not None:
-            query, y = self._group_keys(group), False
-            if not query:
+            query, y = self._group_query(group), True
+            if not query:  # empty / unknown group -> no keywords
                 return []
         if query is None:
-            query = ""
+            query = "" if y else []
         self.rank(query, y=y)
         # Sort colocations first so a low length_impact regroups subsequences
         # ("p2p" absorbed by "p2p networks") instead of listing them separately.
@@ -249,7 +255,8 @@ class GismoLab(XGismo):
         elif isinstance(query, str) and query:
             title = f"Keywords — “{query}”"
         elif query:
-            title = "Keywords — selected authors"
+            names = [getattr(self.author_dict.get(k), "name", k) for k in query]
+            title = f"Keywords — author(s) {', '.join(names)}"
         else:
             title = "Keywords — whole lab"
         return WordCloud(self.keywords(query=query, group=group, **kwargs), title=title)
