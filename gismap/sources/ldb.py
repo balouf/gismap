@@ -122,7 +122,7 @@ class LDB(DB):
     >>> pubs = sorted(LDB.author_publications('66/2077'), key = lambda p: p.year)
     >>> pub = pubs[0]
     >>> pub.metadata
-    {'url': 'http://www2003.org/cdrom/papers/poster/p102/p102-mathieu.htm', 'streams': ['conf/www']}
+    {'streams': ['conf/www']}
     >>> christelle = LDB.search_author("Christelle Caillouet")
     >>> christelle
     [LDBAuthor(name='Christelle Caillouet', key='10/8725')]
@@ -234,7 +234,7 @@ class LDB(DB):
         """
         source = cls.parameters.io.source
         authors_dict = dict()
-        logger.info("Retrieve publications")
+        logger.info("Retrieve publications (first pass)")
         with ZList(frame_size=cls.parameters.frame_size.publis) as publis:
             for i, (
                 key,
@@ -260,7 +260,7 @@ class LDB(DB):
                     break
         cls.publis = publis
         logger.info(f"{len(publis)} publications retrieved.")
-        logger.info("Compact authors")
+        logger.info("Compact authors (first pass)")
         with ZList(frame_size=cls.parameters.frame_size.authors) as authors:
             for key, (_, names, pubs) in tqdm(authors_dict.items()):
                 authors.append((key, list(names), pubs))
@@ -272,9 +272,11 @@ class LDB(DB):
         # cheaper random access). optimize() preserves order, so cls.keys indices
         # stay valid; it returns a plain list for small builds (e.g. limit= tests).
         opt = cls.parameters.optimize
+        logger.info(f"Optimize publications (second pass: train dict + recompress level {opt.level})")
         cls.publis = cls.publis.optimize(
             frame_size=opt.publis, level=opt.level, threshold=opt.dict_threshold, max_bytes=opt.max_bytes
         )
+        logger.info(f"Optimize authors (second pass: train dict + recompress level {opt.level})")
         cls.authors = cls.authors.optimize(
             frame_size=opt.authors, level=opt.level, threshold=opt.dict_threshold, max_bytes=opt.max_bytes
         )

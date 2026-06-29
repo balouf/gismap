@@ -17,7 +17,7 @@ session.headers.update(
 )
 
 
-def get(url, params=None, n_trials=10, verify=True, encoding=None):
+def get(url, params=None, n_trials=10, verify=True, encoding=None, timeout=(10, 30)):
     """
     Parameters
     ----------
@@ -32,6 +32,9 @@ def get(url, params=None, n_trials=10, verify=True, encoding=None):
     encoding: :class:`str`, optional
         Force response encoding (e.g. ``"utf-8"``). Useful when the server
         does not declare the charset and ``requests`` falls back to ISO-8859-1.
+    timeout: :class:`float` or :class:`tuple`, default=(10, 30)
+        ``(connect, read)`` timeout in seconds passed to ``requests``. Without it
+        a slow or hung server blocks forever; a timeout turns that into a retry.
 
     Returns
     -------
@@ -40,7 +43,7 @@ def get(url, params=None, n_trials=10, verify=True, encoding=None):
     """
     for attempt in range(n_trials):
         try:
-            r = session.get(url, params=params, verify=verify)
+            r = session.get(url, params=params, verify=verify, timeout=timeout)
             if r.status_code == 429:
                 try:
                     t = int(r.headers["Retry-After"])
@@ -52,8 +55,8 @@ def get(url, params=None, n_trials=10, verify=True, encoding=None):
                 if encoding is not None:
                     r.encoding = encoding
                 return r.text
-        except requests.exceptions.ConnectionError:
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
             t = 6
-            logger.warning(f"Connection error. Auto-retry in {t} seconds.")
+            logger.warning(f"Connection or timeout error. Auto-retry in {t} seconds.")
             sleep(t)
     raise requests.exceptions.ConnectionError(f"Unable to retrieve {url}")
