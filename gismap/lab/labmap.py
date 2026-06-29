@@ -70,6 +70,13 @@ class LabMap(MixInIO):
 
     name = None
     dbs = default_dbs
+    # Per-author escape hatch for scraped labs: maps an author name (as yielded
+    # by _author_iterator) to either "drop" (skip the author entirely) or a
+    # parenthetical spec appended to the name, e.g. "hal: key, ldb: key" to pin
+    # exact sources, or "no_auto" to keep only explicit sources. Useful when a
+    # near-homonym or a DB-sparse newcomer would otherwise grab someone else's
+    # identity via fuzzy source resolution.
+    overrides = {}
 
     def __init__(
         self, name=None, dbs=None, *, max_co_authors=9, min_title_words=2, taboo_words=None, taboo_authors=None
@@ -85,6 +92,10 @@ class LabMap(MixInIO):
         ]
         self.authors = None
         self.publications = None
+        # Per-group flag: True when expand() hit its cap (more collaborators
+        # exist than were displayed). Drives "Most frequent collaborators" vs
+        # "Collaborators" wording in the legend.
+        self._group_truncated = {}
 
     def __repr__(self):
         return f"LabMap('{self.name}')"
@@ -112,6 +123,11 @@ class LabMap(MixInIO):
         """
         self.authors = dict()
         for author in tqdm(self._author_iterator(), desc=desc):
+            spec = self.overrides.get(author.name)
+            if spec == "drop":
+                continue
+            if spec:
+                author = LabAuthor(f"{author.name} ({spec})", metadata=author.metadata)
             if not all(f(author) for f in self.author_selectors):
                 continue
             author.auto_sources(dbs=list_of_objects(self.dbs, db_dict(), default=default_dbs))
@@ -158,6 +174,9 @@ class LabMap(MixInIO):
         if target is None:
             target = len(self.authors) // 3
         new_authors = proper_prospects(self, max_new=target, **kwargs)
+        # If we got fewer than the cap, every collaborator made it in (the set
+        # is exhaustive); otherwise more likely exist than we display.
+        self._group_truncated[group] = len(new_authors) >= target
         if not new_authors:
             logger.warning("Expansion failed: no new author found.")
             return
@@ -339,6 +358,44 @@ class LabMap(MixInIO):
         None
         """
         display(HTML(self.html(**kwargs)))
+
+    def gismo_lab(self, **kwargs):
+        """
+        Build a :class:`~gismap.gismo.GismoLab` (authors ↔ keywords cross-embedding)
+        from this lab. Reuse a single instance to run several keyword/wordcloud
+        queries without rebuilding the embeddings.
+
+        Parameters
+        ----------
+        **kwargs
+            Passed to :class:`~gismap.gismo.GismoLab` (``ngram_range``, ``stop_words``).
+        """
+        from gismap.gismo import GismoLab
+
+        return GismoLab(self, **kwargs)
+
+    def keywords(self, query=None, group=None, **kwargs):
+        """
+        Ranked ``(word, weight)`` keywords for a topic, an author, a group, or the
+        whole lab. Builds a fresh :meth:`gismo_lab` each call; reuse one for many queries.
+
+        Parameters
+        ----------
+        query: :class:`str` or :class:`list`, optional
+            A text query, or a list of author keys. Defaults to the whole lab.
+        group: :class:`str`, optional
+            Restrict to the authors of this group.
+        **kwargs
+            Ranking tuning forwarded to :meth:`~gismap.gismo.GismoLab.keywords`.
+        """
+        return self.gismo_lab().keywords(query=query, group=group, **kwargs)
+
+    def wordcloud(self, query=None, group=None, **kwargs):
+        """
+        A renderable :class:`~gismap.gismo.WordCloud` (displays inline in notebooks).
+        Same arguments as :meth:`keywords`.
+        """
+        return self.gismo_lab().wordcloud(query=query, group=group, **kwargs)
 
     def add_publication(self, title, authors, **kwargs):
         """

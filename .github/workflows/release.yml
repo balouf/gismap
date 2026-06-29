@@ -32,7 +32,7 @@ jobs:
   build-ldb:
     name: Build LDB Database
     runs-on: ubuntu-latest
-    timeout-minutes: 60  # Build takes ~30 min
+    timeout-minutes: 120  # streaming build ~30 min + aggressive dict recompress pass
     permissions:
       contents: write  # To upload release assets
 

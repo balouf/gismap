@@ -7,6 +7,22 @@ from gismap.lab.labmap import LabMap
 from gismap.utils.requests import get
 
 
+def given_name_first(name):
+    """Reorder a LIP6 ``"Surname Given(s)"`` label into ``"Given(s) Surname"``.
+
+    LIP6 lists members surname-first, but the rest of GisMap assumes
+    given-name-first (for initials and display). We treat the **first** token as
+    the surname and move it to the end, which handles the common single-token
+    surname as well as multi-token given names (e.g. ``"Lieu Choun Tong"`` ->
+    ``"Choun Tong Lieu"``). Single-token names are returned unchanged. Compound
+    surnames (rare here) would need an explicit override.
+    """
+    tokens = name.split()
+    if len(tokens) < 2:
+        return name
+    return " ".join(tokens[1:] + tokens[:1])
+
+
 class Lip6Map(LabMap):
     """
     Class for handling a LIP6 team using
@@ -15,6 +31,7 @@ class Lip6Map(LabMap):
     """
 
     name = "NPA"
+    overrides = {"Antoine Mirri": "drop"}
 
     def _author_iterator(self):
         url = f"https://www.lip6.fr/recherche/team_membres.php?acronyme={self.name}"
@@ -23,6 +40,7 @@ class Lip6Map(LabMap):
             name = a.text.replace("\xa0", " ").strip()
             if not name:
                 continue
+            name = given_name_first(name)
             metadata = AuthorMetadata(group=self.name)
             previous = a.find_previous_sibling()
             if previous is not None and "user" in previous.get("class", []):

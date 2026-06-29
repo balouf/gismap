@@ -2,7 +2,7 @@ import json
 import uuid
 
 from gismap.gisgraphs.graph import lab_to_graph
-from gismap.gisgraphs.groups import auto_groups, make_legend
+from gismap.gisgraphs.groups import auto_groups, base_comet, ego_comet, is_ego, make_legend
 from gismap.gisgraphs.images import inline_node_images
 from gismap.gisgraphs.js import default_script
 from gismap.gisgraphs.options import edges as def_edges
@@ -44,6 +44,10 @@ def make_vis(lab, **kwargs):
         CSS template.
     script: :class:`string.Template`, optional
         JavaScript template.
+    theme: :class:`str`, default="auto"
+        Initial color theme: ``"auto"`` follows the host (Jupyter / Sphinx),
+        ``"light"`` or ``"dark"`` force a palette. Switchable at runtime from
+        the menu.
     inline_images: :class:`bool`, default=True
         If True, fetch each node image and embed it as a ``data:`` URI so
         the canvas stays clean and PNG export works. Images that fail to
@@ -64,11 +68,20 @@ def make_vis(lab, **kwargs):
     vis_url = kwargs.pop("vis_url", default_vis_url)
     groups = kwargs.pop("groups", None)
     groups = auto_groups(lab, groups)
+    # Exhaustiveness-aware wording: the default moon label is "Most frequent
+    # collaborators"; switch to plain "Collaborators" only when expand() proved
+    # the set complete. Unknown (no expansion recorded) keeps the safe default.
+    truncated = getattr(lab, "_group_truncated", {}) or {}
+    if "moon" in groups and truncated.get("moon") is False:
+        groups["moon"] = {**groups["moon"], "display_alt": "Collaborators"}
     draw_legend = kwargs.pop("draw_legend", True)
-    physics = kwargs.pop("physics", def_physics)
-    nodes_options = kwargs.pop("nodes_options", def_nodes)
-    edges_options = kwargs.pop("edges_options", def_edges)
-    interaction_options = kwargs.pop("interaction_option", def_interaction)
+    # Option dicts merge with the defaults, so callers can tweak a single field
+    # (e.g. nodes_options={"widthConstraint": {"minimum": 50}}) without having
+    # to restate the whole dict.
+    physics = {**def_physics, **kwargs.pop("physics", {})}
+    nodes_options = {**def_nodes, **kwargs.pop("nodes_options", {})}
+    edges_options = {**def_edges, **kwargs.pop("edges_options", {})}
+    interaction_options = {**def_interaction, **kwargs.pop("interaction_option", {})}
     options = {
         "physics": physics,
         "groups": groups,
@@ -78,6 +91,7 @@ def make_vis(lab, **kwargs):
     }
     style = kwargs.pop("style", default_style)
     script = kwargs.pop("script", default_script)
+    theme = kwargs.pop("theme", "auto")  # "auto" follows the host; "light"/"dark" force a palette
     inline_images = kwargs.pop("inline_images", True)
     max_inline_bytes = kwargs.pop("max_inline_bytes", 200_000)
     if kwargs:
@@ -102,8 +116,10 @@ def make_vis(lab, **kwargs):
         "publications": _embed(publications),
         "options": _embed(options),
         "lab_name": _embed(lab.name or "gismap"),
+        "theme": _embed(theme),
     }
-    legend_html = make_legend(groups, uid) if draw_legend else ""
+    comet = ego_comet if is_ego(lab) else base_comet
+    legend_html = make_legend(groups, uid, comet=comet) if draw_legend else ""
 
     # Inline SVGs for the bottom-right fullscreen icon. CSS toggles which
     # one is shown via the :fullscreen pseudo-class on box-$uid.
@@ -159,9 +175,12 @@ def make_vis(lab, **kwargs):
             ("redraw", "Redraw", ""),
             ("fullscreen", "Full Screen", fs_menu_icon),
             ("toggle-legend", "Hide Legend", ""),
+            ("legend-mode", "Use alternative labels", ""),
+            ("time-filter", "Time filter", ""),
             ("dl-bib", "Download lab.bib", ""),
             ("dl-png", "Download PNG", ""),
             ("copy-png", "Copy PNG to clipboard", ""),
+            ("theme", "Theme: auto", ""),
         ]
     )
     menu_html = (
@@ -183,6 +202,20 @@ def make_vis(lab, **kwargs):
     fs_button_attrs = 'class="watermark button fullscreen" title="Full Screen" aria-label="Full Screen"'
     fs_button_html = f'<button id="fullscreen-{uid}" {fs_button_attrs}>{expand_svg}{compress_svg}</button>'
 
+    # Time-window slider (hidden until toggled from the menu) and an empty-state
+    # notice shown when the current filters leave nothing to display.
+    slider_html = (
+        f'<div class="time-slider" id="slider-{uid}" style="display:none">'
+        f'<div class="time-slider-label" id="slider-label-{uid}"></div>'
+        f'<div class="time-slider-track">'
+        f'<input type="range" class="time-range" id="slider-min-{uid}" aria-label="Earliest year">'
+        f'<input type="range" class="time-range" id="slider-max-{uid}" aria-label="Latest year">'
+        f"</div></div>"
+    )
+    empty_html = (
+        f'<div class="empty-graph" id="empty-{uid}" style="display:none">No collaboration in this selection.</div>'
+    )
+
     div = (
         f'<div class="gisgraph" id="box-{uid}">'
         f'<div id="vis-{uid}"></div>'
@@ -190,6 +223,8 @@ def make_vis(lab, **kwargs):
         f"{menu_html}"
         f"{fs_button_html}"
         f"{legend_html}"
+        f"{slider_html}"
+        f"{empty_html}"
         f'<div class="modal" id="modal-{uid}">'
         f'<div class="modal-content">'
         f'<div class="modal-header">'

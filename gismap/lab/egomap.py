@@ -1,6 +1,10 @@
 from gismap.lab.lab_author import LabAuthor
 from gismap.lab.labmap import LabMap
 
+# Effectively "no cap": larger than any realistic prospect pool. Used by
+# build(target=None) to take every planet without a magic sentinel in expand().
+_UNLIMITED = 10**9
+
 
 class EgoMap(LabMap):
     """
@@ -67,14 +71,21 @@ class EgoMap(LabMap):
         n_pub = len(self.publications) if self.publications else "?"
         return f"EgoMap of {self.name} ({n_auth} authors, {n_pub} publications)"
 
-    def build(self, **kwargs):
+    def build(self, target=50, moon_ratio=0.5, **kwargs):
         """
         Build the ego network by fetching publications and adding planets/moons.
 
         Parameters
         ----------
-        target : :class:`int`, default=50
-            Target number of authors in the final map.
+        target : :class:`int` or None, default=50
+            Target number of authors in the final map. Use ``None`` for an
+            *exhaustive* map: every planet (direct co-author) is kept, then
+            moons are capped at ``moon_ratio`` times the number of planets
+            found. The cap matters because taking *all* moons routinely reaches
+            several thousand authors.
+        moon_ratio : :class:`float`, default=0.5
+            Only used when ``target=None``: number of moons to add, as a
+            fraction of the number of planets found.
         **kwargs
             Passed to :meth:`~gismap.lab.labmap.LabMap.expand`.
 
@@ -82,11 +93,17 @@ class EgoMap(LabMap):
         -------
         None
         """
-        target = kwargs.pop("target", 50)
         self.update_authors(desc="Star metadata")
         self.update_publis(desc="Star publications")
-        kwargs["target"] = target - len(self.authors)
-        self.expand(group="planet", desc="Planets", **kwargs)
-        kwargs["target"] = target - len(self.authors)
-        if kwargs["target"] > 0:
-            self.expand(group="moon", desc="Moons", **kwargs)
+        if target is None:
+            n_before = len(self.authors)
+            self.expand(group="planet", target=_UNLIMITED, desc="Planets", **kwargs)
+            moon_cap = int((len(self.authors) - n_before) * moon_ratio)
+            if moon_cap > 0:
+                self.expand(group="moon", target=moon_cap, desc="Moons", **kwargs)
+        else:
+            kwargs["target"] = target - len(self.authors)
+            self.expand(group="planet", desc="Planets", **kwargs)
+            kwargs["target"] = target - len(self.authors)
+            if kwargs["target"] > 0:
+                self.expand(group="moon", desc="Moons", **kwargs)

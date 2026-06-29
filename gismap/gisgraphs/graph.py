@@ -6,6 +6,30 @@ import numpy as np
 from gismap.sources.bibtex import pub_to_bibtex
 
 
+def _parse_name(name):
+    """Split a person's name into ``(given_initials, surname)``.
+
+    The surname is the last whitespace-separated token. Given-name initials
+    cover every *capitalized* given part, hyphen components included, so
+    composite first names yield several letters (``Jean-François`` -> ``JF``).
+    Lowercase particles (``de``, ``van``, ...) are skipped, which keeps names
+    like ``Élie de Panafieu`` at ``EP`` rather than ``EdP``.
+    """
+    tokens = name.split()
+    if not tokens:
+        return "", ""
+    surname = tokens[-1]
+    parts = []
+    for tok in tokens[:-1]:
+        if tok[:1].isupper():
+            parts.extend(p for p in tok.split("-") if p)
+    given_initials = "".join(p[0] for p in parts).upper()
+    if not given_initials and len(tokens) > 1:
+        # No capitalized given part (unusual data): fall back to the first token.
+        given_initials = tokens[0][0].upper()
+    return given_initials, surname
+
+
 def initials(name):
     """
     Parameters
@@ -16,10 +40,85 @@ def initials(name):
     Returns
     -------
     :class:`str`
-        Person's initials (2 letters only).
+        Person's initials. Composite first names keep all their initials,
+        while the common ``First Last`` case stays two letters.
+
+    Examples
+    --------
+    >>> initials("Fabien Mathieu")
+    'FM'
+    >>> initials("Jean-François Laslier")
+    'JFL'
+    >>> initials("Jérôme Lang")
+    'JL'
+    >>> initials("Élie de Panafieu")
+    'ÉP'
+    >>> initials("Madonna")
+    'M'
     """
-    first_letters = [w[0] for w in name.split()]
-    return first_letters[0].upper() + first_letters[-1].upper()
+    given_initials, surname = _parse_name(name)
+    return given_initials + (surname[0].upper() if surname else "")
+
+
+def node_labels(names, max_len=5):
+    """Compute display labels (initials) for a set of authors, disambiguating
+    collisions.
+
+    Parameters
+    ----------
+    names: :class:`dict`
+        Mapping ``key -> full name``.
+    max_len: :class:`int`, default=5
+        Hard cap on label length. Disambiguation stops extending a label once
+        it reaches this length, even if a collision remains — this keeps labels
+        readable when names cannot be told apart (e.g. a source that yields
+        "Surname Firstname" makes shared first names look like a shared
+        surname). Set higher to allow longer disambiguation suffixes.
+
+    Returns
+    -------
+    :class:`dict`
+        Mapping ``key -> label``. When several authors share the same base
+        initials, their labels are extended with lowercase letters from the
+        surname until distinct (or until ``max_len`` is reached).
+
+    Examples
+    --------
+    >>> labels = node_labels({1: "Jérôme Lang", 2: "Julien Lesca", 3: "Jean-François Laslier"})
+    >>> [labels[k] for k in (1, 2, 3)]
+    ['JLa', 'JLe', 'JFL']
+    >>> node_labels({1: "Fabien Mathieu"})[1]
+    'FM'
+    """
+    parsed = {k: _parse_name(n) for k, n in names.items()}
+    # extra[k]: number of lowercase surname letters appended beyond the
+    # uppercase surname initial.
+    extra = {k: 0 for k in names}
+
+    def label(k):
+        given_initials, surname = parsed[k]
+        if not surname:
+            return given_initials
+        return given_initials + surname[0].upper() + surname[1 : 1 + extra[k]].lower()
+
+    while True:
+        groups = defaultdict(list)
+        for k in names:
+            groups[label(k)].append(k)
+        progressed = False
+        for keys in groups.values():
+            if len(keys) < 2:
+                continue
+            for k in keys:
+                _, surname = parsed[k]
+                # Extend only while the surname tail lasts and we stay within
+                # the length cap (bounds garbage when names are indistinguishable).
+                if extra[k] + 1 <= len(surname) - 1 and len(label(k)) < max_len:
+                    extra[k] += 1
+                    progressed = True
+        if not progressed:  # no remaining collision can be resolved further
+            break
+    return {k: label(k) for k in names}
 
 
 def _publication_metadata(pub):
@@ -73,7 +172,7 @@ def _pub_to_dict(pub):
     return d
 
 
-def to_node(s, pub_keys):
+def to_node(s, pub_keys, label=None):
     """
     Parameters
     ----------
@@ -81,6 +180,9 @@ def to_node(s, pub_keys):
         Author.
     pub_keys: :class:`list`
         Publication keys associated with this author, year-desc order.
+    label: :class:`str`, optional
+        Pre-computed (and possibly disambiguated) initials for this node. Falls
+        back to :func:`initials` when not provided.
 
     Returns
     -------
@@ -101,7 +203,7 @@ def to_node(s, pub_keys):
     if s.metadata.img:
         res.update({"image": s.metadata.img, "shape": "circularImage"})
     else:
-        res["label"] = initials(s.name)
+        res["label"] = label if label is not None else initials(s.name)
     if s.metadata.position:
         x, y = s.metadata.position
         res.update({"x": x, "y": y, "fixed": True})
@@ -192,7 +294,8 @@ def lab_to_graph(lab):
     for k, v in edges_dict.items():
         edges_dict[k] = [p.key for p in sorted(v, key=lambda p: -p.year)]
 
-    nodes = [to_node(s, node_pubs.get(s.key, [])) for s in lab.authors.values()]
+    labels = node_labels({a.key: a.name for a in lab.authors.values() if a})
+    nodes = [to_node(s, node_pubs.get(s.key, []), labels.get(s.key)) for s in lab.authors.values()]
     edges = [to_edge(k, v, lab.authors) for k, v in edges_dict.items()]
     publications = {pk: _pub_to_dict(p) for pk, p in lab.publications.items()}
 

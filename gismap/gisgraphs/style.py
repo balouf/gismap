@@ -31,6 +31,42 @@ default_style = Template("""
                              background-color: var(--pst-color-background, #14181e);
                          }
 
+                         /* Forced theme (menu toggle). 'auto' adds no class and
+                            follows the host; gm-light/gm-dark redefine the CSS
+                            vars on the box and the (reparented) modal. */
+                         #box-$uid.gm-light, #modal-$uid.gm-light {
+                             --pst-color-background: #ffffff;
+                             --pst-color-on-background: #ffffff;
+                             --pst-color-text-base: #1b1b2b;
+                             --pst-color-border: #c2c2cc;
+                             --pst-color-surface: #f0f0f4;
+                             --pst-color-link: #2958d7;
+                             --pst-color-link-hover: #8435a8;
+                             --pst-color-primary: #3b65b2;
+                             --legend-bg: rgba(244, 244, 248, 0.96);
+                             --legend-border: #c2c2cc;
+                             --legend-text: #1b1b2b;
+                         }
+
+                         #box-$uid.gm-dark, #modal-$uid.gm-dark {
+                             --pst-color-background: #14181e;
+                             --pst-color-on-background: #1f242c;
+                             --pst-color-text-base: #e7e7ec;
+                             --pst-color-border: #4d535d;
+                             --pst-color-surface: #2a2f38;
+                             --pst-color-link: #79a6ff;
+                             --pst-color-link-hover: #c69bf0;
+                             --pst-color-primary: #5b86d6;
+                             --legend-bg: rgba(31, 36, 44, 0.96);
+                             --legend-border: #4d535d;
+                             --legend-text: #e7e7ec;
+                         }
+
+                         #box-$uid.gm-light { background-color: #ffffff; }
+                         #box-$uid.gm-dark { background-color: #14181e; }
+                         #box-$uid.gm-light #vis-$uid { background-color: #ffffff; }
+                         #box-$uid.gm-dark #vis-$uid { background-color: #14181e; }
+
                          .modal {
                              display: none;
                              position: fixed;
@@ -212,6 +248,7 @@ default_style = Template("""
                              border-radius: 8px;
                              box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.10);
                              border: 1px solid var(--legend-border, #bbb);
+                             color: var(--legend-text, #111);
                              background: var(--jp-layout-color1, #f5f5fa);
                              background-color: var(--legend-bg, rgba(240, 240, 245, 0.95));
                              position: absolute;
@@ -225,6 +262,98 @@ default_style = Template("""
                              margin-right: 10px;
                              align-items: center;
                              cursor: pointer;
+                         }
+
+                         .time-slider {
+                             position: absolute;
+                             left: 50%;
+                             bottom: 14px;
+                             transform: translateX(-50%);
+                             z-index: 25;
+                             width: min(60%, 360px);
+                             padding: 8px 16px 10px;
+                             border-radius: 8px;
+                             border: 1px solid var(--pst-color-border, #bbb);
+                             background: var(--pst-color-on-background, var(--jp-layout-color0, #fff));
+                             color: var(--pst-color-text-base, var(--jp-content-font-color1, #222235));
+                             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                             font-size: 12px;
+                         }
+
+                         .time-slider-label {
+                             text-align: center;
+                             margin-bottom: 4px;
+                             white-space: nowrap;
+                         }
+
+                         .time-slider-track {
+                             position: relative;
+                             height: 22px;
+                         }
+
+                         .time-slider-track::before {
+                             content: '';
+                             position: absolute;
+                             left: 0;
+                             right: 0;
+                             top: 10px;
+                             height: 3px;
+                             border-radius: 2px;
+                             background: var(--pst-color-border, #bbb);
+                         }
+
+                         .time-range {
+                             position: absolute;
+                             left: 0;
+                             top: 0;
+                             width: 100%;
+                             height: 22px;
+                             margin: 0;
+                             background: none;
+                             pointer-events: none;
+                             -webkit-appearance: none;
+                             appearance: none;
+                         }
+
+                         .time-range::-webkit-slider-thumb {
+                             pointer-events: auto;
+                             -webkit-appearance: none;
+                             appearance: none;
+                             width: 14px;
+                             height: 14px;
+                             margin-top: 4px;
+                             border: none;
+                             border-radius: 50%;
+                             background: var(--pst-color-primary, #3b65b2);
+                             cursor: pointer;
+                         }
+
+                         .time-range::-moz-range-thumb {
+                             pointer-events: auto;
+                             width: 14px;
+                             height: 14px;
+                             border: none;
+                             border-radius: 50%;
+                             background: var(--pst-color-primary, #3b65b2);
+                             cursor: pointer;
+                         }
+
+                         .time-range::-moz-range-track {
+                             background: transparent;
+                         }
+
+                         .empty-graph {
+                             position: absolute;
+                             left: 50%;
+                             top: 50%;
+                             transform: translate(-50%, -50%);
+                             z-index: 15;
+                             padding: 8px 16px;
+                             border-radius: 6px;
+                             pointer-events: none;
+                             font-size: 14px;
+                             color: var(--pst-color-text-base, #555);
+                             background: var(--pst-color-on-background, rgba(255, 255, 255, 0.85));
                          }
 
                          .pub a.bib-toggle, .pub a.abs-toggle {

@@ -43,6 +43,7 @@ LDB_PARAMETERS = Data(
         "search": {"limit": 3, "cutoff": 87.0, "slack": 1.0},
         "bof": {"n_range": 2, "length_impact": 0.1},
         "frame_size": {"authors": 512, "publis": 256},
+        "optimize": {"authors": 20, "publis": 10, "level": 19, "dict_threshold": 10000, "max_bytes": 10_000_000},
         "io": {
             "source": "https://dblp.org/rdf/dblp.ttl.gz",
             "destination": DATA_DIR / f"{LDB_STEM}.pkl.zst",
@@ -67,10 +68,17 @@ Structure:
   - *n_range*: max factor size (higher is better but more expensive).
   - *length_impact*: how to compare two inputs of different size.
 
-- **frame_size**:
+- **frame_size** (streaming first pass, dict-less; tuned for build speed):
 
   - *authors*: maximum number of authors kept in a single frame/batch.
   - *publis*: maximum number of publications kept in a single frame/batch.
+
+- **optimize** (second pass: repack with a trained dictionary):
+
+  - *authors* / *publis*: (small) frame sizes for the dict-compressed result.
+  - *level*: zstd level for the aggressive recompression (slow; watch build time).
+  - *dict_threshold*: train a dictionary only above this item count.
+  - *max_bytes*: below this estimated decompressed footprint, keep a plain list.
 
 - **io**:
 
@@ -259,6 +267,17 @@ class LDB(DB):
         cls.authors = authors
         cls.keys = {k: v[0] for k, v in authors_dict.items()}
         del authors_dict
+        # Second pass: the streaming build above used large, fast, dict-less
+        # frames; repack into small dict-compressed frames (much smaller dump and
+        # cheaper random access). optimize() preserves order, so cls.keys indices
+        # stay valid; it returns a plain list for small builds (e.g. limit= tests).
+        opt = cls.parameters.optimize
+        cls.publis = cls.publis.optimize(
+            frame_size=opt.publis, level=opt.level, threshold=opt.dict_threshold, max_bytes=opt.max_bytes
+        )
+        cls.authors = cls.authors.optimize(
+            frame_size=opt.authors, level=opt.level, threshold=opt.dict_threshold, max_bytes=opt.max_bytes
+        )
         cls._build_search_engine()
         cls._invalidate_cache()
         cls._initialized = True

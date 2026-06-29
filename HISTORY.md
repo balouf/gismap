@@ -4,10 +4,90 @@
 
 - anHALyze: tools to spot HAL issues (bad author metadata, DBLP comparison, widget)
 - EgoConf: find your conferences/journals
-- Easier access to graph customization
-- Additional graph option (e.g. time filtering and coloring, default group checks...)
-- Custom CSS (e.g. transparent background)
-- Gismo integration
+- Gismo integration: team/researcher clustering and keyword maps (word clouds shipped in 0.6.0)
+- OpenAlex source
+- Conf2Lab: build a lab from a set of publications (e.g. a conference)
+
+## 0.6.0 (2026-06-29): User requests, vol. 2
+
+### Highlights
+
+- Acted on a round of real user feedback on the collaboration graphs: smarter node
+  initials (composite first names like *Jean-François Laslier* → `JFL`, and automatic
+  disambiguation of same-initials neighbours → `JLa` / `JLe`), uniform node sizes, a
+  legend that now defines itself on hover, a coloured square for comets, and a
+  one-click toggle between the astronomy vocabulary and plain-language labels.
+- New **time filter**: a year range-slider (from the menu) filters collaborations to a
+  period live, recomputing nodes, edges and comets.
+- New **theme** menu entry to force *light* / *dark* / *auto* (with a `theme=` build option).
+- Comets are now gently pulled toward their own group's cluster instead of scattering on
+  the rim, while staying draggable.
+
+### Visualization
+
+- `initials()` rewritten: keeps every initial of a composite first name (hyphen- or
+  space-separated), skips lowercase particles (`Élie de Panafieu` → `ÉP`), and the common
+  `First Last` case stays two letters. New graph-level `node_labels()` disambiguates
+  authors that share initials by extending with surname letters (`JLa` / `JLe`).
+- Minimum node size (`widthConstraint`) so short-label nodes no longer render smaller
+  than others. Tunable via `nodes_options=`.
+- Legend overhaul: every entry exposes a definition on hover; a menu entry ("Use
+  alternative labels") swaps the visible wording with the hover one. Each group ships a
+  primary label (`display`) and an alternative (`display_alt`), both overridable per
+  group. EgoMaps use people-centric wording, other labs membership-centric wording.
+- Comets get a coloured legend square (a lightened member colour) and lose the
+  "(Singletons)" parenthesis.
+- Node-label disambiguation is length-capped (`node_labels(max_len=5)`) so names
+  that cannot be told apart (e.g. a source yielding "Surname Firstname") produce
+  bounded labels instead of long garbage.
+- `Lip6Map` reorders the LIP6 directory's "Surname Given" labels to
+  "Given Surname", so initials and display follow the usual convention.
+- Time-window slider (dual-handle, dependency-free) with a graceful empty state when a
+  filter leaves nothing to show.
+- Comet gravity: invisible attractor springs added only to the rendered graph (never to
+  the data model, so comet detection is unchanged) pull each comet toward its group.
+- Forced light/dark theme via CSS-variable overrides on the box and modal.
+
+### New features
+
+- `LabMap.html()` / `make_vis()` gains a `theme=` argument (`"auto"`, `"light"`, `"dark"`).
+- `make_vis()` option dicts (`nodes_options`, `edges_options`, `physics`,
+  `interaction_option`) now **merge** with the defaults, so a single field can be tweaked
+  without restating the whole dict.
+- `EgoMap.build(target=None)` builds an *exhaustive* ego map: every planet, then moons
+  capped at `moon_ratio` × the number of planets (default 0.5) to avoid the thousands of
+  authors a full moon expansion would pull in.
+- Exhaustiveness-aware wording: moons read "Most frequent collaborators" when capped and
+  "Collaborators" when the set is complete.
+- `LabMap.overrides`: per-author escape hatch for scraped labs. Map an author name to
+  `"drop"` (skip) or to a parenthetical source spec (`"hal: key, ldb: key"`, `"no_auto"`)
+  to stop a near-homonym or a DB-sparse newcomer from grabbing someone else's identity via
+  fuzzy source resolution.
+- **Keyword clouds**: `LabMap.wordcloud(query=, group=)` and `LabMap.keywords(...)` extract
+  weighted keywords for a topic, an author, a group, or the whole lab, via a new `GismoLab`
+  (authors ↔ words cross-embedding over titles + abstracts; reuse one instance for many
+  queries). `WordCloud` renders a self-contained HTML cloud (`_repr_html_` in notebooks,
+  `save_html` to a file). Near-duplicate n-grams are merged ("p2p" absorbed by "p2p
+  networks"). No new dependency (built on Gismo).
+
+### Documentation
+
+- FAQ: fixed a typo ("a package base on" → "based on"); new entry explaining why a real
+  collaborator can show up grey (a co-publication recorded under a different author
+  identity) and how to fix it from the source side.
+
+### LDB / internals
+
+- New `ZList` storage format: each frame stores individually-pickled items behind an
+  offset index, so random access unpickles a single item instead of the whole frame, and
+  an optional zstd **dictionary** can be trained for tighter compression. `build_db` now
+  does a two-pass build — a fast dict-less streaming pass, then `ZList.optimize()` repacks
+  into small dict-compressed frames (10 publications / 20 authors per frame) for much
+  smaller dumps and cheaper access. `optimize()` / `estimated_uncompressed_size()` also
+  return a plain list when the data is small enough that memory is not a concern.
+- **The LDB asset format changed**: the `ldb.pkl.zst` shipped with this release is rebuilt;
+  older local caches are incompatible and are re-fetched automatically on first use
+  (`LDB.retrieve()` to force it).
 
 ## 0.5.4 (2026-05-04): Some user requests
 

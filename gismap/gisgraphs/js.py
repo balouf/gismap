@@ -17,6 +17,9 @@ let lastHasSingletons = false;
 // null = follow auto rule (multi-group OR singletons present);
 // true/false = user override from the menu.
 let legendVisibilityOverride = null;
+// null = no time filtering; [minYear, maxYear] = keep only collaborations with
+// at least one publication in that (inclusive) range. Driven by the slider.
+let yearRange = null;
 
 // ----- Modal rendering helpers (fed by the shared `publications` dict) -----
 
@@ -106,12 +109,59 @@ function edgeTitleHtml(a, b) {
         + ' and ' + linkifyAuthor({name: b.name, url: b.url});
 }
 
+// An edge survives the time filter if any of its publications falls in range.
+function edgeInYearRange(edge) {
+    if (!yearRange) return true;
+    const [lo, hi] = yearRange;
+    return (edge.pub_keys || []).some(k => {
+        const y = publications[k]?.year;
+        return y != null && y >= lo && y <= hi;
+    });
+}
+
 // ----- Get the group color and position of a node (gradient edges) -----
 function getNodeInfos(network, node) {
     if (node && !options.groups?.[node.group]?.hidden) {
         return [options.groups[node.group]?.color, network.getPositions([node.id])[node.id]]
     }
     return [false, false];
+}
+
+// Comet gravity (gentle, physics-based). Build invisible "attractor" spring
+// edges from each shown comet to a representative node of its own group, so
+// same-colour comets drift toward same-colour clusters while staying free to
+// move and be dragged. These edges live only in the rendered network, never in
+// the `edges` data model, so the singleton/comet detection above is untouched.
+// `attractor:true` flags them so clicks/gradients ignore them.
+function buildCometAttractors(visibleNodes, visibleEdges, connectedIds) {
+    const comets = visibleNodes.get().filter(n => !connectedIds.has(n.id));
+    if (!comets.length) return [];
+    // Pick the highest-degree connected node per group as the cluster anchor.
+    const degree = {};
+    visibleEdges.forEach(e => {
+        degree[e.from] = (degree[e.from] || 0) + 1;
+        degree[e.to] = (degree[e.to] || 0) + 1;
+    });
+    const anchor = {};
+    visibleNodes.get().forEach(n => {
+        if (!connectedIds.has(n.id)) return;
+        if (!(n.group in anchor) || (degree[n.id] || 0) > (degree[anchor[n.group]] || 0)) anchor[n.group] = n.id;
+    });
+    const attractors = [];
+    comets.forEach(c => {
+        const target = anchor[c.group];
+        if (target != null && target !== c.id) {
+            attractors.push({
+                id: 'attractor-' + c.id, from: c.id, to: target, attractor: true,
+                // Transparent in every state: vis repaints connected edges with
+                // the hover/highlight colour when a node is hovered/selected.
+                color: {color: 'rgba(0,0,0,0)', hover: 'rgba(0,0,0,0)',
+                    highlight: 'rgba(0,0,0,0)', inherit: false},
+                width: 0.5, hoverWidth: 0, selectionWidth: 0, length: 320, smooth: false,
+            });
+        }
+    });
+    return attractors;
 }
 
 
@@ -129,9 +179,10 @@ function draw_graph() {
     var visibleNodes = new DataSet(nodes.get({
       filter: node => !options.groups?.[node.group]?.hidden}));
     var visibleNodeIds = new Set(visibleNodes.map(node => node.id));
-    // Reduce edges
+    // Reduce edges (group visibility + optional time-window filter)
     const visibleEdges = new DataSet(edges.get({
-        filter: edge => visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)}));
+        filter: edge => visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)
+            && edgeInYearRange(edge)}));
     // Detect singletons: nodes with no visible edges
     const connectedIds = new Set();
     visibleEdges.forEach(edge => {
@@ -150,6 +201,15 @@ function draw_graph() {
     if (hasSingletons && !document.getElementById("comet-$uid")?.checked) {
         visibleNodes = new DataSet(nodes.get({filter: node => connectedIds.has(node.id)}));
     }
+
+    // Empty-state notice (e.g. a time window with no collaboration at all).
+    const emptyMsg = document.getElementById('empty-$uid');
+    if (emptyMsg) emptyMsg.style.display = visibleNodes.length === 0 ? '' : 'none';
+
+    // Gentle comet gravity: invisible springs pulling comets toward their
+    // group's cluster (added to the rendered edges only, not the data model).
+    const cometAttractors = buildCometAttractors(visibleNodes, visibleEdges, connectedIds);
+    if (cometAttractors.length) visibleEdges.add(cometAttractors);
 
     // Set graph, nodes, and edges
     const network = new Network(container, {nodes: visibleNodes, edges: visibleEdges}, options);
@@ -224,6 +284,7 @@ function draw_graph() {
         openModal(nodeTitleHtml(node), node.pub_keys || [], node.name);
       } else if (params.edges.length === 1) {
         const edge = netEdges.get(params.edges[0]);
+        if (edge.attractor) { modal.style.display = "none"; return; }
         const a = netNodes.get(edge.from);
         const b = netNodes.get(edge.to);
         openModal(edgeTitleHtml(a, b), edge.pub_keys || [], a.name + '_' + b.name);
@@ -347,8 +408,41 @@ function init_copybuttons() {
     decorate();
 }
 
+// Wire the dual-handle year slider to the (shared) publications dict. Updating
+// either handle sets `yearRange` and re-runs the single draw_graph() path, so
+// node/edge/comet recomputation is reused verbatim. No slider is set up (and
+// the menu entry is hidden) when no publication carries a year.
+function setupTimeSlider() {
+    const years = Object.values(publications).map(p => p.year).filter(y => y != null);
+    const sMin = document.getElementById('slider-min-$uid');
+    const sMax = document.getElementById('slider-max-$uid');
+    const label = document.getElementById('slider-label-$uid');
+    const menuEntry = document.querySelector('#menu-list-$uid [data-action="time-filter"]');
+    if (!years.length || !sMin || !sMax) {
+        if (menuEntry) menuEntry.closest('li').style.display = 'none';
+        return;
+    }
+    const minY = Math.min(...years), maxY = Math.max(...years);
+    for (const s of [sMin, sMax]) { s.min = minY; s.max = maxY; s.step = 1; }
+    sMin.value = minY; sMax.value = maxY;
+    function update() {
+        // Take min/max of the two handles instead of forbidding them to cross:
+        // a hard no-cross rule gets stuck when both sit on the same edge (you
+        // can only grab the top handle, which then snaps back).
+        const a = parseInt(sMin.value, 10), b = parseInt(sMax.value, 10);
+        const lo = Math.min(a, b), hi = Math.max(a, b);
+        yearRange = (lo === minY && hi === maxY) ? null : [lo, hi];
+        if (label) label.textContent = yearRange ? (lo + ' – ' + hi) : ('All years (' + minY + ' – ' + maxY + ')');
+        draw_graph();
+    }
+    sMin.addEventListener('input', update);
+    sMax.addEventListener('input', update);
+    update();
+}
+
 init_modal_handlers();
 init_copybuttons();
+setupTimeSlider();
 
 draw_graph();
 
@@ -551,6 +645,66 @@ function toggleLegend() {
     applyLegendVisibility();
 }
 
+// Legend labels toggle. Each entry ships a primary label (data-default, the
+// initially visible text) and an alternative one (data-alt). We swap the
+// visible text node — kept a *direct* child of the entry so the PNG export
+// reads the current wording — and expose the other version via the title
+// (hover), per the user request "le hover donne de toute façon l'autre version".
+let legendMode = 'default'; // 'default' | 'alt'
+function applyLegendMode() {
+    const legend = document.getElementById('legend-$uid');
+    if (legend) {
+        const showAlt = legendMode === 'alt';
+        legend.querySelectorAll('.legend-entry').forEach(entry => {
+            const def = entry.getAttribute('data-default');
+            const alt = entry.getAttribute('data-alt');
+            if (def === null || alt === null) return;
+            let textNode = null;
+            entry.childNodes.forEach(n => {
+                if (n.nodeType === Node.TEXT_NODE && n.textContent.trim()) textNode = n;
+            });
+            if (textNode) textNode.textContent = showAlt ? alt : def;
+            entry.setAttribute('title', showAlt ? def : alt);
+        });
+    }
+    const label = document.querySelector('#menu-list-$uid [data-action="legend-mode"] .menu-label');
+    if (label) label.textContent = legendMode === 'alt' ? 'Use default labels' : 'Use alternative labels';
+}
+function toggleLegendMode() {
+    legendMode = (legendMode === 'alt') ? 'default' : 'alt';
+    applyLegendMode();
+}
+
+function toggleTimeFilter() {
+    const slider = document.getElementById('slider-$uid');
+    if (!slider) return;
+    const visible = slider.style.display !== 'none';
+    slider.style.display = visible ? 'none' : 'block';
+    const label = document.querySelector('#menu-list-$uid [data-action="time-filter"] .menu-label');
+    if (label) label.textContent = visible ? 'Time filter' : 'Hide time filter';
+}
+
+// Theme override. 'auto' follows the host (Jupyter / Sphinx) via CSS var
+// chains; 'light'/'dark' force a palette by adding a class that redefines those
+// vars. The class is applied to both the box and the modal (the modal is
+// reparented to <body> outside fullscreen, so it must carry the class itself).
+let themeMode = $theme; // 'auto' | 'light' | 'dark'
+function applyTheme() {
+    for (const id of ['box-$uid', 'modal-$uid']) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        el.classList.remove('gm-light', 'gm-dark');
+        if (themeMode === 'light') el.classList.add('gm-light');
+        else if (themeMode === 'dark') el.classList.add('gm-dark');
+    }
+    const label = document.querySelector('#menu-list-$uid [data-action="theme"] .menu-label');
+    if (label) label.textContent = 'Theme: ' + themeMode;
+}
+function cycleTheme() {
+    themeMode = themeMode === 'auto' ? 'light' : themeMode === 'light' ? 'dark' : 'auto';
+    applyTheme();
+}
+
 function refreshFullscreenLabels() {
     const inFs = !!document.fullscreenElement;
     const label = inFs ? 'Exit Full Screen' : 'Full Screen';
@@ -567,6 +721,9 @@ const menuActions = {
     'redraw': draw_graph,
     'fullscreen': toggleFullscreen,
     'toggle-legend': toggleLegend,
+    'legend-mode': toggleLegendMode,
+    'time-filter': toggleTimeFilter,
+    'theme': cycleTheme,
     'dl-bib': downloadLabBib,
     'dl-png': downloadPng,
     'copy-png': copyPngToClipboard,
@@ -618,6 +775,7 @@ document.addEventListener('fullscreenchange', () => {
     setModalParent();
 });
 refreshFullscreenLabels();
+applyTheme();
 
 // Reflect the actual filename in the menu entry, e.g. "Download Céline_Comte.bib".
 const dlBibLabel = document.querySelector('#menu-list-$uid [data-action="dl-bib"] .menu-label');

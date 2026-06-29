@@ -23,6 +23,10 @@ physics = {
 nodes = {
     "shape": "circle",
     "size": 20,
+    # "circle" sizes itself to the label, so short labels (e.g. "JE") would
+    # otherwise render smaller than longer ones. A minimum width keeps all
+    # text nodes at a consistent base size; longer labels still grow past it.
+    "widthConstraint": {"minimum": 34},
     "font": {"size": 16, "color": "#111"},
     "color": "rgb(59, 101, 178)",
     "borderWidth": 5,

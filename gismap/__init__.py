@@ -19,10 +19,10 @@ def __getattr__(name):
         from gismap.gisgraphs.widget import GismapWidget
 
         return GismapWidget
-    if name == "make_gismo":
-        from gismap.gismo import make_gismo
+    if name in {"make_gismo", "GismoLab", "WordCloud"}:
+        from gismap import gismo
 
-        return make_gismo
+        return getattr(gismo, name)
     if name in {"LDB", "LDBAuthor"}:
         from gismap.sources import ldb
 
