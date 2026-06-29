@@ -374,28 +374,34 @@ class LabMap(MixInIO):
 
         return GismoLab(self, **kwargs)
 
-    def keywords(self, query=None, group=None, **kwargs):
+    def keywords(self, query=None, *, gismo_lab=None, **kwargs):
         """
         Ranked ``(word, weight)`` keywords for a topic, an author, a group, or the
-        whole lab. Builds a fresh :meth:`gismo_lab` each call; reuse one for many queries.
+        whole lab. Builds a fresh :meth:`gismo_lab` each call unless one is supplied;
+        reuse a single :meth:`gismo_lab` for many queries to avoid rebuilding.
 
         Parameters
         ----------
         query: :class:`str` or :class:`list`, optional
             A text query, or a list of author keys. Defaults to the whole lab.
-        group: :class:`str`, optional
-            Restrict to the authors of this group.
+        gismo_lab: :class:`~gismap.gismo.GismoLab`, optional
+            A prebuilt instance to reuse; if ``None``, a fresh one is built.
         **kwargs
-            Ranking tuning forwarded to :meth:`~gismap.gismo.GismoLab.keywords`.
+            Ranking tuning forwarded to :meth:`~gismap.gismo.GismoLab.keywords`
+            (e.g. ``group`` to restrict to a group, ``k``, ``threshold``).
         """
-        return self.gismo_lab().keywords(query=query, group=group, **kwargs)
+        if gismo_lab is None:
+            gismo_lab = self.gismo_lab()
+        return gismo_lab.keywords(query=query, **kwargs)
 
-    def wordcloud(self, query=None, group=None, **kwargs):
+    def wordcloud(self, query=None, *, gismo_lab=None, **kwargs):
         """
         A renderable :class:`~gismap.gismo.WordCloud` (displays inline in notebooks).
         Same arguments as :meth:`keywords`.
         """
-        return self.gismo_lab().wordcloud(query=query, group=group, **kwargs)
+        if gismo_lab is None:
+            gismo_lab = self.gismo_lab()
+        return gismo_lab.wordcloud(query=query, **kwargs)
 
     def add_publication(self, title, authors, **kwargs):
         """

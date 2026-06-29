@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '0 2 * * 0'  # Weekly on Sunday 2 AM UTC
   workflow_dispatch:  # Manual trigger
+    inputs:
+      ref:
+        description: "Git ref (tag/branch) whose CODE is built. Leave empty to build the dispatched ref. Set to a release tag (e.g. v0.5.4) to rebuild that release's asset with the current workflow logic."
+        required: false
+        default: ""
 
 jobs:
   build-ldb:
@@ -12,10 +17,16 @@ jobs:
     timeout-minutes: 120  # streaming build ~30 min + aggressive dict recompress pass
     permissions:
       contents: write  # To upload release assets
+    env:
+      TQDM_MININTERVAL: "30"  # throttle progress bars: one refresh/30s instead of \r spam in CI logs
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          # Build the requested ref's code (e.g. v0.5.4) while the workflow
+          # definition itself comes from the dispatched ref. Empty -> default.
+          ref: ${{ inputs.ref || github.ref }}
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -48,39 +59,53 @@ jobs:
             exit 1
           fi
 
-          # Get file size
+          # Get counts WITHOUT LDB.load_db(): load_db() rebuilds the search engine
+          # when the dump has none (we build with --no-search) and re-dumps the asset
+          # with include_search=True, which bloats it (~0.83 -> ~1.1 GB) and silently
+          # defeats --no-search. Read the pickled state directly (read-only) instead.
+          COUNTS=$(uv run python -c "import dill as pickle, zstandard as zstd; from gismap.sources.ldb import LDB_PARAMETERS as P; s=pickle.load(zstd.ZstdDecompressor().stream_reader(open(P.io.destination,'rb'))); print(len(s['authors']), len(s['publis']))")
+          AUTHOR_COUNT=$(echo "$COUNTS" | cut -d' ' -f1)
+          PUBLI_COUNT=$(echo "$COUNTS" | cut -d' ' -f2)
+          echo "Authors: $AUTHOR_COUNT, Publications: $PUBLI_COUNT"
+
+          # Size measured AFTER counts so it reflects the actual asset to upload.
           DB_SIZE=$(stat -c%s "$DB_PATH")
           echo "Database size: $DB_SIZE bytes ($(echo "scale=2; $DB_SIZE / 1073741824" | bc) GB)"
-
-          # Get counts
-          AUTHOR_COUNT=$(uv run python -c "from gismap.sources.ldb import LDB; LDB.load_db(); print(len(LDB.authors))")
-          PUBLI_COUNT=$(uv run python -c "from gismap.sources.ldb import LDB; LDB.load_db(); print(len(LDB.publis))")
-          echo "Authors: $AUTHOR_COUNT, Publications: $PUBLI_COUNT"
 
           echo "db_path=$DB_PATH" >> $GITHUB_OUTPUT
           echo "db_size=$DB_SIZE" >> $GITHUB_OUTPUT
           echo "author_count=$AUTHOR_COUNT" >> $GITHUB_OUTPUT
           echo "publi_count=$PUBLI_COUNT" >> $GITHUB_OUTPUT
 
-      - name: Find latest release
-        id: latest-release
+      - name: Determine target release
+        id: target-release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          LATEST_TAG=$(gh release list --limit 1 --json tagName -q '.[0].tagName')
-          if [ -z "$LATEST_TAG" ]; then
-            echo "ERROR: No releases found"
+          # The asset must match the code that built it. Derive the target tag
+          # from the built package version instead of "latest release": a build
+          # from an unreleased main would otherwise clobber the latest release's
+          # asset with an incompatible DB (the ZList format break in 0.6.0 once
+          # uploaded a 0.6.0 DB onto the v0.5.4 release). Abort if no matching
+          # release exists rather than silently clobbering another version.
+          VERSION=$(uv run python -c "import gismap; print(gismap.__version__)")
+          TAG="v$VERSION"
+          echo "Built version: $VERSION -> target tag: $TAG"
+
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            echo "ERROR: release $TAG does not exist."
+            echo "The built DB is version $VERSION but there is no matching release to attach it to."
+            echo "Create release $TAG first, or run this build from a ref whose version is already released."
             exit 1
           fi
-          echo "Latest release: $LATEST_TAG"
-          echo "tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Upload LDB to release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Uploading ldb.pkl.zst to release ${{ steps.latest-release.outputs.tag }}..."
-          gh release upload "${{ steps.latest-release.outputs.tag }}" \
+          echo "Uploading ldb.pkl.zst to release ${{ steps.target-release.outputs.tag }}..."
+          gh release upload "${{ steps.target-release.outputs.tag }}" \
             "${{ steps.locate-db.outputs.db_path }}" \
             --clobber
           echo "Upload complete!"
@@ -91,7 +116,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Release | ${{ steps.latest-release.outputs.tag }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Release | ${{ steps.target-release.outputs.tag }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Authors | ${{ steps.locate-db.outputs.author_count }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Publications | ${{ steps.locate-db.outputs.publi_count }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Database Size | $(echo "scale=2; ${{ steps.locate-db.outputs.db_size }} / 1073741824" | bc) GB |" >> $GITHUB_STEP_SUMMARY

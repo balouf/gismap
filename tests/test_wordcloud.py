@@ -59,6 +59,12 @@ class TestKeywords:
         assert gl.keywords("graph", k=10)
         assert gl.keywords(group="teamB", k=10)  # reuse without rebuilding
 
+    def test_lab_keywords_accepts_prebuilt_gismo_lab(self, lab):
+        gl = lab.gismo_lab()
+        # passing gismo_lab reuses the instance instead of rebuilding
+        assert lab.keywords("graph", gismo_lab=gl, k=10) == gl.keywords("graph", k=10)
+        assert lab.wordcloud("networks", gismo_lab=gl, k=10).words
+
 
 class TestWordCloud:
     def test_wordcloud_renders_html(self, lab):

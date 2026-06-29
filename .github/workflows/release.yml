@@ -35,6 +35,8 @@ jobs:
     timeout-minutes: 120  # streaming build ~30 min + aggressive dict recompress pass
     permissions:
       contents: write  # To upload release assets
+    env:
+      TQDM_MININTERVAL: "30"  # throttle progress bars: one refresh/30s instead of \r spam in CI logs
 
     steps:
       - name: Checkout code

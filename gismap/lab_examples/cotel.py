@@ -322,21 +322,27 @@ class AlgoRes2016(CoTel):
     """
     https://algotel2016.labri.fr/index.php?committee
     https://algotel2016.labri.fr/index.php?cores
+
+    Served through the archive.org identity mirror: the live LaBRI page has a
+    ~20 s cold-cache penalty on first hit, well over the test time budget. The
+    mirror returns byte-identical content in ~2 s and is more durable for a
+    long-dead 2016 conference site.
     """
 
     year = 2016
     rosetta = {"Laurent Viennot LIAFA": "Laurent Viennot"}
+    base = "http://web.archive.org/web/2id_/https://algotel2016.labri.fr/index.php"
 
     def _author_iterator(self):
         # Algotel: committee names in the largest <ul> with 30 <li>
-        soup = Soup(get("https://algotel2016.labri.fr/index.php?committee"), features="lxml")
+        soup = Soup(get(f"{self.base}?committee"), features="lxml")
         ul = max(soup("ul"), key=lambda u: len(u("li")))
         for li in ul("li"):
             name = strip_li(li)
             name = self.rosetta.get(name, name)
             yield LabAuthor(name=name, metadata=AuthorMetadata(group="Algotel"))
         # Cores: <p> tags after "Comité scientifique" h3
-        soup = Soup(get("https://algotel2016.labri.fr/index.php?cores"), features="lxml")
+        soup = Soup(get(f"{self.base}?cores"), features="lxml")
         for h in soup("h3"):
             if "scientifique" in h.text.lower():
                 for p in h.find_next_siblings("p"):
